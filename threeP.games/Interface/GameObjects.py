@@ -3,9 +3,9 @@
 #@package GameObjects
 # A hierarchy of prepared classes to develop games scripted in python using PyGame for 2d games and Panda3d for 3d games.
 #
-# @mainpage MyPyGame
+# @mainpage threeP.games
 # @section description Summary
-# A collection of scripts to ease the task of game development with the python programming language by interfacing with the PyGame and Panda3D game engines.\n
+# A collection of scripts to ease the task of game development with the Python programming language by interfacing with the PyGame and Panda3D game engines.\n The Graphical User Interface contains tools for project restricted file navigation, Python scripting, and carrying out common tasks in game development.
 # @section author Developer
 # Christopher S. Francis\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;26 November 2020 to ...
 
