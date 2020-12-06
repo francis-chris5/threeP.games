@@ -3,6 +3,8 @@ An interface and graphical-interface to package game development projects writte
 
 This is the very early stages of a work in progress, but there is a YouTube tutorial playlist that accompanies its development so I wanted to get it shared on here quickly. Instructions for using it will be coming soon...
 
+Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
+
 
 I forgot to list all the dependencies as I was making this, but I know that in addition to the core Python API I at least used:
 
