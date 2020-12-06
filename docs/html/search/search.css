@@ -1,0 +1,19 @@
+
+iframe#MSearchResults {
+    width: 60ex;
+    height: 15em;
+	text-align: right;
+}
+
+#MSearchResultsWindow {
+	display: none;
+    position: absolute;
+    left: 0; top: 0;
+	padding-left: 250px;
+    border: 1px solid #000;
+    z-index:10000;
+}
+
+#MSearchSelectWindow{
+	display: none;
+}
