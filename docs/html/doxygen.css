@@ -1,0 +1,120 @@
+
+
+html{
+	min-height: 100%;
+	font-size: 12pt;
+}
+
+/** HEADER **/
+#title-area{
+	
+}
+
+#projectname{
+	font-size: 2.3em;
+}
+
+#projectbrief{
+	font-size: 0.75em
+}
+
+
+/** NAVIGATION **/
+#main-nav{
+	float: left;
+	min-width: 15%;
+	margin-top: 5em;
+}
+
+/** .sm, #main-nav .sm-dox**/
+/*
+#main-nav ul, #nav-path ul{
+	list-style: none;
+}
+
+#nav-path{
+	display: none;
+}
+*/
+
+/** MAIN CONTENT **/
+.contents{
+	border-left: 2px outset #878787;
+	padding-left: 3em;
+	margin-top: 5em;
+	float: right;
+	width: 75%;
+	min-height: 40em;
+}
+
+.textblock{
+	max-width: 65%;
+}
+
+.header{
+	font-size: 1.7em;
+	text-align: center;
+}
+
+
+.groupheader{
+	text-decoration: underline;
+	margin: 1.5em;
+	text-align: center;
+}
+
+
+.memitem{
+	margin-left: 2.5em;
+	margin-bottom: 2.5em;
+	border-bottom: 1px dotted #878787;
+}
+
+
+.paramname{
+	font-weight: bolder;
+}
+
+.memname{
+	background-color: #f5ec73;
+}
+
+.icona{
+	padding-left: 1.2em;
+	padding-right: 1.2em;
+	font-weight: bolder;
+	background-color: #a7a7b7;
+}
+
+
+.summary{
+	display: none;
+}
+
+hr{
+	display: none;
+}
+
+img.footer, .footer small{
+	display: none;
+}
+
+.memberdecls{
+	display: none;
+}
+
+
+
+
+/** FOOTER **/
+.footer{
+	margin-top: 3.5em;
+	text-align: right;
+	clear: right;
+	min-height: 2em;
+}
+
+.footer:after{
+	width: 35%;
+	content: "\00A9 2020 Christopher S. Francis";
+}

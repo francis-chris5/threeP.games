@@ -1,0 +1,8 @@
+/** .sm, #main-nav .sm-dox**/
+#main-nav ul, #nav-path ul{
+	list-style: none;
+}
+
+#nav-path{
+	display: none;
+}
