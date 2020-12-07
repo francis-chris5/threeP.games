@@ -172,6 +172,7 @@ def scriptEditor():
 # @return <b>void</b>
 def writeGame():
     if gameMode == 2:
+        print(projectName, location)
         gw2 = GameWriter2d(projectName, location)
         gw2.directory = location
         gw2.writeGame()

@@ -9,11 +9,12 @@ import sys
 sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
 sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
-from os.path import join
+from os.path import join, isfile
 import interfaceStuff
 from EditorTab import EditorTab
 from InspectorTab import InspectorTab
 from ProjectTree import ProjectTree
+from NewProjectDialog import NewProjectDialog
 
 
 class MainWindow(wx.Frame):
@@ -57,14 +58,25 @@ class MainWindow(wx.Frame):
         
         
     def mainMenu(self):
-        mnMain = wx.MenuBar()
-        mnFile = wx.Menu()
-        mnNewProject = mnFile.Append(wx.Window.NewControlId(), "New Project", helpString="Create a new project...")
-        self.Bind(wx.EVT_MENU, self.CreateNewProject, mnNewProject)
-        mnOpenProject = mnFile.Append(wx.Window.NewControlId(), "Open Project", helpString="Open an existing project...")
-        self.Bind(wx.EVT_MENU, self.OpenExistingProject, mnOpenProject)
-        mnMain.Append(mnFile, "File")
-        self.SetMenuBar(mnMain)
+        self.mnMain = wx.MenuBar()
+        self.mnFile = wx.Menu()
+        self.mnNewProject = self.mnFile.Append(wx.Window.NewControlId(), "New Project", helpString="Create a new project...")
+        self.Bind(wx.EVT_MENU, self.CreateNewProject, self.mnNewProject)
+        self.mnOpenProject = self.mnFile.Append(wx.Window.NewControlId(), "Open Project", helpString="Open an existing project...")
+        self.Bind(wx.EVT_MENU, self.OpenExistingProject, self.mnOpenProject)
+        
+        self.mnFile.AppendSeparator()
+        
+        self.mnNewScript = self.mnFile.Append(wx.Window.NewControlId(), "New Script", helpString="Create a new script in the Script Editor Tab...")
+        
+        self.mnFile.AppendSeparator()
+        
+        self.mnClose = self.mnFile.Append(wx.Window.NewControlId(), "Close Project", helpString="Close the current project...")
+        self.Bind(wx.EVT_MENU, self.CloseCurrentProject, self.mnClose)
+        
+        
+        self.mnMain.Append(self.mnFile, "File")
+        self.SetMenuBar(self.mnMain)
     
     
     def toolBar(self):
@@ -81,6 +93,7 @@ class MainWindow(wx.Frame):
         self.tbInspector = InspectorTab(nbMainContent)
         nbMainContent.AddPage(self.tbEditor, "Script Editor")
         nbMainContent.AddPage(self.tbInspector, "Inspector")
+        self.Bind(wx.EVT_MENU, self.tbEditor.newScript, self.mnNewScript)
         
             #directory tree
         #self.trDirectory = wx.GenericDirCtrl(self, wx.Window.NewControlId(), size=(300, 1500))
@@ -96,24 +109,11 @@ class MainWindow(wx.Frame):
         
         
     def CreateNewProject(self, event):
-        nameDialog = wx.TextEntryDialog(None, "Enter a Project Name", caption="New Project", value="")
-        with nameDialog as dlg:
-            if dlg.ShowModal() == wx.ID_OK:
-                self.setProjectName(dlg.GetValue())
-        if self.getProjectName() != "":
-            modeDialog = wx.NumberEntryDialog(None, "Enter a Mode for the game: 2 or 3", "dimensions of game", "Project Mode", 0, min=2, max=3)
-            with modeDialog as dlg:
-                if dlg.ShowModal() == wx.ID_OK:
-                    self.setGameMode(dlg.GetValue())
-            if self.getGameMode() == 2 or self.getGameMode() == 3:
-                directoryDialog = wx.DirDialog(None, "Choose Directory Location")
-                with directoryDialog as dlg:
-                    if dlg.ShowModal() == wx.ID_OK:
-                        self.setLocation(dlg.GetPath())
-                if self.getLocation() != "":
-                    interfaceStuff.newProj(self.getProjectName(), self.getGameMode(), self.getLocation())
-                    self.trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
-                    
+        npd = NewProjectDialog(self, -1)
+        npd.ShowModal()
+        path = join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml")
+        if isfile(path):
+            self.trDirectory.loadProject(path)
                     
     def OpenExistingProject(self, event):
         fileDialog = wx.FileDialog(None, "Select the Manifest for Project", wildcard="XML Project Manifest (*.xml)|*.xml")
@@ -122,6 +122,13 @@ class MainWindow(wx.Frame):
                 manifest = dlg.GetPath()
                 interfaceStuff.xmlParseManifest(manifest)
                 self.trDirectory.loadProject(manifest)
+                
+    def CloseCurrentProject(self, event):
+        interfaceStuff.updateManifest()
+        interfaceStuff.projectName = ""
+        interfaceStuff.gameMode = ""
+        interfaceStuff.location = ""
+        self.trDirectory.clearTree()
 
     
     def runGame(self, event):

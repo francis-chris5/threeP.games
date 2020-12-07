@@ -51,6 +51,10 @@ class ProjectTree(wx.Panel):
     
     def getTree(self):
         return self.__tree
+    
+    
+    def clearTree(self):
+        self.__tree.DeleteAllItems()
 
 
 

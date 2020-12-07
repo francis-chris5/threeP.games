@@ -15,6 +15,8 @@ import wx.py.editor
 import wx.py.editwindow
 import wx.aui
 
+from os.path import isdir
+
 import interfaceStuff
 
 
@@ -22,14 +24,9 @@ class EditorTab(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
         
-        #self.__book = wx.py.editor.EditorNotebook(self)
         self.__book = wx.aui.AuiNotebook(self)
-        self.newEditor()
         self.__shell = wx.py.shell.Shell(self) #size=(700, 200)
-        self.__new = wx.Button(self, label="TEMPORARY New Script Button")
-        self.Bind(wx.EVT_BUTTON, self.newScript, self.__new)
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.__new)
         sizer.Add(self.__book, 3, wx.EXPAND)
         sizer.Add(self.__shell, 1, wx.EXPAND)
         self.SetSizer(sizer)
@@ -76,9 +73,11 @@ class Editor(wx.Panel):
         self.__editor.LoadFile(file)
         
     def saveScript(self, event):
-        contents = self.__editor.GetText()
-        with open(interfaceStuff.location + "\\Scripts\\" + self.__path, "w") as toFile:
-            toFile.write(contents)
+        directory = interfaceStuff.location + "\\Scripts"
+        if isdir(directory):
+            self.__editor.SaveFile(directory + "\\" + self.__path)
+        else:
+            wx.MessageDialog(self, "INVALID DIRECTORY: Please open a project before saving a script").ShowModal()
 
 
 class gui(wx.Frame):
