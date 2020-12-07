@@ -74,8 +74,12 @@ class Editor(wx.Panel):
         
     def saveScript(self, event):
         directory = interfaceStuff.location + "\\Scripts"
+        file = self.__path.split("\\")[-1]
         if isdir(directory):
-            self.__editor.SaveFile(directory + "\\" + self.__path)
+            with open(directory + "\\" + file, "w", newline="") as toFile:
+                for line in range(self.__editor.GetLineCount()):
+                    print(self.__editor.GetLine(line))
+                    toFile.write(self.__editor.GetLine(line))
         else:
             wx.MessageDialog(self, "INVALID DIRECTORY: Please open a project before saving a script").ShowModal()
 
