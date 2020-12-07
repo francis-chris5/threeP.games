@@ -17,6 +17,8 @@ Scripts can only be saved to the "Scripts" folder in a project so each tab in th
 
 So at this point, basically just the directory structure set up...
 
+Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
+
 
 ![threeP_screenshot1](https://user-images.githubusercontent.com/50467171/101319497-1a8d8500-3830-11eb-8146-efaa73c2487b.jpg)
 
@@ -25,8 +27,6 @@ So at this point, basically just the directory structure set up...
 ![threeP_screenshot3](https://user-images.githubusercontent.com/50467171/101319498-1a8d8500-3830-11eb-8cbd-67d698b1ad74.jpg)
 
 
-
-Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
 
 
 I forgot to list all the dependencies as I was making this, but I know that in addition to the core Python API I at least used:
