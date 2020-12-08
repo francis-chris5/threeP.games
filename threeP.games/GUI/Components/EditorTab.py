@@ -51,6 +51,7 @@ class EditorTab(wx.Panel):
                 src = dlg.GetValue() + ".py"
                 editor = Editor(self.__book, src)
                 self.__book.AddPage(editor, src)
+                return editor.saveScript(event)
 
 
 
@@ -68,6 +69,7 @@ class Editor(wx.Panel):
         sizer.Add(self.__save, 1)
         sizer.Add(self.__editor, 9, wx.EXPAND)
         self.SetSizer(sizer)
+        self.Bind(wx.stc.EVT_STC_CHANGE, self.needSave)
         
     def loadFile(self, file):
         self.__editor.LoadFile(file)
@@ -80,8 +82,14 @@ class Editor(wx.Panel):
                 for line in range(self.__editor.GetLineCount()):
                     print(self.__editor.GetLine(line))
                     toFile.write(self.__editor.GetLine(line))
+                    self.__save.SetBackgroundColour((9, 71, 227, 128))
+            return True
         else:
             wx.MessageDialog(self, "INVALID DIRECTORY: Please open a project before saving a script").ShowModal()
+            return False
+        
+    def needSave(self, event):
+        self.__save.SetBackgroundColour((227, 45, 9, 128))
 
 
 class gui(wx.Frame):

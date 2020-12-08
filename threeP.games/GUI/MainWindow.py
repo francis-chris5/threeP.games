@@ -74,17 +74,34 @@ class MainWindow(wx.Frame):
         self.mnClose = self.mnFile.Append(wx.Window.NewControlId(), "Close Project", helpString="Close the current project...")
         self.Bind(wx.EVT_MENU, self.CloseCurrentProject, self.mnClose)
         
+        self.mnExit = self.mnFile.Append(wx.Window.NewControlId(), "Exit", helpString="Exit this application...")
+        self.Bind(wx.EVT_MENU, self.exitApp, self.mnExit)
+        
         
         self.mnMain.Append(self.mnFile, "File")
         self.SetMenuBar(self.mnMain)
     
     
     def toolBar(self):
-        tbTools = self.CreateToolBar()
-        self.ToolBar = tbTools
-        runButton = tbTools.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("images\\run_button.png"))
+        self.tlMain = self.CreateToolBar()
+        self.ToolBar = self.tlMain
+        tlNewProject = self.tlMain.AddTool(wx.Window.NewControlId(), "New Project", wx.Bitmap("images\\new_project.png"))
+        self.Bind(wx.EVT_TOOL, self.CreateNewProject, tlNewProject)
+        tlOpenProject = self.tlMain.AddTool(wx.Window.NewControlId(), "Open Project", wx.Bitmap("images\\open_project.png"))
+        self.Bind(wx.EVT_TOOL, self.OpenExistingProject, tlOpenProject)
+        tlCloseProject = self.tlMain.AddTool(wx.Window.NewControlId(), "Close Project", wx.Bitmap("images\\close_project.png"))
+        self.Bind(wx.EVT_TOOL, self.CloseCurrentProject, tlCloseProject)
+        
+        self.tlMain.AddSeparator()
+        
+        self.tlNewScript = self.tlMain.AddTool(wx.Window.NewControlId(), "New Script", wx.Bitmap("images\\new_script.png"))
+        
+        self.tlMain.AddSeparator()
+        
+        runButton = self.tlMain.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("images\\run_button.png"))
         self.Bind(wx.EVT_TOOL, self.runGame, runButton)
-        tbTools.Realize()
+        self.tlMain.SetToolSeparation(12)
+        self.tlMain.Realize()
 
     def mainContent(self):
             #tab panes
@@ -93,7 +110,8 @@ class MainWindow(wx.Frame):
         self.tbInspector = InspectorTab(nbMainContent)
         nbMainContent.AddPage(self.tbEditor, "Script Editor")
         nbMainContent.AddPage(self.tbInspector, "Inspector")
-        self.Bind(wx.EVT_MENU, self.tbEditor.newScript, self.mnNewScript)
+        self.Bind(wx.EVT_MENU, self.newScript, self.mnNewScript)
+        self.Bind(wx.EVT_TOOL, self.newScript, self.tlNewScript)
         
             #directory tree
         #self.trDirectory = wx.GenericDirCtrl(self, wx.Window.NewControlId(), size=(300, 1500))
@@ -129,6 +147,10 @@ class MainWindow(wx.Frame):
         interfaceStuff.gameMode = ""
         interfaceStuff.location = ""
         self.trDirectory.clearTree()
+        
+        
+    def exitApp(self, event):
+        self.Close()
 
     
     def runGame(self, event):
@@ -152,7 +174,12 @@ class MainWindow(wx.Frame):
         else:
             self.tbEditor.setStyle("base")
         """
-
+        
+    def newScript(self, event):
+        created = self.tbEditor.newScript(event)
+        if created:
+            interfaceStuff.updateManifest()
+            self.trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
 
 
 if __name__ == "__main__":
