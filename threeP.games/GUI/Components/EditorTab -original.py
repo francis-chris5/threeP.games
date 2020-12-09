@@ -123,7 +123,16 @@ class EditorTab(wx.Panel):
     def loadFile(self, file):
         self.__text.LoadFile(file)
         
-        
+
+## Put this in caller
+"""
+if file[file.index("."):] == ".py":
+    self.tbEditor.setStyle("python")
+elif file[file.index("."):] == ".xml" or file[file.index("."):] == ".svg":
+    self.tbEditor.setStyle("xml")
+else:
+    self.tbEditor.setStyle("base")
+"""
         
 
 

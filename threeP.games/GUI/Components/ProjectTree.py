@@ -4,28 +4,43 @@ Created on Sat Dec  5 17:12:04 2020
 
 @author: Christopher S. Francis
 """
+
+
 import wx
+from os.path import dirname
 import xml.etree.ElementTree as ET
 
+
 class ProjectTree(wx.Panel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, parent, images = [], *args, **kwargs):
+        super().__init__(parent)
         
-        self.__tree = wx.TreeCtrl(self, -1) #size=(200, 500)
-        #self.loadProject("C:\\Users\\Chris\\Documents\\delete\\example\\example_manifest.xml")
+            # tree
+        self.__tree = wx.TreeCtrl(self, -1)
         
+            #images for tree items
+        self.__images = wx.ImageList(16, 16)
+        for img in images:
+            self.__images.Add(img)
+        self.__tree.AssignImageList(self.__images)
+        
+            # build and set tree
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.__tree, 1, wx.EXPAND)
         self.SetSizer(sizer)
         
+
         
+# =============================================================================
+#  Tree Methods       
+# =============================================================================
     def loadProject(self, path):
         self.__tree.DeleteAllItems()
         tree = ET.parse(path)
         root = tree.getroot()
         for child in root:
             if child.tag == "project":
-                treeRoot = self.__tree.AddRoot(child.text)
+                treeRoot = self.__tree.AddRoot(child.text, 4)
             else:
                 self.parseDirectory(treeRoot, child)
         self.__tree.ExpandAll()
@@ -34,7 +49,7 @@ class ProjectTree(wx.Panel):
     def parseDirectory(self, root, directory):
         for item in directory:
             if item.tag == "directory":
-                branch = self.__tree.AppendItem(root, item.find("name").text)
+                branch = self.__tree.AppendItem(root, item.find("name").text, 2)
                 self.parseDirectory(branch, item)
             if item.tag == "files":
                 self.parseDirectory(root, item)
@@ -45,9 +60,20 @@ class ProjectTree(wx.Panel):
                 except:
                     start = 0
                 name = name[start:]
-                branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text)
-                #branch = self.__tree.AppendItem(root, item.find("name").text)
-    
+                dot = name.rindex(".")
+                extension = name[dot:]
+                if extension == ".py":
+                    branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 0)
+                elif extension == ".xml":
+                    if name[-12:] == "manifest.xml":
+                        branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 3)
+                    else:
+                        branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 1)
+                elif extension == ".png" or extension == ".bam":
+                    branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 5)
+                else:
+                    branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 1)
+                
     
     def getTree(self):
         return self.__tree
@@ -59,7 +85,9 @@ class ProjectTree(wx.Panel):
 
 
 
-
+# =============================================================================
+# Open a Testing Window for Tree
+# =============================================================================
 class gui(wx.Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

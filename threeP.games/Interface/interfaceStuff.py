@@ -7,6 +7,7 @@
 
 from os import makedirs, listdir, system
 from os.path import isdir, isfile, join, basename
+from shutil import copytree
 import subprocess
 from xml.sax.saxutils import escape as xml_escape
 import xml.etree.ElementTree as ET
@@ -131,7 +132,31 @@ def xmlParseManifest(path):
             gameMode = int(child.text)
         elif child.tag == "location":
             location = child.text
+            
+
+
+##
+# A method to import a folder of .png 2d-sprite-sheet images or .bam formatted 3d-models.\n
+# The folder must be named appropriately in advance and contain only .png files
+# @param path The directory where the sprite sheet was originally stored at
+# @param extension The file extension for image/model files, should be either png or bam
+# @ return <b>bool</b> Representing success or failure of the task
+def grabSpriteSheetOrModel(path, extension):
+    allGood = True
+    for file in listdir(path):
+        if not isfile(join(path,file)) or  file[-4:] != extension:
+            allGood = False
+    if allGood:
+        copytree(path, location + "\\Assets\\" + path[path.rindex("\\"):])
+        updateManifest()
+        return True
+    else:
+        return False
+ 
+
+       
     
+
     
 #************** GRAPHICS STUFF    
 

@@ -15,24 +15,10 @@
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    sodipodi:docname="new_script.svg"
    inkscape:export-filename="C:\Users\Chris\Documents\game dev in python\threeP.games\GUI\images\new_script.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:export-xdpi="113.94925"
+   inkscape:export-ydpi="113.94925">
   <defs
-     id="defs2">
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter845"
-       x="-0.079084288"
-       width="1.1581686"
-       y="-0.080766931"
-       height="1.1615339">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.11209492"
-         id="feGaussianBlur847" />
-    </filter>
-  </defs>
+     id="defs2" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -40,8 +26,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="13.526786"
+     inkscape:zoom="5.6"
+     inkscape:cx="11.5625"
      inkscape:cy="16.25"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -50,11 +36,11 @@
      units="px"
      inkscape:pagecheckerboard="true"
      showguides="false"
-     inkscape:window-width="1366"
+     inkscape:window-width="792"
      inkscape:window-height="705"
-     inkscape:window-x="-8"
+     inkscape:window-x="566"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -71,13 +57,17 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <path
-       style="fill:#e9ddaf;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 0.68508183,8.1028645 7.7485117,8.0556176 7.7721353,2.9765625 4.9609374,0.40159969 0.68508183,0.33072916 Z"
-       id="path833" />
-    <path
-       style="mix-blend-mode:darken;fill:none;stroke:#d6c892;stroke-width:0.265;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter845);opacity:0.83225806"
-       d="M 4.9609374,0.40159969 4.3703496,3.7325149 7.7721353,2.9765625 Z"
-       id="path835" />
+    <g
+       id="g11"
+       transform="matrix(0.64127778,0,0,0.87021094,1.4613292,0.66822642)">
+      <path
+         style="fill:none;stroke:#e9ddaf;stroke-width:0.776118;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 0.6525798,7.9463787 7.7337055,7.9013204 7.7573883,3.0575464 4.9391476,0.60186567 0.6525798,0.53427813 Z"
+         id="path833" />
+      <path
+         style="opacity:0.832258;mix-blend-mode:darken;fill:none;stroke:#e9ddaf;stroke-width:0.776118;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 4.9391476,0.60186567 4.3470802,3.7784802 7.7573883,3.0575464 Z"
+         id="path835" />
+    </g>
   </g>
 </svg>

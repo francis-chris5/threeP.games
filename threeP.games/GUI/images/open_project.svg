@@ -13,7 +13,10 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="open_project.svg">
+   sodipodi:docname="open_project.svg"
+   inkscape:export-filename="C:\Users\Chris\Documents\game dev in python\threeP.games\GUI\images\open_project.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <defs
      id="defs2">
     <filter
@@ -38,7 +41,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.2"
-     inkscape:cx="16.728675"
+     inkscape:cx="14.764389"
      inkscape:cy="19.547067"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -59,7 +62,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -68,18 +71,18 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:#ffdd55;stroke:none;stroke-width:0.4233px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 8.4072771,2.1182888 7.0277718,7.7315649 1.1914038,7.8123318 2.5355369,2.1586722 Z"
+       style="fill:none;stroke:#ffdd55;stroke-width:0.412275px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 7.9908433,2.1182888 6.682259,7.7315649 1.1459416,7.8123318 2.4209721,2.1586722 Z"
        id="path833" />
     <path
-       style="fill:#ffdd55;fill-opacity:1;stroke:none;stroke-width:0.4233px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 1.1914038,7.8123318 0.30710557,0.62410737 3.0307438,0.54334067 3.2076037,1.3913895 l 3.997028,-0.040385 0.307756,0.7835293 -4.9768508,0.024134 z"
+       style="fill:none;fill-opacity:1;stroke:#ffdd55;stroke-width:0.412275px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 1.1459416,7.8123318 0.30710557,0.62410737 2.8907202,0.54334067 3.0584877,1.3913895 6.8500265,1.3510045 7.1419606,2.1345338 2.4209721,2.1586678 Z"
        id="path835" />
     <path
-       style="fill:#f1d254;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1041)"
+       style="fill:#f1d254;fill-opacity:0.710843;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1041)"
        d="M 2.126116,7.2051711 3.0238094,3.8978771 6.3476512,3.8837589 6.2307207,3.6415472 2.0007811,3.8822462 Z"
        id="path891"
-       transform="matrix(1.4973188,0,0,1.709453,-1.9920696,-4.5045696)"
+       transform="matrix(1.4203409,0,0,1.709453,-1.8738679,-4.5045696)"
        sodipodi:nodetypes="cccccc" />
   </g>
 </svg>
