@@ -26,6 +26,8 @@ The import graphics features will copy in a folder containing a 2d sprite sheet 
 
 The help features link directly to the official API documentation pages for Python, PyGame, and Panda3D.
 
+To remove a file from the project, right-click on it in the directory tree and confirm the choice.
+
 So at this point, basically just the directory structure set up...
 
 Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
