@@ -10,7 +10,7 @@ sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.game
 sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 import webbrowser
-from os import remove
+from os import remove, rmdir
 from os.path import join, isfile, isdir
 import interfaceStuff
 from EditorTab import EditorTab
@@ -232,12 +232,20 @@ class MainWindow(wx.Frame):
         
         
     def removeFile(self, event):
-        sure = wx.MessageDialog(self, message="Are you sure you want to permenantly delete this script?", caption="Remove Script From Project", style=wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL)
+        sure = wx.MessageDialog(self, message="Are you sure you want to permenantly delete this item?", caption="Remove Script From Project", style=wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL)
         if sure.ShowModal() == wx.ID_YES:
-            file = self.__trDirectory.getTree().GetItemText(event.GetItem())
-            start = file.index(">") + 1
-            file = file[start:]
-            remove(file)
+            try:
+                file = self.__trDirectory.getTree().GetItemText(event.GetItem())
+                start = file.index(">") + 1
+                file = file[start:]
+                if not isdir(file):
+                    remove(file)
+            except ValueError:
+                branch = self.__trDirectory.getTree().GetItemText(event.GetItem())
+                if branch == interfaceStuff.projectName or branch == "Assets" or branch == "Scenes" or branch == "Scripts":
+                    wx.MessageDialog(self, "A core directory in the project cannot be removed.").ShowModal()
+                else:
+                    wx.MessageDialog(self, "This feature currently is not working, please delete from the normal file controls on your system for the time being. Sorry for any inconvenience.").ShowModal()
             interfaceStuff.updateManifest()
             self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
 
