@@ -2,6 +2,8 @@
 
 An interface and graphical-interface to package game development projects written in Python with the PyGame and Panda3D engines.
 
+<h2>Introduciton</h2>
+
 So I've grown weary of scripting my games in C#, I hope to replace quizzes in classes that I teach with educational video games, which means a steady flow of dinky things better than radio buttons and check boxes on a webpage styled to look like paper needs to flow out, and I would prefer to script these games in Python. The game engines PyGame and Panda3D were selected for 2d and 3d games respectively, but a graphical user interface I liked for them could not be found. So, making my own.
 
 
@@ -10,6 +12,7 @@ This is the very early stages of a work in progress. Currently the packaging for
 
 wxPython was selected for putting together the Graphical User Interface due to the ease of embedding scripting tools with the wx.py.editor and wx.py.shell libraries, and many many other reasons... These python scripting tools are about the only things working so far, in default format mind you, along with setting up the project directories and a couple new/save/open features. 
 
+<h2>Instructions</h2>
 
 The run button writes the game, though it currently is only in the initial state: open engine and start main loop for both 2d and 3d, then runs it in a system console subprocess --not the embedded console, so open it with the exec(open(FILEPATH).run()) method in embedded console to get error messages. 
 
