@@ -27,7 +27,7 @@ Script documentation generated with doxygen available at: https://francis-chris5
 
 
 
-I forgot to list all the dependencies as I was making this, but I know that in addition to the core Python API I at least used:
+I forgot to list all the dependencies as I was making this at first, the full list will be coming, but I know that in addition to the core Python API I at least used:
 
 <blockquote>
       
