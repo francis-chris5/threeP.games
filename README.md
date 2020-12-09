@@ -14,7 +14,7 @@ wxPython was selected for putting together the Graphical User Interface due to t
 
 <h2>Instructions</h2>
 
-The create new project functions will provide a dialog box where a name, mode (2d or 3d), and directory must be selected. This cannot be changed internally, but moving the folder externally will work if the directory requires changing.
+The create new project functions will provide a dialog box where a name, mode (2d or 3d), and directory must be selected. This cannot be changed via GUI, and it is HIGHLY RECOMMENDED to simply create a new project and copy over the parts that were not automatically generated if major changes to any of these three main properties are required.
 
 The open project function will bring up a dialog box restricted to .xml files, select the {project-name}_manifest.xml file to open the project.
 
