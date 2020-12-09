@@ -14,9 +14,17 @@ wxPython was selected for putting together the Graphical User Interface due to t
 
 <h2>Instructions</h2>
 
+The create new project functions will provide a dialog box where a name, mode (2d or 3d), and directory must be selected. This cannot be changed internally, but moving the folder externally will work if the directory requires changing.
+
+The open project function will bring up a dialog box restricted to .xml files, select the {project-name}_manifest.xml file to open the project.
+
 The run button writes the game, though it currently is only in the initial state: open engine and start main loop for both 2d and 3d, then runs it in a system console subprocess --not the embedded console, so open it with the exec(open(FILEPATH).run()) method in embedded console to get error messages. 
 
-Scripts can only be saved to the "Scripts" folder in a project so each tab in the editor has a save button but no browse feature, and only scripts in the current project can be opened, do so by double clicking on the directory tree.
+Scripts can only be saved to the "Scripts" folder in a project so each tab in the editor has a save button but no browse feature, and only scripts in the current project can be opened, do so by double clicking on the directory tree. Also note that a new script can only be created when there is a project open.
+
+The import graphics features will copy in a folder containing a 2d sprite sheet of images stored in .png format or a folder containing a 3d model with animation stored in a .bam format. The game mode (2d or 3d) setting for the project will determine which file type is allowed to be imported, and the folder that is brought in must contain only the .png or .bam files for the project (a script to automate grabbing the folder directly from a blender file will be coming soon -probably the next thing coded up).
+
+The help features link directly to the official API documentation pages for Python, PyGame, and Panda3D.
 
 So at this point, basically just the directory structure set up...
 
