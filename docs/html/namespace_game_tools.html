@@ -77,7 +77,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a9fff2287cbb173171945723d61b9b802"><td class="mdescLeft">&#160;</td><td class="mdescRight">A method to create the start for a python class structure with getters and setters for all the attributes.  <a href="namespace_game_tools.html#a9fff2287cbb173171945723d61b9b802">More...</a><br /></td></tr>
 <tr class="separator:a9fff2287cbb173171945723d61b9b802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a553f322f3e9a040cb0b0f6d276464dc4"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_game_tools.html#a553f322f3e9a040cb0b0f6d276464dc4">startTask</a> (name, module=&quot;&quot;, directory=&quot;&quot;)</td></tr>
-<tr class="memdesc:a553f322f3e9a040cb0b0f6d276464dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A method to generate a set up a new task and add it to the task manager in the Panda3D engine.  <a href="namespace_game_tools.html#a553f322f3e9a040cb0b0f6d276464dc4">More...</a><br /></td></tr>
+<tr class="memdesc:a553f322f3e9a040cb0b0f6d276464dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A method to generate a set up for a new task to be added to the task manager in the Panda3D engine.  <a href="namespace_game_tools.html#a553f322f3e9a040cb0b0f6d276464dc4">More...</a><br /></td></tr>
 <tr class="separator:a553f322f3e9a040cb0b0f6d276464dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0590d1e5c71568544115c10ba9131d33"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_game_tools.html#a0590d1e5c71568544115c10ba9131d33">startFunction</a> (name, module=&quot;&quot;, parameters=[], directory=&quot;&quot;)</td></tr>
 <tr class="memdesc:a0590d1e5c71568544115c10ba9131d33"><td class="mdescLeft">&#160;</td><td class="mdescRight">A method to generate the method header and attach it to an object or module.  <a href="namespace_game_tools.html#a0590d1e5c71568544115c10ba9131d33">More...</a><br /></td></tr>
@@ -185,7 +185,7 @@ Functions</h2></td></tr>
 
 <p>A method to generate the method header and attach it to an object or module. </p>
 <p><br  />
- Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import </p><dl class="params"><dt>Parameters</dt><dd>
+ Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import (the new function is added at the bottom of the file, and if there are any classes in the module it will be indented)# Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>A name for the function to be added to an object for either a 2d or 3d game </td></tr>
     <tr><td class="paramname">module</td><td>The module (a.k.a. python file) to add the function into, if omitted it will be added directly to the module containing the main game object </td></tr>
@@ -228,9 +228,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>A method to generate a set up a new task and add it to the task manager in the Panda3D engine. </p>
+<p>A method to generate a set up for a new task to be added to the task manager in the Panda3D engine. </p>
 <p><br  />
- Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import </p><dl class="params"><dt>Parameters</dt><dd>
+ Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import (the new function is added at the bottom of the file, and if there are any classes in the module it will be indented) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>A name for the task to be added to the Panda3D task manager </td></tr>
     <tr><td class="paramname">module</td><td>The module (a.k.a. python file) to add the task into, if omitted it will be added directly to the main game object </td></tr>
