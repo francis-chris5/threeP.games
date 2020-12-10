@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['printxml_21',['printXML',['../namespaceinterface_stuff.html#a3a1259cf124ead850b2ca0f1277a2eae',1,'interfaceStuff']]],
-  ['projectname_22',['projectName',['../namespaceinterface_stuff.html#ae23783ed3378ce11fe73e01dc19c6fed',1,'interfaceStuff']]]
+  ['render_22',['render',['../class_game_objects_1_1_stuff2d.html#a60c350f51be359160f9bbb3183e47fb4',1,'GameObjects::Stuff2d']]],
+  ['rungame_23',['runGame',['../namespaceinterface_stuff.html#a76dfa72d1e2fa82932b88c117ff21f5d',1,'interfaceStuff']]]
 ];

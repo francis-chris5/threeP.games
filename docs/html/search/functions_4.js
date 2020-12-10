@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['grabspritesheetormodel_49',['grabSpriteSheetOrModel',['../namespaceinterface_stuff.html#a69f2efa05f652484b3b2cd4c37968a39',1,'interfaceStuff']]]
+  ['initializesection_47',['initializeSection',['../class_game_writer_1_1_game_writer2d.html#afc4eaa0c496cd672cd1f1b277c296638',1,'GameWriter::GameWriter2d']]]
 ];

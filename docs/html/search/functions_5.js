@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['initializesection_50',['initializeSection',['../class_game_writer_1_1_game_writer2d.html#afc4eaa0c496cd672cd1f1b277c296638',1,'GameWriter::GameWriter2d']]]
+  ['laytiles_48',['layTiles',['../class_game_objects_1_1_background2d.html#a23936335d4fe1bb4d6bf1e1db7bc6857',1,'GameObjects::Background2d']]]
 ];

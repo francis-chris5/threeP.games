@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['laytiles_51',['layTiles',['../class_game_objects_1_1_background2d.html#a23936335d4fe1bb4d6bf1e1db7bc6857',1,'GameObjects::Background2d']]]
+  ['mainloopsection_49',['mainLoopSection',['../class_game_writer_1_1_game_writer2d.html#a7fee56e232a6858756e13a9644ef71b5',1,'GameWriter::GameWriter2d']]],
+  ['move_50',['move',['../class_game_objects_1_1_character2d.html#ac1b73c02f6fecabaa7a3d590c80a9244',1,'GameObjects::Character2d']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['newproj_54',['newProj',['../namespaceinterface_stuff.html#a521e20901d75c7cfc36492963f215e77',1,'interfaceStuff']]]
+  ['printxml_52',['printXML',['../namespaceinterface_stuff.html#a3a1259cf124ead850b2ca0f1277a2eae',1,'interfaceStuff']]]
 ];

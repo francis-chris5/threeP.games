@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['initializesection_14',['initializeSection',['../class_game_writer_1_1_game_writer2d.html#afc4eaa0c496cd672cd1f1b277c296638',1,'GameWriter::GameWriter2d']]],
-  ['interfacestuff_15',['interfaceStuff',['../namespaceinterface_stuff.html',1,'']]]
+  ['laytiles_15',['layTiles',['../class_game_objects_1_1_background2d.html#a23936335d4fe1bb4d6bf1e1db7bc6857',1,'GameObjects::Background2d']]],
+  ['location_16',['location',['../namespaceinterface_stuff.html#a7d4e69b5636f796a579bcf44e2afb2f7',1,'interfaceStuff']]]
 ];

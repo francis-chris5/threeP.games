@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['render_56',['render',['../class_game_objects_1_1_stuff2d.html#a60c350f51be359160f9bbb3183e47fb4',1,'GameObjects::Stuff2d']]],
-  ['rungame_57',['runGame',['../namespaceinterface_stuff.html#a76dfa72d1e2fa82932b88c117ff21f5d',1,'interfaceStuff']]]
+  ['setsprite_55',['setSprite',['../class_game_objects_1_1_stuff2d.html#add918a5b356089e98b5f570fe08fc38f',1,'GameObjects::Stuff2d']]],
+  ['startclass_56',['startClass',['../namespace_game_tools.html#a9fff2287cbb173171945723d61b9b802',1,'GameTools']]],
+  ['startfunction_57',['startFunction',['../namespace_game_tools.html#a0590d1e5c71568544115c10ba9131d33',1,'GameTools']]],
+  ['starttask_58',['startTask',['../namespace_game_tools.html#a553f322f3e9a040cb0b0f6d276464dc4',1,'GameTools']]]
 ];
