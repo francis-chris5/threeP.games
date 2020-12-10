@@ -263,15 +263,15 @@ class MainWindow(wx.Frame):
             isCopied = False
             if dlg.ShowModal() == wx.ID_OK:
                 if interfaceStuff.gameMode == 2:
-                    isCopied = interfaceStuff.grabSpriteSheetOrModel(dlg.GetPath(), ".png")
+                    isCopied = interfaceStuff.grabSpriteSheet(dlg.GetPath())
                 elif interfaceStuff.gameMode == 3:
-                    isCopied = interfaceStuff.grabSpriteSheetOrModel(dlg.GetPath(), ".bam")
+                    isCopied = interfaceStuff.grabModel(dlg.GetPath())
                 else:
                     isCopied = False
             if isCopied:
                 self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
             else:
-                wx.MessageDialog(self, "The selected folder could not be imported, please check the following issues and try again:\nThere is a project open\nThe folder contians only the apporpriate image type for this project (2d:.png, 3d: .bam)").ShowModal()
+                wx.MessageDialog(self, "The selected folder could not be imported, please check the following issues and try again:\nThere is a project open\nThe folder contians only the apporpriate image type for this project (2d:.png, 3d: .glb)").ShowModal()
                 
     
     def tlHelp(self, event):

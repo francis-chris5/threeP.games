@@ -15,8 +15,8 @@
    sodipodi:docname="help_icon.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="C:\Users\Chris\Documents\game dev in python\threeP.games\GUI\images\help_icon.png"
-   inkscape:export-xdpi="160.81"
-   inkscape:export-ydpi="160.81">
+   inkscape:export-xdpi="102.76672"
+   inkscape:export-ydpi="102.76672">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -57,23 +57,23 @@
      inkscape:groupmode="layer"
      id="layer1">
     <ellipse
-       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#1c1680;stroke-width:0.470197;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.819277"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#1c1680;stroke-width:0.567624;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.819277"
        id="path832"
-       cx="3.7679498"
-       cy="4.4412203"
-       rx="1.7810168"
-       ry="3.7194889" />
+       cx="4.145926"
+       cy="4.3467264"
+       rx="2.6299968"
+       ry="3.6707754" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:4.66108px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#1c1680;fill-opacity:0.819608;stroke:none;stroke-width:0.116526;stroke-opacity:0.819277"
-       x="3.851491"
-       y="5.1441169"
+       style="font-style:normal;font-weight:normal;font-size:5.62688px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#1c1680;fill-opacity:0.819608;stroke:none;stroke-width:0.140671;stroke-opacity:0.819277"
+       x="3.0912323"
+       y="6.1769409"
        id="text836"
-       transform="scale(0.74397848,1.3441249)"><tspan
+       transform="scale(0.91005301,1.0988371)"><tspan
          sodipodi:role="line"
          id="tspan834"
-         x="3.851491"
-         y="5.1441169"
-         style="fill:#1c1680;fill-opacity:0.819608;stroke:none;stroke-width:0.116526;stroke-opacity:0.819277">?</tspan></text>
+         x="3.0912323"
+         y="6.1769409"
+         style="fill:#1c1680;fill-opacity:0.819608;stroke:none;stroke-width:0.140671;stroke-opacity:0.819277">?</tspan></text>
   </g>
 </svg>

@@ -11,6 +11,7 @@ from shutil import copytree
 import subprocess
 from xml.sax.saxutils import escape as xml_escape
 import xml.etree.ElementTree as ET
+from gltf.converter import convert
 
 from GameWriter import GameWriter2d, GameWriter3d
 
@@ -52,7 +53,7 @@ def newProj(name, mode, direct):
     updateManifest()
 
 
-##
+
 # Retrieves the directory structure of the project as a series of nested lists.\n
 # @return <b>(["directories"["contents"[...]]])
 def getDirectoryList(pathList, path):
@@ -136,15 +137,14 @@ def xmlParseManifest(path):
 
 
 ##
-# A method to import a folder of .png 2d-sprite-sheet images or .bam formatted 3d-models.\n
-# The folder must be named appropriately in advance and contain only .png files
+# A method to import a folder of .png 2d-sprite-sheet images \n
+# The folder must be named appropriately in advance and contain only .png files as it will simply copy the entire thing directly over to the Assets folder of the current project.
 # @param path The directory where the sprite sheet was originally stored at
-# @param extension The file extension for image/model files, should be either png or bam
 # @ return <b>bool</b> Representing success or failure of the task
-def grabSpriteSheetOrModel(path, extension):
+def grabSpriteSheet(path):
     allGood = True
     for file in listdir(path):
-        if not isfile(join(path,file)) or  file[-4:] != extension:
+        if not isfile(join(path,file)) or  file[-4:] != ".png":
             allGood = False
     if allGood:
         copytree(path, location + "\\Assets\\" + path[path.rindex("\\"):])
@@ -154,7 +154,33 @@ def grabSpriteSheetOrModel(path, extension):
         return False
  
 
-       
+
+##
+# A method to import a folder of gltf format (.glb) animated 3d models \n
+# The folder must be named appropriately in advance and contain only .glb files which will be converted to an identically named subdirectory of the Assets folder in the current project containing .bam files to use in Panda3D.\n
+# @param path The directory where the gltf (.glb) files were originally located.
+# @ return <b>bool</b> Representing success or failure of the task
+def grabModel(path):
+    name = path[path.rindex("\\"):]
+    destination = location + "\\" + "Assets\\" + name
+    
+    allGood = True
+    for file in listdir(path):
+        if not isfile(join(path,file)) or  file[-4:] != ".glb":
+            allGood = False
+            
+    if allGood:
+        if not isdir(destination):
+            makedirs(destination)
+        
+        for infile in listdir(path):
+            outfile = infile[0:-4] + ".bam"
+            convert(join(path, infile), join(destination, outfile))
+            # remove(join(src, infile))
+            updateManifest()
+        return True
+    else:
+        return False
     
 
     
