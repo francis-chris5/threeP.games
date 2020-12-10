@@ -7,7 +7,7 @@
 
 from os import makedirs, listdir, system
 from os.path import isdir, isfile, join, basename
-from shutil import copytree
+from shutil import copytree, copy
 import subprocess
 from xml.sax.saxutils import escape as xml_escape
 import xml.etree.ElementTree as ET
@@ -23,6 +23,8 @@ gameMode = ""
 
 ## The working directory for the project
 location = ""
+
+external = ["External Editors", "Notepad++", ("Inkscape", ".svg", "inkscape_logo.png"), ("Blender", ".blend", "blender_logo.png")]
 
 
 
@@ -50,6 +52,7 @@ def newProj(name, mode, direct):
     makedirs(join(location, "Scripts"))
     with open(join(location, "Scripts\\scripts.txt"), "w") as toFile:
         toFile.write("The scripts folder is intended to serve as the master location to\norganize the vast quantity of custom scripts that will be needed to\nassemble a game.\n")
+    copytree("images\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
     updateManifest()
 
 
@@ -115,7 +118,7 @@ def printXML(filename, xml):
         toFile.write("\t<location>" + location + "</location>\n\n\n")
         toFile.write("\t\t<!-- PROJECT RESOURCES -->\n")
         toFile.write("\t" + xml + "\n\n\n")
-        toFile.write(dependencyToXML() + "\n\n\n")
+        toFile.write(dependencyToXML(location) + "\n\n\n")
         toFile.write("</MyPyGame>")
         
 
@@ -157,24 +160,26 @@ def checkDependencies(path):
     return dependency
 
 
-def dependencyToXML():
-    dependency = []
-    for script in listdir(location):
-        if not isdir(script) and script[-3:] == ".py":
-            print("Checking: " + str((script)))
-            dep = checkDependencies(location + "\\" + script)
+
+##
+# Checks the project for all the imports in python scripts and returns all of the libraries used in a project to an xml-string.\n
+# @ return <b>str</b> An xml string with library tags nested inside of a dependency tag. 
+def dependencyToXML(path):
+    xml = ""
+    name = ""
+    for script in listdir(path):
+        dependency = []
+        if not isdir(join(path, script)) and script[-3:] == ".py":
+            dep = checkDependencies(join(path, script))
             for d in dep:
                 dependency.append(d)
-    for script in listdir(location + "\\Scripts"):
-        if not isdir(script) and script[-3:] == ".py":
-            print("Checking: " + str((script)))
-            dep = checkDependencies(location + "\\Scripts\\" + script)
-            for d in dep:
-                dependency.append(d)
-    xml = "\t<dependencies>\n"
-    for lib in dependency:
-        xml += "\t\t<library>" + lib + "</library>\n"
-    xml += "\t</dependencies>\n"
+        elif isdir(join(path, script)):
+            xml += dependencyToXML(join(path, script))
+        if len(dependency) > 0:
+            xml += "\t<dependencies script=\"" + script + "\">\n"
+            for lib in dependency:
+                xml += "\t\t<library>" + lib + "</library>\n"
+            xml += "\t</dependencies>\n"
     return xml
 
 
@@ -189,8 +194,9 @@ def grabSpriteSheet(path):
         if not isfile(join(path,file)) or  file[-4:] != ".png":
             allGood = False
     if allGood:
-        copytree(path, location + "\\Assets\\" + path[path.rindex("\\"):])
-        updateManifest()
+        if not isdir(location + "\\Assets\\" + path[path.rindex("\\"):]):
+            copytree(path, location + "\\Assets\\" + path[path.rindex("\\"):])
+            updateManifest()
         return True
     else:
         return False
@@ -208,13 +214,29 @@ def grabModel(path):
         if not isfile(join(path,file)) or  file[-4:] != ".glb":
             allGood = False
     if allGood:
-        destination = location + "\\Assets\\" + path[path.rindex("\\"):]
-        copytree(path, destination)
+        if not (location + "\\Assets\\") in path:
+            destination = location + "\\Assets\\" + path[path.rindex("\\"):]
+            copytree(path, destination)
+        else:
+            destination = path
         for infile in listdir(path):
             outfile = infile[0:-4] + ".bam"
             convert(join(path, infile), join(destination, outfile))
         updateManifest()
         return True
+    else:
+        return False
+    
+    
+def grabGraphicsSource(path):
+    allGood = True
+    if allGood:
+        if path[-4:] == ".svg" or path[-6:] == ".blend" or path[-4:] == ".png":
+            if not (location + "\\Assets\\") in path:
+                destination = location + "\\Assets\\" + path[path.rindex("\\"):]
+                copy(path, destination)
+            updateManifest()
+            return True
     else:
         return False
 
@@ -223,6 +245,18 @@ def grabModel(path):
 def systemPreview(file):
     command = "\"" + file + "\""
     system(command)
+    
+    
+def getFileStuff(filepath):
+    name = filepath
+    try:
+        start = name.rindex("\\") + 1
+    except:
+        start = 0
+    name = name[start:]
+    dot = name.rindex(".")
+    extension = name[dot:]
+    return name, extension
     
 #************** GRAPHICS STUFF    
 

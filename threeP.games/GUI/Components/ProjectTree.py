@@ -6,9 +6,13 @@ Created on Sat Dec  5 17:12:04 2020
 """
 
 
+import sys
+sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
+sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 from os.path import dirname
 import xml.etree.ElementTree as ET
+import interfaceStuff
 
 
 class ProjectTree(wx.Panel):
@@ -54,14 +58,7 @@ class ProjectTree(wx.Panel):
             if item.tag == "files":
                 self.parseDirectory(root, item)
             if  item.tag == "file":
-                name = item.find("name").text
-                try:
-                    start = name.rindex("\\") + 1
-                except:
-                    start = 0
-                name = name[start:]
-                dot = name.rindex(".")
-                extension = name[dot:]
+                name, extension = interfaceStuff.getFileStuff(item.find("name").text)
                 if extension == ".py":
                     branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 0)
                 elif extension == ".xml":
@@ -71,6 +68,10 @@ class ProjectTree(wx.Panel):
                         branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 1)
                 elif extension == ".png" or extension == ".glb":
                     branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 5)
+                elif extension == interfaceStuff.external[3][1]:
+                    branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 6)
+                elif extension == interfaceStuff.external[2][1]:
+                    branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 7)
                 else:
                     branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 1)
                 

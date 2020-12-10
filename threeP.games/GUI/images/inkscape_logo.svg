@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg1328"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   sodipodi:docname="inkscape_logo.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:export-filename="C:\Users\Chris\Documents\game dev in python\threeP.games\GUI\images\inkscape_logo.png"
+   inkscape:export-xdpi="113.949"
+   inkscape:export-ydpi="113.949">
+  <metadata
+     id="metadata1334">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1332" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     id="namedview1330"
+     showgrid="false"
+     inkscape:snap-nodes="true"
+     inkscape:pagecheckerboard="true"
+     inkscape:zoom="5.9777778"
+     inkscape:cx="24.76493"
+     inkscape:cy="27.38879"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1336" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g1336">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.11646;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 2.1840383,15.590473 13.097165,2.5450195 14.611124,1.809122 l 0.630817,-0.0669 1.450879,0.8027972 11.228534,13.3130528 -7.822125,4.013987 -0.189245,1.940092 1.955531,1.404895 -0.504653,1.070397 -3.532574,1.605593 -0.693896,1.538695 0.946224,0.936597 -3.595655,1.337995 -1.324715,-2.408392 -2.586347,-0.535198 1.072389,-2.809789 -6.3081668,-3.010489 2.7755931,-2.274593 -0.9462249,-0.869697 z"
+       id="path1901" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.11646;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 8.1842623,8.434069 8.9871607,9.7586171 H 11.84191 l 1.115137,-1.9395168 0.981321,3.2640637 2.631722,-1.8449052 1.962641,0.8514952 0.312238,-2.1287381 1.784219,1.2772429 0.579871,-1.0407163"
+       id="path1903" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.11646;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 9.790059,18.84123 -0.2230274,0.520357 5.6648944,2.081432 0.936715,-0.99341 z"
+       id="path1905" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.11646;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 24.242231,23.429842 0.446054,-0.662275 0.98132,-0.473052 h 1.025926 l 0.669082,0.520357 0.40145,0.662275 -0.847505,0.425747 -1.695007,0.0473 z"
+       id="path1907" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.11646;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 23.662359,24.801694 0.802899,0.331137 0.446055,0.80419 -0.535266,0.236527 H 23.75157 l -0.535266,-0.520359 z"
+       id="path1909" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.11646;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 9.3886098,25.038221 8.8087386,24.707083 7.7828129,24.849 l -0.7136873,0.473052 -0.1338164,0.473053 0.2230273,0.567663 0.49066,0.189222 0.6244769,-0.0473 0.8028979,-0.614969 z"
+       id="path1911" />
+  </g>
+</svg>

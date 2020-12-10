@@ -97,9 +97,11 @@ class MainWindow(wx.Frame):
             # construct asset menu
         self.__mnAssets = wx.Menu()
         self.__mnImportGraphics = self.__mnAssets.Append(wx.Window.NewControlId(), "Import Graphics Folder", helpString="Import a prepared folder of .png or .bam files...")
+        self.__mnImportSource = self.__mnAssets.Append(wx.Window.NewControlId(), "Import Graphics/Model Editor File", helpString="Import the editable source file for the graphics")
         
             # asset menu events
         self.Bind(wx.EVT_MENU, self.importGraphics, self.__mnImportGraphics)
+        self.Bind(wx.EVT_MENU, self.importSource, self.__mnImportSource)
         
             # construct help menu
         self.__mnHelp = wx.Menu()
@@ -125,11 +127,12 @@ class MainWindow(wx.Frame):
         
             # tools
         self.__tlNewProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Project", wx.Bitmap("images\\new_project.png"))
-        self.__tlOpenProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Open Project", wx.Bitmap("images\\open_project.png"))
+        self.__tlOpenProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Open Project", wx.Bitmap("images\\folder_icon.png"))
         self.__tlCloseProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Close Project", wx.Bitmap("images\\close_project.png"))
         self.__tlMain.AddSeparator()
-        self.__tlNewScript = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Script", wx.Bitmap("images\\new_script.png"))
+        self.__tlNewScript = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Script", wx.Bitmap("images\\file_icon.png"))
         self.__tlImportGraphics = self.__tlMain.AddTool(wx.Window.NewControlId(), "Import Graphics Folder", wx.Bitmap("images\\graphics_icon.png"))
+        self.__tlImportSource = self.__tlMain.AddTool(wx.Window.NewControlId(), "Imort Graphics/Model Editor Source", wx.Bitmap("images\\edit_source.png"))
         self.__tlMain.AddSeparator()
         self.__tlRunSystem = self.__tlMain.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("images\\run_button.png"))
         self.__tlMain.AddSeparator()
@@ -141,6 +144,7 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.CreateNewProject, self.__tlNewProject)
         self.Bind(wx.EVT_TOOL, self.OpenExistingProject, self.__tlOpenProject)
         self.Bind(wx.EVT_TOOL, self.importGraphics, self.__tlImportGraphics)
+        self.Bind(wx.EVT_TOOL, self.importSource, self.__tlImportSource)
         self.Bind(wx.EVT_TOOL, self.tlHelp, self.__tlHelp)
         
             # build and set menu
@@ -156,7 +160,9 @@ class MainWindow(wx.Frame):
         self.__nbMainContent.AddPage(self.__tbInspector, "Inspector")
         
             # directory tree
-        self.__trImages = [wx.Icon("images\\python_logo.png"), wx.Icon("images\\new_script.png"), wx.Icon("images\\open_project.png"), wx.Icon("images\\manifest_icon.png"), wx.Icon("images\\threeP_logo.ico"), wx.Icon("images\\graphics_icon.png")]
+        self.__trImages = [wx.Icon("images\\python_logo.png"), wx.Icon("images\\file_icon.png"), wx.Icon("images\\folder_icon.png"), wx.Icon("images\\manifest_icon.png"), wx.Icon("images\\threeP_logo.ico"), wx.Icon("images\\graphics_icon.png")]
+        self.__trImages.append(wx.Icon("images\\" + interfaceStuff.external[3][2])) #3d editor will be index 6
+        self.__trImages.append(wx.Icon("images\\" + interfaceStuff.external[2][2])) #2d editor will be index 7
         self.__trDirectory = ProjectTree(self, self.__trImages)
         
             # main content events
@@ -218,15 +224,17 @@ class MainWindow(wx.Frame):
         
         
     def openFile(self, event):
-        file = self.__trDirectory.getTree().GetItemText(event.GetItem())
+        filepath = self.__trDirectory.getTree().GetItemText(event.GetItem())
         try:
-            start = file.index(">") + 1
-            file = file[start:]
-            if not isdir(file) and file[-4:] != ".png" and file[-4:] != ".glb" and file[-4:] != ".bam":
-                self.__tbEditor.newEditor(file)
-            elif file[-4:] == ".png" or file[-4:] == ".glb":
-                interfaceStuff.systemPreview(file)
-            elif file[-4:] == ".bam":
+            start = filepath.index(">") + 1
+            filepath = filepath[start:]
+            name, extension = interfaceStuff.getFileStuff(filepath)
+            print(name)
+            if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
+                self.__tbEditor.newEditor(filepath)
+            elif extension == ".png" or extension == ".glb" or extension == interfaceStuff.external[2][1] or extension == interfaceStuff.external[3][1]:
+                interfaceStuff.systemPreview(filepath)
+            elif extension == ".bam":
                 wx.MessageDialog(self, "No preview of a Binary-Compressed Sequence Alignment/Map available, see https://samtools.github.io/hts-specs/SAMv1.pdf for details.\nThis file is here because the Panda3D engine uses it, select the associated gltf(.glb) file for a preview of the animated model.").ShowModal()
         except ValueError:
             branch = self.__trDirectory.getTree().GetSelection()
@@ -277,9 +285,23 @@ class MainWindow(wx.Frame):
             if isCopied:
                 self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
             else:
-                wx.MessageDialog(self, "The selected folder could not be imported, please check the following issues and try again:\nThere is a project open\nThe folder contians only the apporpriate image type for this project (2d:.png, 3d: .glb)").ShowModal()
-                
+                wx.MessageDialog(self, "The selected folder could not be imported, please check the following issues and try again:\nThere is a project open\nThe folder contians only the apporpriate image type for this project (2d:.png, 3d: .glb)\nIf the folder was exported from a source file refresh the directory tree (close and reopen project)").ShowModal()
     
+    
+    def importSource(self, event):
+        directories = wx.FileDialog(None, "Select the folder to import to " + interfaceStuff.projectName + " Project", wildcard="Graphics Source File (*.blend, *.png, *.svg)|*.blend;*.png;*.svg")
+        with directories as dlg:
+            isCopied = False
+            if dlg.ShowModal() == wx.ID_OK:
+                isCopied = interfaceStuff.grabGraphicsSource(dlg.GetPath())
+            if isCopied:
+                self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
+            else:
+                wx.MessageDialog(self, "The selected file could not be imported, please check the following issues and try again:\nThere is a project open...").ShowModal()
+                
+        
+        
+        
     def tlHelp(self, event):
         self.pyGameHelp(event)
         self.pythonHelp(event)
