@@ -61,8 +61,8 @@ def startClass(module="myModule", name="myClass", parent="", attributes=[], dire
         
         
 ##
-# A method to generate a set up a new task and add it to the task manager in the Panda3D engine.\n
-# Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import
+# A method to generate a set up for a new task to be added to the task manager in the Panda3D engine.\n
+# Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import (the new function is added at the bottom of the file, and if there are any classes in the module it will be indented)
 # @param name A name for the task to be added to the Panda3D task manager
 # @param module The module (a.k.a. python file) to add the task into, if omitted it will be added directly to the main game object
 # @param directory The directory to write the objects to, will be created if it does not already exist
@@ -115,7 +115,7 @@ def startTask(name, module="", directory=""):
 
 ##
 # A method to generate the method header and attach it to an object or module.\n
-# Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import
+# Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import (the new function is added at the bottom of the file, and if there are any classes in the module it will be indented)# Currently this is only set up to work if there is only one single class per file or a module of non-class methods to import
 # @param name A name for the function to be added to an object for either a 2d or 3d game
 # @param module The module (a.k.a. python file) to add the function into, if omitted it will be added directly to the module containing the main game object
 # @param parameters A list of strings representing the parameters that will be needed for the method

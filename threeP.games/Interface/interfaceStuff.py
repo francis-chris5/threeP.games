@@ -114,7 +114,8 @@ def printXML(filename, xml):
         toFile.write("\t<mode>" + str(gameMode) + "</mode>\n")
         toFile.write("\t<location>" + location + "</location>\n\n\n")
         toFile.write("\t\t<!-- PROJECT RESOURCES -->\n")
-        toFile.write("\t" + xml)
+        toFile.write("\t" + xml + "\n\n\n")
+        toFile.write(dependencyToXML() + "\n\n\n")
         toFile.write("</MyPyGame>")
         
 
@@ -134,6 +135,47 @@ def xmlParseManifest(path):
         elif child.tag == "location":
             location = child.text
             
+
+
+##
+# A method to check a python script and produce a list of the imported libraries.\n
+# @param path The filepath for the python script to be checked
+# @return <b>list</b> 
+def checkDependencies(path):
+    if path[-3:] != ".py":
+        return False
+    else:
+        dependency = []
+        with open(path, "r") as script:
+            for line in script:
+                if line[0:6] == "import":
+                    line = line[7:]
+                    dependency.append(line[0:-1])
+                elif line[0:4] == "from":
+                    line = line[5:]
+                    dependency.append(line[0:line.index(" ")])
+    return dependency
+
+
+def dependencyToXML():
+    dependency = []
+    for script in listdir(location):
+        if not isdir(script) and script[-3:] == ".py":
+            print("Checking: " + str((script)))
+            dep = checkDependencies(location + "\\" + script)
+            for d in dep:
+                dependency.append(d)
+    for script in listdir(location + "\\Scripts"):
+        if not isdir(script) and script[-3:] == ".py":
+            print("Checking: " + str((script)))
+            dep = checkDependencies(location + "\\Scripts\\" + script)
+            for d in dep:
+                dependency.append(d)
+    xml = "\t<dependencies>\n"
+    for lib in dependency:
+        xml += "\t\t<library>" + lib + "</library>\n"
+    xml += "\t</dependencies>\n"
+    return xml
 
 
 ##
@@ -157,48 +199,42 @@ def grabSpriteSheet(path):
 
 ##
 # A method to import a folder of gltf format (.glb) animated 3d models \n
-# The folder must be named appropriately in advance and contain only .glb files which will be converted to an identically named subdirectory of the Assets folder in the current project containing .bam files to use in Panda3D.\n
+# The folder must be named appropriately in advance and contain only .glb files which will be copied to an identically named subdirectory of the Assets folder in the current project and generate identically named .bam files to use in Panda3D.\n
 # @param path The directory where the gltf (.glb) files were originally located.
 # @ return <b>bool</b> Representing success or failure of the task
 def grabModel(path):
-    name = path[path.rindex("\\"):]
-    destination = location + "\\" + "Assets\\" + name
-    
     allGood = True
     for file in listdir(path):
         if not isfile(join(path,file)) or  file[-4:] != ".glb":
             allGood = False
-            
     if allGood:
-        if not isdir(destination):
-            makedirs(destination)
-        
+        destination = location + "\\Assets\\" + path[path.rindex("\\"):]
+        copytree(path, destination)
         for infile in listdir(path):
             outfile = infile[0:-4] + ".bam"
             convert(join(path, infile), join(destination, outfile))
-            # remove(join(src, infile))
-            updateManifest()
+        updateManifest()
         return True
     else:
         return False
-    
 
+
+
+def systemPreview(file):
+    command = "\"" + file + "\""
+    system(command)
     
 #************** GRAPHICS STUFF    
 
 
-##
-# Quick access to the primary 2d editing software from the workspace
-# @return <b>void</b>
+
 def editor2d():
     openInkscape = "C:\\Program Files\\Inkscape\\bin\\Inkscape.exe"
     subprocess.call(openInkscape, shell=True)
     
 
 
-##
-# Quick access to the primary 3d editing software from the workspace
-# @return <b>void</b>
+
 def editor3d():
     openBlender = "C:\\Program Files\\Blender Foundation\\Blender 2.82\Blender.exe"
     subprocess.call(openBlender, shell=True)
@@ -207,9 +243,7 @@ def editor3d():
 #*************** SCRIPTING STUFF
 
 
-##
-# Quick access to the primary text editing software from the workspace
-# @return <b>void</b>
+
 def scriptEditor():
     openTextEditor = "C:\\Program Files\\Notepad++\\notepad++.exe"
     subprocess.call(openTextEditor, shell=True)

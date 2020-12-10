@@ -191,6 +191,8 @@ class MainWindow(wx.Frame):
             if dlg.ShowModal() == wx.ID_OK:
                 manifest = dlg.GetPath()
                 interfaceStuff.xmlParseManifest(manifest)
+                interfaceStuff.updateManifest()
+                interfaceStuff.xmlParseManifest(manifest)
                 self.__trDirectory.loadProject(manifest)
                 self.SetTitle("threeP.games:        " + interfaceStuff.location)
          
@@ -220,8 +222,12 @@ class MainWindow(wx.Frame):
         try:
             start = file.index(">") + 1
             file = file[start:]
-            if not isdir(file) and file[-4:] != ".png" and file[-4:] != ".bam":
+            if not isdir(file) and file[-4:] != ".png" and file[-4:] != ".glb" and file[-4:] != ".bam":
                 self.__tbEditor.newEditor(file)
+            elif file[-4:] == ".png" or file[-4:] == ".glb":
+                interfaceStuff.systemPreview(file)
+            elif file[-4:] == ".bam":
+                wx.MessageDialog(self, "No preview of a Binary-Compressed Sequence Alignment/Map available, see https://samtools.github.io/hts-specs/SAMv1.pdf for details.\nThis file is here because the Panda3D engine uses it, select the associated gltf(.glb) file for a preview of the animated model.").ShowModal()
         except ValueError:
             branch = self.__trDirectory.getTree().GetSelection()
             if self.__trDirectory.getTree().IsExpanded(branch):

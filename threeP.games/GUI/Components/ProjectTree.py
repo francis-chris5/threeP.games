@@ -69,7 +69,7 @@ class ProjectTree(wx.Panel):
                         branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 3)
                     else:
                         branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 1)
-                elif extension == ".png" or extension == ".bam":
+                elif extension == ".png" or extension == ".glb":
                     branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 5)
                 else:
                     branch = self.__tree.AppendItem(root, name + "   --->"  + item.find("name").text, 1)
