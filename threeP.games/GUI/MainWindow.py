@@ -229,7 +229,6 @@ class MainWindow(wx.Frame):
             start = filepath.index(">") + 1
             filepath = filepath[start:]
             name, extension = interfaceStuff.getFileStuff(filepath)
-            print(name)
             if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
                 self.__tbEditor.newEditor(filepath)
             elif extension == ".png" or extension == ".glb" or extension == interfaceStuff.external[2][1] or extension == interfaceStuff.external[3][1]:

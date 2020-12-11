@@ -118,6 +118,7 @@ def printXML(filename, xml):
         toFile.write("\t<location>" + location + "</location>\n\n\n")
         toFile.write("\t\t<!-- PROJECT RESOURCES -->\n")
         toFile.write("\t" + xml + "\n\n\n")
+        toFile.write("\t\t<!-- PYTHON SCRIPT DEPENDENCIES -->\n")
         toFile.write(dependencyToXML(location) + "\n\n\n")
         toFile.write("</MyPyGame>")
         
