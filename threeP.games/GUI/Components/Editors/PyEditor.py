@@ -20,6 +20,8 @@ import Editors.myWords as myWords
 class PyEditor(TextEditor):
     def __init__(self, parent, path):
         super().__init__(parent, path)
+        self.getEditor().SetUseTabs(False)
+        self.getEditor().SetTabWidth(4)
         self.setStyle()
     
     
