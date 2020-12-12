@@ -228,7 +228,8 @@ class MainWindow(wx.Frame):
 
     
     def runGame(self, event):
-        interfaceStuff.writeGame()
+        if not isfile(interfaceStuff.location + "\\" + interfaceStuff.projectName + ".py"):
+            interfaceStuff.writeGame()
         interfaceStuff.updateManifest()
         self.__trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
         echo = interfaceStuff.runSystem()
@@ -278,10 +279,6 @@ class MainWindow(wx.Frame):
 
     def newScript(self, event):
         created = self.__tbEditor.newScript(event)
-            #stuff for createing/testing dialog
-        #created = False
-        #nsd = NewScriptDialog(self, -1)
-        #nsd.ShowModal()
         if created:
             interfaceStuff.updateManifest()
             self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")

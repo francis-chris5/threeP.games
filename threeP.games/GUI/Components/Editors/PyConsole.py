@@ -105,7 +105,7 @@ class PyConsole(wx.Panel):
 #     Styling for the console
 # =============================================================================
     def setFont(self):
-        self.__font = wx.Font(10, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+        self.__font = wx.Font(12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
         self.__shell.face = self.__font.GetFaceName()
         self.__shell.size = self.__font.GetPointSize()
         

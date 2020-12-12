@@ -38,27 +38,27 @@ def startClass(module="myModule", name="myClass", parent="", attributes=[], dire
                 createClass.write("        pass")
         else:
             createClass.write(", ") 
-        for att in attributes:
-            if att != attributes[-1]:
-                createClass.write(att + ", ") 
-            else:
-                createClass.write(att + "):\n")
-        
-        for att in attributes:
-            createClass.write("        self.__" + att + " = " + att + "\n")
-        
-        for att in attributes:
-            createClass.write("\n")
-            first = att[0]
-            createClass.write("    def get" + att.replace(first, first.upper(), 1) + "(self):\n")
-            createClass.write("        return self.__" + att + "\n")
+            for att in attributes:
+                if att != attributes[-1]:
+                    createClass.write(att + ", ") 
+                else:
+                    createClass.write(att + "):\n")
             
-        for att in attributes:
-            createClass.write("\n")
-            first = att[0]
-            createClass.write("    def set" + att.replace(first, first.upper(), 1) + "(self, " + att + "):\n")
-            createClass.write("        self.__" + att + " = " + att +"\n")
-        
+            for att in attributes:
+                createClass.write("        self.__" + att + " = " + att + "\n")
+            
+            for att in attributes:
+                createClass.write("\n")
+                first = att[0]
+                createClass.write("    def get" + att.replace(first, first.upper(), 1) + "(self):\n")
+                createClass.write("        return self.__" + att + "\n")
+                
+            for att in attributes:
+                createClass.write("\n")
+                first = att[0]
+                createClass.write("    def set" + att.replace(first, first.upper(), 1) + "(self, " + att + "):\n")
+                createClass.write("        self.__" + att + " = " + att +"\n")
+            
         
 ##
 # A method to generate a set up for a new task to be added to the task manager in the Panda3D engine.\n

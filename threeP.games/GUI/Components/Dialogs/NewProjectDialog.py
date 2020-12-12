@@ -40,6 +40,7 @@ class NewProjectDialog(wx.Dialog):
         
             # Error Message
         self.__error = wx.StaticText(self, -1, label="", size=(90, 120), pos=(250, 30))
+        self.__error.SetForegroundColour((176, 43, 39))
         
             # Dialog Events
         self.Bind(wx.EVT_DIRPICKER_CHANGED, self.showDirectory, self.__location)

@@ -148,7 +148,7 @@ class TextEditor(wx.Panel):
         
     
     def setFont(self):
-        self.__font = wx.Font(10, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+        self.__font = wx.Font(12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
         self.getEditor().face = self.__font.GetFaceName()
         self.getEditor().size = self.__font.GetPointSize()
         
