@@ -217,7 +217,7 @@ class MainWindow(wx.Frame):
 
     
     def runGame(self, event):
-        #interfaceStuff.writeGame()
+        interfaceStuff.writeGame()
         interfaceStuff.updateManifest()
         self.__trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
         echo = interfaceStuff.runSystem()
