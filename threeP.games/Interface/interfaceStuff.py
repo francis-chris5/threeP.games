@@ -306,9 +306,14 @@ def writeGame():
 ##
 # A method to actually run the game constructed in the project.\n
 # Called from a run button on the GUI.\n
-def runGame():
+def runSystem():
     command = "python " + "\"" + location + "\\" + projectName + ".py\""
-    system(command)
+    #system(command)
+    ###subprocess.call(command, shell=True)
+    result = subprocess.getoutput(command)
+    return result
+
+    
 
 
 

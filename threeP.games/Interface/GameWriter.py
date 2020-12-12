@@ -57,12 +57,23 @@ class GameWriter2d:
         with open(path, mode="w") as toFile:
             for line in self.imports:
                 toFile.write(line + "\n")
+            toFile.write("\n\n\n")
+            
             for line in self.initialize:
                 toFile.write(line + "\n")
+            toFile.write("\n\n\n")
+            
             for line in self.mainLoop:
                 toFile.write(line + "\n")
+            toFile.write("\n\n\n")
+            
             for line in self.shutDown:
                 toFile.write(line + "\n")
+            toFile.write("\n\n\n")
+            
+            toFile.write("if __name__ == \"__main__\":\n")
+            toFile.write("    run()\n")
+            
         
 
 
@@ -78,7 +89,7 @@ class GameWriter3d:
     def __init__(self, title, directory = ""):
         self.imports = ["from direct.showbase.ShowBase import ShowBase"]
         self.mainScene = ["class Scene(ShowBase):", "    def __init__(self):", "        super().__init__()"]
-        self.runGame = ["game = Scene()", "game.run()"]
+        self.runGame = ["    game = Scene()", "    try:", "        game.run()", "    except:", "        base.destroy()"]
         self.title = title
         self.directory = directory
         
@@ -91,10 +102,17 @@ class GameWriter3d:
         with open(path, mode="w") as toFile:
             for line in self.imports:
                 toFile.write(line + "\n")
+            toFile.write("\n\n\n")
+            
             for line in self.mainScene:
                 toFile.write(line + "\n")
+            toFile.write("\n\n\n")
+            
+            toFile.write("if __name__ == \"__main__\":\n")
             for line in self.runGame:
                 toFile.write(line + "\n")
+
+            
                 
         
         
