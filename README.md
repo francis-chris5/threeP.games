@@ -12,6 +12,8 @@ This is the very early stages of a work in progress. Currently the packaging for
 
 wxPython was selected for putting together the Graphical User Interface due to the ease of embedding scripting tools with the wx.py.editor and wx.py.shell libraries, and many many other reasons... These python scripting tools are about the only things working so far, in default format mind you, along with setting up the project directories and a couple new/save/open features. 
 
+![threeP_screenshot](https://user-images.githubusercontent.com/50467171/101975528-42ebf980-3c0b-11eb-9e27-16e5628f3bf7.jpg)
+
 <h2>Instructions</h2>
 
 
