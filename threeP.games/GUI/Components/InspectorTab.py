@@ -33,14 +33,3 @@ class InspectorTab(wx.Panel):
         self.__name = text
 
 
-
-class gui(wx.Frame):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        p = InspectorTab(self)
-        self.Show()
-        
-if __name__ == "__main__":
-    app = wx.App()
-    gui(None, -1, "Inspector Test", size=(700, 450))
-    app.MainLoop()

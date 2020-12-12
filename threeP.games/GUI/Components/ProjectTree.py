@@ -83,19 +83,3 @@ class ProjectTree(wx.Panel):
     def clearTree(self):
         self.__tree.DeleteAllItems()
 
-
-
-
-# =============================================================================
-# Open a Testing Window for Tree
-# =============================================================================
-class gui(wx.Frame):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        p = ProjectTree(self)
-        self.Show()
-        
-if __name__ == "__main__":
-    app = wx.App()
-    gui(None, -1, "Tree Test")
-    app.MainLoop()

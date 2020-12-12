@@ -54,21 +54,21 @@ class EditorTab(wx.Panel):
     def newEditor(self, src=""):
         if src == "":
             self.__book.AddPage(PyEditor(self.__book, "untitled.py"), "untitled.py")
-        else: #if src[-3:] == ".py"
+        elif src[-3:] == ".py":
             editor = PyEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
             self.__book.AddPage(editor, file)
-        # elif src[-4:] == ".xml":
-        #     editor = XMLEditor(self.__book, src)
-        #     editor.loadFile(src)
-        #     file = src.split("\\")[-1]
-        #     self.__book.AddPage(editor, file)
-        # elif src[-4:] == ".txt":
-        #     editor = TextEditor(self.__book, src)
-        #     editor.loadFile(src)
-        #     file = src.split("\\")[-1]
-        #     self.__book.AddPage(editor, file)
+        elif src[-4:] == ".xml":
+            editor = XMLEditor(self.__book, src)
+            editor.loadFile(src)
+            file = src.split("\\")[-1]
+            self.__book.AddPage(editor, file)
+        elif src[-4:] == ".txt":
+            editor = TextEditor(self.__book, src)
+            editor.loadFile(src)
+            file = src.split("\\")[-1]
+            self.__book.AddPage(editor, file)
         
         
     def newScript(self, event):
@@ -82,17 +82,3 @@ class EditorTab(wx.Panel):
 
 
 
-
-# =============================================================================
-# Open a Testing Window for Editor Notebook
-# =============================================================================
-class gui(wx.Frame):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        p = EditorTab(self)
-        self.Show()
-        
-if __name__ == "__main__":
-    app = wx.App()
-    gui(None, -1, "Editor Test")
-    app.MainLoop()

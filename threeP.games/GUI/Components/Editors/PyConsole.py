@@ -6,6 +6,9 @@ Created on Fri Dec 11 06:46:30 2020
 """
 
 
+import sys
+sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
+sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 import wx.py.shell
 import Editors.myWords as myWords
@@ -33,6 +36,7 @@ class PyConsole(wx.Panel):
         self.__clrComment = "#c590e0"
         self.__clrString = "#77ad68"
         self.setFont()
+        self.baseStyle()
         self.setStyle()
         
             # bindings
@@ -109,6 +113,13 @@ class PyConsole(wx.Panel):
     def getFaces(self):
         return dict(font=self.__shell.face, size=self.__shell.size)
     
+    
+    def baseStyle(self):
+        faces = self.getFaces()
+        fonts = "face: %(font)s,size:%(size)d" % faces
+        default = "fore:" + self.getBaseColor() + ", " + fonts
+        self.__shell.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, default)
+        
         
     def setStyle(self):
         faces = self.getFaces()

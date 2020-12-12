@@ -16,7 +16,8 @@ import interfaceStuff
 from EditorTab import EditorTab
 from InspectorTab import InspectorTab
 from ProjectTree import ProjectTree
-from NewProjectDialog import NewProjectDialog
+from Dialogs.NewProjectDialog import NewProjectDialog
+from Dialogs.NewScriptDialog import NewScriptDialog
 
 
 class MainWindow(wx.Frame):
@@ -103,6 +104,15 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_MENU, self.importGraphics, self.__mnImportGraphics)
         self.Bind(wx.EVT_MENU, self.importSource, self.__mnImportSource)
         
+            # construct external menu
+        self.__mnExternal = wx.Menu()
+        self.__graphics2d = self.__mnExternal.Append(wx.Window.NewControlId(), "Open " + interfaceStuff.external[2][0], helpString="Opens the selected 2d graphics editing software...")
+        self.__graphics3d = self.__mnExternal.Append(wx.Window.NewControlId(), "Open " + interfaceStuff.external[3][0], helpString="Opens the selected 3d graphics editing software...")
+        
+            # external menu events
+        self.Bind(wx.EVT_MENU, self.open2dEditor, self.__graphics2d)
+        self.Bind(wx.EVT_MENU, self.open3dEditor, self.__graphics3d)
+        
             # construct help menu
         self.__mnHelp = wx.Menu()
         self.__mnPythonHelp = self.__mnHelp.Append(wx.Window.NewControlId(), "Python", helpString="Links to the official Python API Documentation Site...")
@@ -118,6 +128,7 @@ class MainWindow(wx.Frame):
         self.__mnMain.Append(self.__mnFile, "File")
         self.__mnMain.Append(self.__mnRun, "Run")
         self.__mnMain.Append(self.__mnAssets, "Assets")
+        self.__mnMain.Append(self.__mnExternal, "External")
         self.__mnMain.Append(self.__mnHelp, "Help")
         self.SetMenuBar(self.__mnMain)
     
@@ -221,7 +232,7 @@ class MainWindow(wx.Frame):
         interfaceStuff.updateManifest()
         self.__trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
         echo = interfaceStuff.runSystem()
-        wx.MessageDialog(self, echo).ShowModal()
+        wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
         
         
     def openFile(self, event):
@@ -233,7 +244,8 @@ class MainWindow(wx.Frame):
             if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
                 self.__tbEditor.newEditor(filepath)
             elif extension == ".png" or extension == ".glb" or extension == interfaceStuff.external[2][1] or extension == interfaceStuff.external[3][1]:
-                interfaceStuff.systemPreview(filepath)
+                echo = interfaceStuff.systemPreview(filepath)
+                wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
             elif extension == ".bam":
                 wx.MessageDialog(self, "No preview of a Binary-Compressed Sequence Alignment/Map available, see https://samtools.github.io/hts-specs/SAMv1.pdf for details.\nThis file is here because the Panda3D engine uses it, select the associated gltf(.glb) file for a preview of the animated model.").ShowModal()
         except ValueError:
@@ -266,6 +278,10 @@ class MainWindow(wx.Frame):
 
     def newScript(self, event):
         created = self.__tbEditor.newScript(event)
+            #stuff for createing/testing dialog
+        #created = False
+        #nsd = NewScriptDialog(self, -1)
+        #nsd.ShowModal()
         if created:
             interfaceStuff.updateManifest()
             self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
@@ -299,9 +315,16 @@ class MainWindow(wx.Frame):
             else:
                 wx.MessageDialog(self, "The selected file could not be imported, please check the following issues and try again:\nThere is a project open...").ShowModal()
                 
-        
-        
-        
+    def open2dEditor(self, event):
+        echo = interfaceStuff.editor2d()
+        wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
+    
+    
+    def open3dEditor(self, event):
+        echo = interfaceStuff.editor3d()
+        wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
+    
+    
     def tlHelp(self, event):
         self.pyGameHelp(event)
         self.pythonHelp(event)

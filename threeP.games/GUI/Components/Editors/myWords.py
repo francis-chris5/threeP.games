@@ -33,7 +33,12 @@ python = ["False",
           "if",
           "or",
           "yield", 
-          "print"]
+          "print",
+          "str",
+          "int"
+          "float"
+          "write"
+          "read"]
 
 
 
