@@ -31,19 +31,13 @@ Loadng the source graphics file rather than exports currently must be done to wo
 
 The help features link directly to the official API documentation pages for Python, PyGame, and Panda3D.
 
+![threeP_screenshot](https://user-images.githubusercontent.com/50467171/101975564-92322a00-3c0b-11eb-9737-bf69fffd28fb.jpg)
+
 To remove a file from the project, right-click on it in the directory tree and confirm the choice.
 
 So at this point, basically just the directory structure set up...
 
 Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
-
-
-
-
-![threeP_screenshot](https://user-images.githubusercontent.com/50467171/101975564-92322a00-3c0b-11eb-9737-bf69fffd28fb.jpg)
-
-
-
 
 I forgot to list all the dependencies as I was making this at first, the full list will be coming, but I know that in addition to the core Python API I at least used:
 
