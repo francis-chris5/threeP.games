@@ -24,7 +24,9 @@ gameMode = ""
 ## The working directory for the project
 location = ""
 
-external = ["External Editors", "Notepad++", ("Inkscape", ".svg", "inkscape_logo.png"), ("Blender", ".blend", "blender_logo.png")]
+
+## List of tubles describing the external applications to be used:  [(currently unused -filled with nonsense), (currently unused -filled with nonsense), (2d-editor, file-extension, icon, path), (3d-modeling, file-extension, icon, path)]
+external = [("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("Inkscape", ".svg", "inkscape_logo.png", "\"C:\\Inkscape\\bin\\Inkscape.exe\""), ("Blender", ".blend", "blender_logo.png", "\"C:\\Program Files\\Blender Foundation\\Blender 2.82\Blender.exe\"")]
 
 
 
@@ -45,13 +47,13 @@ def newProj(name, mode, direct):
     location = join(direct, projectName)
     makedirs(join(location, "Scenes"))
     with open(join(location, "Scenes\\scenes.txt"), "w") as toFile:
-        toFile.write("The scenes folder is intended to be used to hold the scripts which\ndefine the various cut-scenes and/or levels of a game.\n")
+        toFile.write("The scenes folder is intended to be used to hold the scripts which\ndefine the various cut-scenes and/or levels of a game.\n\n\nThis file is included here for to-do lists and notes about the Scenes resources\nsince only new python scripts can be created from within the project.")
     makedirs(join(location, "Assets"))
     with open(join(location, "Assets\\assets.txt"), "w") as toFile:
-        toFile.write("The assets folder is intended to serve as the master location to\norganize the multitude of resources needed for a game, such as: images,\nmodels, sound files, etc.\n")
+        toFile.write("The assets folder is intended to serve as the master location to\norganize the multitude of resources needed for a game, such as: images,\nmodels, sound files, etc.\n\n\nThis file is included here for to-do lists and notes about the Assets resources\nsince only new python scripts can be created from within the project.")
     makedirs(join(location, "Scripts"))
     with open(join(location, "Scripts\\scripts.txt"), "w") as toFile:
-        toFile.write("The scripts folder is intended to serve as the master location to\norganize the vast quantity of custom scripts that will be needed to\nassemble a game.\n")
+        toFile.write("The scripts folder is intended to serve as the master location to\norganize the vast quantity of custom scripts that will be needed to\nassemble a game.\n\n\nThis file is included here for to-do lists and notes about the Scripts resources\nsince only new python scripts can be created from within the project.")
     copytree("images\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
     updateManifest()
 
@@ -228,11 +230,17 @@ def grabModel(path):
     else:
         return False
     
+ 
     
+##
+# A method to bring the source files for graphics resources into the project. It checks for the filetype listed with the default editor listed for the project.
+# @param path The original location of the graphics source file.
+# @return <b>bool</b> representing the success (True) or failure (False) of the task.
 def grabGraphicsSource(path):
+    name, extension = getFileStuff(path)
     allGood = True
     if allGood:
-        if path[-4:] == ".svg" or path[-6:] == ".blend" or path[-4:] == ".png":
+        if extension == external[2][1] or extension == external[3][1] or extension == ".png":
             if not (location + "\\Assets\\") in path:
                 destination = location + "\\Assets\\" + path[path.rindex("\\"):]
                 copy(path, destination)
@@ -242,12 +250,20 @@ def grabGraphicsSource(path):
         return False
 
 
-
-def systemPreview(file):
-    command = "\"" + file + "\""
-    system(command)
+##
+# Opens non-meaningful-text files with the system defualt for such file types.
+# @param filepath The location of the file to be opened. 
+def systemPreview(filepath):
+    command = "\"" + filepath + "\""
+    result = subprocess.getoutput(command)
+    return result
     
+ 
     
+##
+# A method to take in a filepath and pull out the name and file extension.
+# @param filepath The file to extract the name and type data about
+# @return <b>(str, str)</b> The name and then the extension.
 def getFileStuff(filepath):
     name = filepath
     try:
@@ -262,29 +278,24 @@ def getFileStuff(filepath):
 #************** GRAPHICS STUFF    
 
 
-
+##
+# Quick start for the chosen 2d graphics editing software, obviously far more useful with the interface linked to a GUI than text based
+# @return <b>sys.stdout</b>
 def editor2d():
-    openInkscape = "C:\\Program Files\\Inkscape\\bin\\Inkscape.exe"
-    subprocess.call(openInkscape, shell=True)
-    
+    openEditor = external[2][3]
+    result = subprocess.getoutput(openEditor)
+    return result
 
 
-
+##
+# Quick start for the chosen 2d graphics editing software, obviously far more useful with the interface linked to a GUI than text based
+# @return <b>sys.stdout</b>
 def editor3d():
-    openBlender = "C:\\Program Files\\Blender Foundation\\Blender 2.82\Blender.exe"
-    subprocess.call(openBlender, shell=True)
+    openBlender = external[3][3]
+    result = subprocess.getoutput(openBlender)
+    return result
     
-    
-#*************** SCRIPTING STUFF
-
-
-
-def scriptEditor():
-    openTextEditor = "C:\\Program Files\\Notepad++\\notepad++.exe"
-    subprocess.call(openTextEditor, shell=True)
-    
-    
-    
+   
 #***************  GAME STUFF
 
 ##
