@@ -89,10 +89,10 @@ class MainWindow(wx.Frame):
         
             # construct run menu
         self.__mnRun = wx.Menu()
-        self.__mnRunSystem = self.__mnRun.Append(wx.Window.NewControlId(), "Run in System", helpString="Generate the game file and run...")
+        self.__mnRunGame = self.__mnRun.Append(wx.Window.NewControlId(), "Run in System", helpString="Generate the game file and run in system console...")
         
             # run menu events
-        self.Bind(wx.EVT_MENU, self.runGame, self.__mnRunSystem)
+        self.Bind(wx.EVT_MENU, self.runGame, self.__mnRunGame)
         
             # construct asset menu
         self.__mnAssets = wx.Menu()
@@ -134,13 +134,13 @@ class MainWindow(wx.Frame):
         self.__tlImportGraphics = self.__tlMain.AddTool(wx.Window.NewControlId(), "Import Graphics Folder", wx.Bitmap("images\\graphics_icon.png"))
         self.__tlImportSource = self.__tlMain.AddTool(wx.Window.NewControlId(), "Imort Graphics/Model Editor Source", wx.Bitmap("images\\edit_source.png"))
         self.__tlMain.AddSeparator()
-        self.__tlRunSystem = self.__tlMain.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("images\\run_button.png"))
+        self.__tlRunGame = self.__tlMain.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("images\\run_button.png"))
         self.__tlMain.AddSeparator()
         self.__tlHelp = self.__tlMain.AddTool(wx.Window.NewControlId(), "Help", wx.Bitmap("images\\help_icon.png"))
         
             # tool bar events (that don't have to wait on other components)
         self.Bind(wx.EVT_TOOL, self.CloseCurrentProject, self.__tlCloseProject)
-        self.Bind(wx.EVT_TOOL, self.runGame, self.__tlRunSystem)
+        self.Bind(wx.EVT_TOOL, self.runGame, self.__tlRunGame)
         self.Bind(wx.EVT_TOOL, self.CreateNewProject, self.__tlNewProject)
         self.Bind(wx.EVT_TOOL, self.OpenExistingProject, self.__tlOpenProject)
         self.Bind(wx.EVT_TOOL, self.importGraphics, self.__tlImportGraphics)
@@ -217,10 +217,11 @@ class MainWindow(wx.Frame):
 
     
     def runGame(self, event):
-        interfaceStuff.writeGame()
+        #interfaceStuff.writeGame()
         interfaceStuff.updateManifest()
         self.__trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
-        interfaceStuff.runGame()
+        echo = interfaceStuff.runSystem()
+        wx.MessageDialog(self, echo).ShowModal()
         
         
     def openFile(self, event):

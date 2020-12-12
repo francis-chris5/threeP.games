@@ -9,6 +9,8 @@ Created on Fri Dec 11 06:46:30 2020
 import wx
 import wx.py.shell
 import Editors.myWords as myWords
+import interfaceStuff
+from os.path import join
 
 
 # =============================================================================
@@ -91,8 +93,13 @@ class PyConsole(wx.Panel):
         self.__shell.clear()
         self.__shell.prompt()
         
+      
         
         
+        
+# =============================================================================
+#     Styling for the console
+# =============================================================================
     def setFont(self):
         self.__font = wx.Font(10, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
         self.__shell.face = self.__font.GetFaceName()

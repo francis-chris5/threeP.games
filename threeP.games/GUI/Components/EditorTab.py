@@ -38,7 +38,15 @@ class EditorTab(wx.Panel):
         sizer.Add(self.__book, 3, wx.EXPAND)
         sizer.Add(self.__shell, 1, wx.EXPAND)
         self.SetSizer(sizer)
-
+    
+    
+    
+    
+# =============================================================================
+#     Getters (and Setters) for Notebook 
+# =============================================================================
+    def getShell(self):
+        return self.__shell
 
 # =============================================================================
 # Methods for Notebook
@@ -46,31 +54,31 @@ class EditorTab(wx.Panel):
     def newEditor(self, src=""):
         if src == "":
             self.__book.AddPage(PyEditor(self.__book, "untitled.py"), "untitled.py")
-        elif src[-3:] == ".py":
+        else: #if src[-3:] == ".py"
             editor = PyEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
             self.__book.AddPage(editor, file)
-        elif src[-4:] == ".xml":
-            editor = XMLEditor(self.__book, src)
-            editor.loadFile(src)
-            file = src.split("\\")[-1]
-            self.__book.AddPage(editor, file)
-        elif src[-4:] == ".txt":
-            editor = TextEditor(self.__book, src)
-            editor.loadFile(src)
-            file = src.split("\\")[-1]
-            self.__book.AddPage(editor, file)
+        # elif src[-4:] == ".xml":
+        #     editor = XMLEditor(self.__book, src)
+        #     editor.loadFile(src)
+        #     file = src.split("\\")[-1]
+        #     self.__book.AddPage(editor, file)
+        # elif src[-4:] == ".txt":
+        #     editor = TextEditor(self.__book, src)
+        #     editor.loadFile(src)
+        #     file = src.split("\\")[-1]
+        #     self.__book.AddPage(editor, file)
         
         
     def newScript(self, event):
         scriptDialog = wx.TextEntryDialog(None, "Enter a Script Name", caption="New Script", value="")
         with scriptDialog as dlg:
             if dlg.ShowModal() == wx.ID_OK:
-                src = dlg.GetValue() + ".py"
+                src = interfaceStuff.location + "\\Scripts\\" + dlg.GetValue() + ".py"
                 editor = PyEditor(self.__book, src)
                 self.__book.AddPage(editor, src)
-                return editor.saveScript(event)
+                return editor.saveFile(event)
 
 
 
