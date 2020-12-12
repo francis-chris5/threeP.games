@@ -71,8 +71,7 @@ class GameWriter2d:
                 toFile.write(line + "\n")
             toFile.write("\n\n\n")
             
-            toFile.write("if __name__ == \"__main__\":\n")
-            toFile.write("    run()\n")
+
             
         
 
