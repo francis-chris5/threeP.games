@@ -14,11 +14,12 @@ wxPython was selected for putting together the Graphical User Interface due to t
 
 <h2>Instructions</h2>
 
+
 The create new project functions will provide a dialog box where a name, mode (2d or 3d), and directory must be selected. This cannot be changed via GUI, and it is HIGHLY RECOMMENDED to simply create a new project and copy over the parts that were not automatically generated if major changes to any of these three main properties are required.
 
 The open project function will bring up a dialog box restricted to .xml files, select the {project-name}_manifest.xml file to open the project.
 
-The run button writes the game, though it currently is only in the initial state: open engine and start main loop for both 2d and 3d, then runs it in a system console subprocess --not the embedded Python console, so open it with the exec(open(FILEPATH).run()) method in embedded console to get error messages. 
+The run button (re)writes the game script, though it currently is only in the initial state: open engine and start main loop for both 2d and 3d, then runs it in a system console subprocess --not the embedded Python console, that is intended only for small tests (single line or block) while composing the scripts. Messages, errors and confirmations and anything else that may come to sys.stdout are delivered via message dialog after completeion of the program.
 
 Scripts can only be saved to the "Scripts" folder in a project so each tab in the editor has a save button but no browse feature, and only scripts in the current project can be opened, do so by double clicking on the directory tree. Also note that a new script can only be created when there is a project open. The python script editor uses the official python recommendation of four(4) spaces for indenting --this will match idle and should be what most IDE's do, but files started in many regular text editors could result in a mix-tab-spaces issue. XML files can be viewed and edited in the editor, but changes to the {projectName}_manifest.xml cannot be saved. Text files can also be viewed, edited and saved, just that creating is for python scripts alone, the project will be created with a text file in each of the three main folders to serve todo-list and notes functions.
 
