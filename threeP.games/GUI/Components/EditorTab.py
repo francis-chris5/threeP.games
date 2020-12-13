@@ -74,63 +74,52 @@ class EditorTab(wx.Panel):
         
         
     def newScript(self, event):
-        # scriptDialog = wx.TextEntryDialog(None, "Enter a Script Name", caption="New Script", value="")
-        # with scriptDialog as dlg:
-        #     if dlg.ShowModal() == wx.ID_OK:
-            nsd = NewScriptDialog(self, -1)
-            result = nsd.ShowModal()
-            if result == wx.ID_OK:
-                script = nsd.create()
-                #print(script)
-                if script[0] == 0:
-                    if script[1] == "":
-                        wx.MessageDialog(self, "A module (a.k.a. filename) is required for a new script, please try again.").ShowModal()
+        nsd = NewScriptDialog(self, -1)
+        result = nsd.ShowModal()
+        if result == wx.ID_OK:
+            script = nsd.create()
+            #print(script)
+            if script[0] == 0:
+                if script[1] == "":
+                    wx.MessageDialog(self, "A module (a.k.a. filename) is required for a new script, please try again.").ShowModal()
+                else:
+                    src = interfaceStuff.location + "\\Scripts\\" + script[1] + ".py"
+                    editor = PyEditor(self.__book, src)
+                    editor.saveFile(event)
+                    self.__book.AddPage(editor, src)
+                    interfaceStuff.updateManifest()
+                    return True
+            elif script[0] == 1:
+                if script[1] == "" or script[2] == "":
+                    wx.MessageDialog(self, "A module (a.k.a. filename), and a function name are required to generate a function, please try again.").ShowModal()
+                else:
+                    src = interfaceStuff.location + "\\Scripts"
+                    module = startFunction(script[2], script[1], script[4], src)
+                    self.newEditor(src + "\\" + script[1] + ".py")
+                    interfaceStuff.updateManifest()
+                    return True
+            elif script[0] == 2:
+                if script[1] == "" or script[2] == "":
+                    wx.MessageDialog(self, "A module (a.k.a. filename), and a function name are required to generate a function, please try again.").ShowModal()
+                else:
+                    src = interfaceStuff.location + "\\Scripts"
+                    module = startTask(script[2], script[1], src)
+                    self.newEditor(src + "\\" + script[1] + ".py")
+                    interfaceStuff.updateManifest()
+                    return True
+            elif script[0] == 3:
+                if script[2] == "":
+                    wx.MessageDialog(self, "A name is required to generate a class, please try again.").ShowModal()
+                else:
+                    src = interfaceStuff.location + "\\Scripts"
+                    if len(script[4]) > 1 or script[4][0] != "":
+                        module = startClass(script[2], script[2], script[3], script[4], src)
                     else:
-                        src = interfaceStuff.location + "\\Scripts\\" + script[1] + ".py"
-                        editor = PyEditor(self.__book, src)
-                        editor.saveFile(event)
-                        self.__book.AddPage(editor, src)
-                        interfaceStuff.updateManifest()
-                        return True
-                elif script[0] == 1:
-                    if script[1] == "" or script[2] == "":
-                        wx.MessageDialog(self, "A module (a.k.a. filename), and a function name are required to generate a function, please try again.").ShowModal()
-                    else:
-                        src = interfaceStuff.location + "\\Scripts"
-                        module = startFunction(script[2], script[1], script[4], src)
-                        self.newEditor(src + "\\" + script[1] + ".py")
-                        interfaceStuff.updateManifest()
-                        return True
-                elif script[0] == 2:
-                    if script[1] == "" or script[2] == "":
-                        wx.MessageDialog(self, "A module (a.k.a. filename), and a function name are required to generate a function, please try again.").ShowModal()
-                    else:
-                        src = interfaceStuff.location + "\\Scripts"
-                        module = startTask(script[2], script[1], src)
-                        self.newEditor(src + "\\" + script[1] + ".py")
-                        interfaceStuff.updateManifest()
-                        return True
-                elif script[0] == 3:
-                    if script[2] == "":
-                        wx.MessageDialog(self, "A name is required to generate a class, please try again.").ShowModal()
-                    else:
-                        src = interfaceStuff.location + "\\Scripts"
-                        if len(script[4]) > 1 or script[4][0] != "":
-                            module = startClass(script[2], script[2], script[3], script[4], src)
-                        else:
-                            module = startClass(script[2], script[2], script[3], directory=src)
-                        self.newEditor(src + "\\" + script[2] + ".py")
-                        interfaceStuff.updateManifest()
-                        return True
-            else:
-                return False
-            # if script:
-            #     src = interfaceStuff.location + "\\Scripts\\" + dlg.GetValue() + ".py"
-            #     editor = PyEditor(self.__book, src)
-            #     self.__book.AddPage(editor, src)
-            #     return editor.saveFile(event)
-            # else:
-            #     return False
-
+                        module = startClass(script[2], script[2], script[3], directory=src)
+                    self.newEditor(src + "\\" + script[2] + ".py")
+                    interfaceStuff.updateManifest()
+                    return True
+        else:
+            return False
 
 

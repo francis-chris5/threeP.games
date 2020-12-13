@@ -13,6 +13,8 @@ import wx
 import wx.stc
 from os.path import isdir
 import interfaceStuff
+from Editors.PyCompleter import PyCompleter
+import Editors.myWords as myWords
 
 
 # =============================================================================
@@ -24,7 +26,7 @@ class TextEditor(wx.Panel):
         
             # editor
         self.__path = path
-        self.__stcEditor = wx.stc.StyledTextCtrl(self, )
+        self.__stcEditor = wx.stc.StyledTextCtrl(self, -1)
         
             # save button
         self.__picSave = wx.Bitmap("images\\save_script.png")
@@ -120,6 +122,10 @@ class TextEditor(wx.Panel):
     def needSave(self, event):
         self.__btnSave.SetBitmap(self.__picNeedSave)
         
+        
+    
+
+    
     
     
 # =============================================================================

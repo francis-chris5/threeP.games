@@ -38,6 +38,7 @@ class PyConsole(wx.Panel):
         self.setFont()
         self.baseStyle()
         self.setStyle()
+        #self.clear(None)
         
             # bindings
         self.Bind(wx.EVT_BUTTON, self.clear, self.__clear)
