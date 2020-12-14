@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['grabmodel_45',['grabModel',['../namespaceinterface_stuff.html#ad954fa7d4581affbe91704689ed4dc89',1,'interfaceStuff']]],
-  ['grabspritesheet_46',['grabSpriteSheet',['../namespaceinterface_stuff.html#a466a8e0586af79a427de7307734c1a41',1,'interfaceStuff']]]
+  ['editor2d_65',['editor2d',['../namespaceinterface_stuff.html#a2405139a8193152d1e3296de457cc715',1,'interfaceStuff']]],
+  ['editor3d_66',['editor3d',['../namespaceinterface_stuff.html#ab8c5fa651dc547e08e586a109ac2332e',1,'interfaceStuff']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['location_63',['location',['../namespaceinterface_stuff.html#a7d4e69b5636f796a579bcf44e2afb2f7',1,'interfaceStuff']]]
+  ['gamemode_92',['gameMode',['../namespaceinterface_stuff.html#a8e2c3e9e5c60f8230b44390a82a9375f',1,'interfaceStuff']]]
 ];

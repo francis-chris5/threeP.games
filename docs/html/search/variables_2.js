@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['projectname_64',['projectName',['../namespaceinterface_stuff.html#ae23783ed3378ce11fe73e01dc19c6fed',1,'interfaceStuff']]]
+  ['location_93',['location',['../namespaceinterface_stuff.html#a7d4e69b5636f796a579bcf44e2afb2f7',1,'interfaceStuff']]]
 ];

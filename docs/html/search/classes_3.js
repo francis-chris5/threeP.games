@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['stuff2d_38',['Stuff2d',['../class_game_objects_1_1_stuff2d.html',1,'GameObjects']]]
+  ['player2d_53',['Player2d',['../class_game_objects_1_1_player2d.html',1,'GameObjects']]],
+  ['player3d_54',['Player3d',['../class_game_objects_1_1_player3d.html',1,'GameObjects']]]
 ];

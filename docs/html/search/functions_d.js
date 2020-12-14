@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xmlparsemanifest_61',['xmlParseManifest',['../namespaceinterface_stuff.html#aaa28eef8bf404fb2fca5bac30e7ccc66',1,'interfaceStuff']]]
+  ['updatemanifest_87',['updateManifest',['../namespaceinterface_stuff.html#a245f04704d26a44f1eb8ffaa0b39106a',1,'interfaceStuff']]]
 ];

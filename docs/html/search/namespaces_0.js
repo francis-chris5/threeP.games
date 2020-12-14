@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['gametools_39',['GameTools',['../namespace_game_tools.html',1,'']]],
-  ['gamewriter_40',['GameWriter',['../namespace_game_writer.html',1,'']]]
+  ['gametools_56',['GameTools',['../namespace_game_tools.html',1,'']]],
+  ['gamewriter_57',['GameWriter',['../namespace_game_writer.html',1,'']]]
 ];
