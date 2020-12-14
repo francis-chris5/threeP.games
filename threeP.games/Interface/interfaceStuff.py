@@ -41,7 +41,7 @@ external = [("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("nonsens
 # @param name A name for the game project
 # @param mode A selection between a 2d or 3d game 
 # @param dir the location the project will be created in 
-# @return <b>void</b>
+# @returns <b>void</b>
 def newProj(name, mode, direct):
     global projectName, gameMode, location
     projectName = name
@@ -64,7 +64,7 @@ def newProj(name, mode, direct):
 
 
 # Retrieves the directory structure of the project as a series of nested lists.\n
-# @return <b>(["directories"["contents"[...]]])
+# @returns <b>(["directories"["contents"[...]]])
 def getDirectoryList(pathList, path):
     for d in listdir(path):
         nextItem = join(path, d)
@@ -80,6 +80,7 @@ def getDirectoryList(pathList, path):
 
 ##
 # Method to create and rewrite the manifest whenever something that should be in it is changed: files, folders, objects, images, etc. are added to the project.\n
+# @returns <b>void</b>
 def updateManifest():
     xmlString = directoryToXML(location)
     printXML(join(location, projectName + "_manifest.xml"), xmlString)
@@ -91,6 +92,7 @@ def updateManifest():
 # A method to parse through the directory structure for the project and reformat it into an xml-string.\n
 # Called to make updates to the project manifest.\n
 # @param path The directory level to begin marking up the directory structure.
+# @returns <b>void</b>
 def directoryToXML(path):
     xmlString = "<directory>\n\t<name>%s</name>\n" % xml_escape(basename(path))
     directories = []
@@ -115,6 +117,7 @@ def directoryToXML(path):
 # Method to actually write the xml-string from DirAsXML method to a file along with other pertinent data-fields about the project.\n
 # @param filename The name of the file the xml formatted data will be written to.
 # @param xml The xml string to write to the file.
+# @returns <b>void</b>
 def printXML(filename, xml):
     with open(filename, "w") as toFile:
         toFile.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
@@ -134,6 +137,7 @@ def printXML(filename, xml):
 ##
 # A method to parse the data back out of the manifest for the project, i.e. open a project.\n
 # @param path The path to and including the *__manifest.xml file
+# @returns <b>void</b>
 def xmlParseManifest(path):
     global projectName, gameMode, location
     tree = ET.parse(path)
@@ -154,7 +158,7 @@ def xmlParseManifest(path):
 ##
 # A method to check a python script and produce a list of the imported libraries.\n
 # @param path The filepath for the python script to be checked
-# @return <b>list</b> 
+# @returns <b>list</b> 
 def checkDependencies(path):
     if path[-3:] != ".py":
         return False
@@ -174,7 +178,7 @@ def checkDependencies(path):
 
 ##
 # Checks the project for all the imports in python scripts and returns all of the libraries used in a project to an xml-string.\n
-# @ return <b>str</b> An xml string with library tags nested inside of a dependency tag. 
+# @ returns <b>str</b> An xml string with library tags nested inside of a dependency tag. 
 def dependencyToXML(path):
     xml = ""
     name = ""
@@ -196,8 +200,8 @@ def dependencyToXML(path):
 
 
 ##
-# Check a single file for todo annotations ('@todo') in comments.\n
-# return <b>str</b> A string listing the filename and all todo annotations
+# Check a single file for todo annotations ('\@todo') in comments.\n
+# @returns <b>str</b> A string listing the filename and all todo annotations
 def checkTodo(filepath):
     stuff = "\n\n" + filepath + "\n"
     with open(filepath, "r") as checkfile:
@@ -212,8 +216,8 @@ def checkTodo(filepath):
 
 
 ##
-# Checks all files in the project for any todo annotations ('@todo') in comments
-# return <b>str</b> String to be written to a file indicating which tasks are listed in which files
+# Checks all files in the project for any todo annotations ('\@todo') in comments
+# @returns <b>str</b> String to be written to a file indicating which tasks are listed in which files
 def todoList(path):
     tasks = ""
     if isdir(path):
@@ -227,7 +231,8 @@ def todoList(path):
 
 
 ##
-# Checks the python scripts for todo annotations ('@todo') in comments and writes it in a textfile to help keep track of all the upcoming tasks.
+# Checks the python scripts for todo annotations ('\@todo') in comments and writes it in a textfile to help keep track of all the upcoming tasks.
+# @returns <b>void</b>
 def writeTodoList():
     tasks = todoList(location)
     if len(tasks) == 0:
@@ -241,7 +246,7 @@ def writeTodoList():
 # A method to import a folder of .png 2d-sprite-sheet images \n
 # The folder must be named appropriately in advance and contain only .png files as it will simply copy the entire thing directly over to the Assets folder of the current project.
 # @param path The directory where the sprite sheet was originally stored at
-# @ return <b>bool</b> Representing success or failure of the task
+# @ returns <b>bool</b> Representing success or failure of the task
 def grabSpriteSheet(path):
     allGood = True
     for file in listdir(path):
@@ -261,7 +266,7 @@ def grabSpriteSheet(path):
 # A method to import a folder of gltf format (.glb) animated 3d models \n
 # The folder must be named appropriately in advance and contain only .glb files which will be copied to an identically named subdirectory of the Assets folder in the current project and generate identically named .bam files to use in Panda3D.\n
 # @param path The directory where the gltf (.glb) files were originally located.
-# @ return <b>bool</b> Representing success or failure of the task
+# @ returns <b>bool</b> Representing success or failure of the task
 def grabModel(path):
     allGood = True
     for file in listdir(path):
@@ -286,7 +291,7 @@ def grabModel(path):
 ##
 # A method to bring the source files for graphics resources into the project. It checks for the filetype listed with the default editor listed for the project.
 # @param path The original location of the graphics source file.
-# @return <b>bool</b> representing the success (True) or failure (False) of the task.
+# @returns <b>bool</b> representing the success (True) or failure (False) of the task.
 def grabGraphicsSource(path):
     name, extension = getFileStuff(path)
     allGood = True
@@ -306,7 +311,7 @@ def grabGraphicsSource(path):
 # A method to add a new game object to the scene folder.
 # @param name The name for the new object
 # @param obj The type of object, either a player or background so far.
-# @return <b>bool</b> indicating the success or failure of the task
+# @returns <b>bool</b> indicating the success or failure of the task
 def newSceneObject(name, obj):
     rewrite = ["import sys\n", "sys.path.insert(1, \"" + location + "\")\n"]
     if gameMode == 2 and obj == "Player":
@@ -377,17 +382,18 @@ def newSceneObject(name, obj):
 ##
 # Opens non-meaningful-text files with the system defualt for such file types.
 # @param filepath The location of the file to be opened. 
+# @returns <b>str</b> The sys.stdout echoes from running the subprocess
 def systemPreview(filepath):
-    command = "\"" + filepath + "\""
-    result = subprocess.getoutput(command)
-    return result
+    command = filepath
+    result = subprocess.run(command, shell=True, capture_output=True)
+    return result.stdout, result.stderr
     
  
     
 ##
 # A method to take in a filepath and pull out the name and file extension.
 # @param filepath The file to extract the name and type data about
-# @return <b>(str, str)</b> The name and then the extension.
+# @returns <b>(str, str)</b> The name and then the extension.
 def getFileStuff(filepath):
     name = filepath
     try:
@@ -404,27 +410,27 @@ def getFileStuff(filepath):
 
 ##
 # Quick start for the chosen 2d graphics editing software, obviously far more useful with the interface linked to a GUI than text based
-# @return <b>sys.stdout</b>
+# @returns <b>str</b> The sys.stdout echoes from running the subprocess
 def editor2d():
-    openEditor = external[2][3]
-    result = subprocess.getoutput(openEditor)
-    return result
+    command = external[2][3]
+    result = subprocess.run(command, capture_output=True)
+    return result.stdout, result.stderr
 
 
 ##
 # Quick start for the chosen 2d graphics editing software, obviously far more useful with the interface linked to a GUI than text based
-# @return <b>sys.stdout</b>
+# @returns <b>str</b> The sys.stdout echoes from running the subprocess
 def editor3d():
-    openBlender = external[3][3]
-    result = subprocess.getoutput(openBlender)
-    return result
+    command = external[3][3]
+    result = subprocess.run(command, capture_output=True)
+    return result.stdout, result.stderr
     
    
 #***************  GAME STUFF
 
 ##
 # A call to the appropriate function of the GameWriter object for the mode set with the project
-# @return <b>void</b>
+# @returns <b>void</b>
 def writeGame():
     if gameMode == 2:
         print(projectName, location)
@@ -443,12 +449,11 @@ def writeGame():
 ##
 # A method to actually run the game constructed in the project.\n
 # Called from a run button on the GUI.\n
+# @returns <b>str</b> The sys.stdout echoes from running the subprocess
 def runSystem():
     command = "python " + "\"" + location + "\\" + projectName + ".py\""
-    #system(command)
-    ###subprocess.call(command, shell=True)
-    result = subprocess.getoutput(command)
-    return result
+    result = subprocess.run(command, capture_output=True)
+    return result.stdout, result.stderr
 
     
 
