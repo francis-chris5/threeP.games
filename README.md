@@ -26,7 +26,7 @@ The create new project functions will provide a dialog box where a name, mode (2
 
 <h4>Open Project</h4>
 
-The open project function will bring up a dialog box restricted to .xml files, select the {project-name}_manifest.xml file to open the project.
+The open project function will bring up a standard file browser dialog box restricted to .xml files, select the {project-name}_manifest.xml file to open the project.
 
 <h4>Run Game</h4>
 
