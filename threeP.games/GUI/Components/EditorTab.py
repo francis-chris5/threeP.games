@@ -79,7 +79,7 @@ class EditorTab(wx.Panel):
         if result == wx.ID_OK:
             script = nsd.create()
             #print(script)
-            if script[0] == 0:
+            if script[0] == "Simple/Blank Script":
                 if script[1] == "":
                     wx.MessageDialog(self, "A module (a.k.a. filename) is required for a new script, please try again.").ShowModal()
                 else:
@@ -89,7 +89,7 @@ class EditorTab(wx.Panel):
                     self.__book.AddPage(editor, src)
                     interfaceStuff.updateManifest()
                     return True
-            elif script[0] == 1:
+            elif script[0] == "Function/Method":
                 if script[1] == "" or script[2] == "":
                     wx.MessageDialog(self, "A module (a.k.a. filename), and a function name are required to generate a function, please try again.").ShowModal()
                 else:
@@ -98,7 +98,7 @@ class EditorTab(wx.Panel):
                     self.newEditor(src + "\\" + script[1] + ".py")
                     interfaceStuff.updateManifest()
                     return True
-            elif script[0] == 2:
+            elif script[0] == "Panda3d Task":
                 if script[1] == "" or script[2] == "":
                     wx.MessageDialog(self, "A module (a.k.a. filename), and a function name are required to generate a function, please try again.").ShowModal()
                 else:
@@ -107,7 +107,7 @@ class EditorTab(wx.Panel):
                     self.newEditor(src + "\\" + script[1] + ".py")
                     interfaceStuff.updateManifest()
                     return True
-            elif script[0] == 3:
+            elif script[0] == "Class/Object":
                 if script[2] == "":
                     wx.MessageDialog(self, "A name is required to generate a class, please try again.").ShowModal()
                 else:
