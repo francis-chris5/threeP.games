@@ -11,7 +11,9 @@ sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.game
 import interfaceStuff
 import wx
 
-
+# =============================================================================
+# Popup dialog with script creation options
+# =============================================================================
 class NewScriptDialog(wx.Dialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,8 +25,10 @@ class NewScriptDialog(wx.Dialog):
         self.__value = ()
         
             # Type of Script to Create Input
-        actionLabel = wx.StaticText(self, -1, label="Type of script to create", pos=(20, 70))
-        actionList = ["Simple/Blank Script", "Function/Method", "Panda3d Task", "Class/Object"]
+        actionLabel = wx.StaticText(self, -1, label="Type of script to create", pos=(20, 10))
+        actionList = ["Simple/Blank Script", "Function/Method", "Class/Object"]
+        if interfaceStuff.gameMode == 3:
+            actionList.append("Panda3d Task")
         self.__action = wx.RadioBox(self, -1, pos=(10, 30), choices=actionList, style=wx.RA_SPECIFY_ROWS)
         
            # Name Input
@@ -72,20 +76,20 @@ class NewScriptDialog(wx.Dialog):
             self.__name.SetEditable(True)
             self.__parent.SetEditable(False)
             self.__attribute.SetEditable(True)
-        elif selection == "Panda3d Task":
-            self.__module.SetEditable(True)
-            self.__name.SetEditable(True)
-            self.__parent.SetEditable(False)
-            self.__attribute.SetEditable(False)
         elif selection == "Class/Object":
             self.__module.SetEditable(False)
             self.__name.SetEditable(True)
             self.__parent.SetEditable(True)
             self.__attribute.SetEditable(True)
+        elif selection == "Panda3d Task":
+            self.__module.SetEditable(True)
+            self.__name.SetEditable(True)
+            self.__parent.SetEditable(False)
+            self.__attribute.SetEditable(False)
             
     
     def create(self):
-        action = self.__action.GetSelection()
+        action = self.__action.GetString(self.__action.GetSelection())
         module = self.__module.GetValue()
         name = self.__name.GetValue()
         parent = self.__parent.GetValue()
