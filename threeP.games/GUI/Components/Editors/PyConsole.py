@@ -48,7 +48,7 @@ class PyConsole(wx.Panel):
         toolSizer.Add(self.__clear)
         
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(self.__shell, wx.EXPAND)
+        sizer.Add(self.__shell, 1, wx.EXPAND)
         sizer.Add(toolSizer)
         self.SetSizer(sizer)
 
