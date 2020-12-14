@@ -206,6 +206,8 @@ def checkTodo(filepath):
             if "@todo" in line:
                 stuff += "\t" + str(number) + "\t|\t" + line[line.find("@todo") + 6:]
             number += 1
+    if stuff == "\n\n" + filepath + "\n":
+        stuff = ""
     return stuff
 
 
@@ -220,7 +222,7 @@ def todoList(path):
                 if item[-3:] == ".py":
                     tasks += checkTodo(path + "\\" + item)
             else:
-                todoList(path + "\\" + item)
+                tasks += todoList(path + "\\" + item)
     return tasks
 
 
