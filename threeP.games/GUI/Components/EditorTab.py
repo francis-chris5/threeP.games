@@ -55,22 +55,22 @@ class EditorTab(wx.Panel):
 # =============================================================================
     def newEditor(self, src=""):
         if src == "":
-            self.__book.AddPage(PyEditor(self.__book, "untitled.py"), "untitled.py")
+            self.__book.AddPage(PyEditor(self.__book, "untitled.py"), "untitled.py", select=True)
         elif src[-3:] == ".py":
             editor = PyEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
-            self.__book.AddPage(editor, file)
+            self.__book.AddPage(editor, file, select=True)
         elif src[-4:] == ".xml":
             editor = XMLEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
-            self.__book.AddPage(editor, file)
+            self.__book.AddPage(editor, file, select=True)
         elif src[-4:] == ".txt":
             editor = TextEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
-            self.__book.AddPage(editor, file)
+            self.__book.AddPage(editor, file, select=True)
         
         
     def newScript(self, event):
