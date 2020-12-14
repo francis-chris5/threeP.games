@@ -38,7 +38,7 @@ The run button writes the game script if it doesn't already exist, though it cur
 
 ![threep_screenshot_errLog](https://user-images.githubusercontent.com/50467171/102130990-8a4ad380-3e1f-11eb-9d86-e52aa0a211eb.jpg)
 
-Since this runs in a system console, not a python interpreter, it is necessary that the computer can run python scripts in a system console, check by opening your console, such as command prompt or powershell on windows, type python and hit enter. If that is an unrecognized command you will need to set an environment variable to python --here are videos I made for a recent class I taught showing how: <a href="https://www.youtube.com/watch?v=COuSOim_JHg&list=PLBA4kDe4kZOrASKhq43mnJ9INP7snu7BZ&index=1">Windows</a> or <a href="https://www.youtube.com/watch?v=Cy0eVMAuA2w&list=PLBA4kDe4kZOrASKhq43mnJ9INP7snu7BZ&index=2">Apache Server</a>, or obviously you could just search google for 'set environment variables.'
+Since this runs in a system console, not a python interpreter, it is necessary that the computer can run python scripts in a system console, check by opening your console, such as command prompt or powershell on windows, type python and hit enter. If that is an unrecognized command you will need to set an environment variable to python --here are videos I made for a recent class I taught showing how: <a href="https://www.youtube.com/watch?v=COuSOim_JHg&list=PLBA4kDe4kZOrASKhq43mnJ9INP7snu7BZ&index=1">Windows</a> (about 14 minutes in) or <a href="https://www.youtube.com/watch?v=Cy0eVMAuA2w&list=PLBA4kDe4kZOrASKhq43mnJ9INP7snu7BZ&index=2">Apache Server</a>, or obviously you could just search google for 'set environment variables.'
 
 
 <h4>Scripting</h4>
