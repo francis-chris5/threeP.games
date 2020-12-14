@@ -11,7 +11,7 @@ sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.game
 import wx.stc
 from Editors.TextEditor import TextEditor
 import Editors.myWords as myWords
-from Editors.PyCompleter import PyCompleter
+
 
 
 
@@ -88,9 +88,11 @@ class PyEditor(TextEditor):
         if event.GetKey() != 32 and event.GetKey() != 10 and event.GetKey() != 13:
             self.__lastSpace += 1
         else:
-            if event.GetKey() == 10:
+            if event.GetKey() == 10 or event.GetKey == 13:
                 self.checkWords()
-            self.__lastSpace = 0
+                self.__lastSpace = 1
+            elif event.GetKey() == 32:
+                self.__lastSpace = 0
         self.getEditor().AutoCompShow(self.__lastSpace, self.getWords())
         
 

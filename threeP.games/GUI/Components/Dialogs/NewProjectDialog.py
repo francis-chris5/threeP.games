@@ -12,6 +12,9 @@ import interfaceStuff
 import wx
 
 
+# =============================================================================
+# Popup dialog with new project options
+# =============================================================================
 class NewProjectDialog(wx.Dialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

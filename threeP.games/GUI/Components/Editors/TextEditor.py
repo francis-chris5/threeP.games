@@ -13,7 +13,6 @@ import wx
 import wx.stc
 from os.path import isdir
 import interfaceStuff
-from Editors.PyCompleter import PyCompleter
 import Editors.myWords as myWords
 
 

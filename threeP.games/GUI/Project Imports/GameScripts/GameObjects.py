@@ -93,10 +93,6 @@ class Stuff2d():
 
 
 
-
-
-
-
 ##
 # The object to consolidate background functionality in a single place for working with PyGame 2d game engine.\n
 class Background2d(Stuff2d):
@@ -127,70 +123,6 @@ class Background2d(Stuff2d):
 
 
 
-
-
-
-##
-# A class to consolidate all of the player control features for a 2d game.\n
-# @param left The left control, default is 'a' key
-# @param down The down control, default is 's' key
-# @param right The right control, default is 'd' key
-# @param up The up control, default is 'w' key
-class Control2D():
-    def __init__(self, left=pygame.K_a, down=pygame.K_s, right=pygame.K_d, up=pygame.K_w):
-        self.__left = left
-        self.__down = down
-        self.__right = right
-        self.__up = up
-
-    def getLeft(self):
-        return self.__left
-
-    def getDown(self):
-        return self.__down
-
-    def getRight(self):
-        return self.__right
-
-    def getUp(self):
-        return self.__up
-
-    def setLeft(self, left):
-        self.__left = left
-
-    def setDown(self, down):
-        self.__down = down
-
-    def setRight(self, right):
-        self.__right = right
-
-    def setUp(self, up):
-        self.__up = up
-    
-        
-    ##
-    # Mehtod to dertimine what keys are currently being pressed.\n
-    # @param watcher A base.mouseWatcherNode from a Panda3D game which cannot be passed in until runtime
-    # @return <b>{bool}</b> A dictionary of boolean values describing the state of each key
-    def checkKey(self, event):
-        controls = {"left":False, "down":False, "right":False, "up":False}
-        if event.key == self.getLeft():
-            controls["left"] = True
-        if event.key == self.getDown():
-            controls["down"] = True
-        if event.key == self.getRight():
-            controls["right"] = True
-        if event.key == self.getUp():
-            controls["up"] = True
-        return controls
-    
- 
-    
- 
-    
- 
-
-
 ##
 # The class for characters in 2d games created with the PyGame engine.\n
 class Player2d(Stuff2d):
@@ -199,20 +131,16 @@ class Player2d(Stuff2d):
     # The constructor for Characters2D objects
     # @param speed The number of pixels the character will cover during each tick of the clock when moving
     # @param isMoving The boolean to control which animation is playing with regards to walk/run or idle
-    def __init__(self, x=0, y=0, sprite=["images\\empty.svg"], control=Control2D(), speed=0, isMoving=False):
+    def __init__(self, x=0, y=0, sprite=["images\\empty.svg"], speed=0, isMoving=False):
         super().__init__(x, y, sprite)
         self.__speed = speed
         self.__isMoving = isMoving
-        self.__control = control
 
     def getSpeed(self):
         return self.__speed
 
     def getIsMoving(self):
         return self.__isMoving
-    
-    def getControl(self):
-        return self.__control
 
     def setSpeed(self, speed):
         self.__speed = speed
@@ -220,40 +148,30 @@ class Player2d(Stuff2d):
     def setIsMoving(self, isMoving):
         self.__isMoving = isMoving
         
-    def setControl(self, control):
-        self.__control = control
-        
         
     ##
     # The method to move the character.\n
     # Currently only handles player movement based off of the WASD keys, but plans will be to add another parameter and a selection structure to handle movement of NPC as well.
     # @param event The key press indicating which direction the player is to move.
-    def moveCardinal(self, event):
-        direction = self.getControl().checkKey(event)
-        if direction["left"]:
+    def move(self, event):
+        if event.key == pygame.K_a:
             self.setIsMoving(True)
             self.setX(self.getX() - self.getSpeed())
-        if direction["down"]:
+        if event.key == pygame.K_s:
             self.setIsMoving(True)
             self.setY(self.getY() + self.getSpeed())
-        if direction["right"]:
+        if event.key == pygame.K_d:
             self.setIsMoving(True)
             self.setX(self.getX() + self.getSpeed())
-        if direction["up"]:
+        if event.key == pygame.K_w:
             self.setIsMoving(True)
             self.setY(self.getY() - self.getSpeed())
 
 
 
 
-
-
-
-
-
-
 ##
-# A class to consolidate all of the player control features for a 3d game.\n
+# A class to consolidate all of the player control features for a game.\n
 # @param left The left control, default is 'a' key
 # @param down The down control, default is 's' key
 # @param right The right control, default is 'd' key
@@ -362,7 +280,7 @@ class Player3d():
 	def setAngularSpeed(self, angularSpeed):
 		self.__angularSpeed = angularSpeed
 		
-	def moveAngle(self, task):
+	def move(self, task):
 		turn = 0
 		step = 0
 		
