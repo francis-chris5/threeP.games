@@ -29,6 +29,10 @@ When it came time to set up the import graphics features for 3d models and 2d sp
 
 Loadng the source graphics file rather than exports currently must be done to work with either Blender (.blend) or Inkscape (.svg), both of which can be opened for new file creation directly from the GUI through the "External" options in the main menu. Double clicking on a source graphics file in the directory tree will open with one of these editors externally as a subprocess, so the threeP.games user interface will be unresponsive until the external editor is closed any sys.stdout messages will be presented in a message dialog once the external editor is closed and the threeP.games graphical user interface is returned to.
 
+The "Scenes" folder is for the objects that will actually be placed into the game. Selecting the "New Scene Object" tool or menu option will bring up a dialog to choose from the short list of objects that are ready so far: 2d backgrounds, 2d props, 2d player, 3d player. More options will be coming soon.
+
+There is a ToDo list text file at the top level of the project, simply place the annotaion "@todo" IN A COMMENT to add items on the ToDo-List text file. The generated files all come with some @todo items in them at this point.
+
 The help features link directly to the official API documentation pages for Python, PyGame, and Panda3D.
 
 ![threeP_screenshot](https://user-images.githubusercontent.com/50467171/101975564-92322a00-3c0b-11eb-9737-bf69fffd28fb.jpg)
