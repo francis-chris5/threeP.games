@@ -19,6 +19,7 @@ from ProjectTree import ProjectTree
 from Dialogs.NewProjectDialog import NewProjectDialog
 from Dialogs.NewScriptDialog import NewScriptDialog
 from Dialogs.NewSceneDialog import NewSceneDialog
+from Dialogs.StdOutDialog import StdOutDialog
 
 
 class MainWindow(wx.Frame):
@@ -244,7 +245,8 @@ class MainWindow(wx.Frame):
         interfaceStuff.updateManifest()
         self.__trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
         echo = interfaceStuff.runSystem()
-        wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
+        StdOutDialog(self, echo).ShowModal()
+        #wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
         
         
     def openFile(self, event):
@@ -257,7 +259,7 @@ class MainWindow(wx.Frame):
                 self.__tbEditor.newEditor(filepath)
             elif extension == ".png" or extension == ".glb" or extension == interfaceStuff.external[2][1] or extension == interfaceStuff.external[3][1]:
                 echo = interfaceStuff.systemPreview(filepath)
-                wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
+                StdOutDialog(self, echo).ShowModal()
             elif extension == ".bam":
                 wx.MessageDialog(self, "No preview of a Binary-Compressed Sequence Alignment/Map available, see https://samtools.github.io/hts-specs/SAMv1.pdf for details.\nThis file is here because the Panda3D engine uses it, select the associated gltf(.glb) file for a preview of the animated model.").ShowModal()
         except ValueError:
@@ -352,12 +354,12 @@ class MainWindow(wx.Frame):
     
     def open2dEditor(self, event):
         echo = interfaceStuff.editor2d()
-        wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
+        StdOutDialog(self, echo).ShowModal()
     
     
     def open3dEditor(self, event):
         echo = interfaceStuff.editor3d()
-        wx.MessageDialog(self, echo, caption="sys.stdout").ShowModal()
+        StdOutDialog(self, echo).ShowModal()
     
     
     def tlHelp(self, event):
