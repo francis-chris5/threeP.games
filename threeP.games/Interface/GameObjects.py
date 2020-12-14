@@ -11,6 +11,8 @@
 
 import pygame
 from panda3d.core import KeyboardButton
+from direct.actor.Actor import Actor
+import math
 
 ##
 #The parent class for all of the custom objects to be used when developing a a 2d game with the PyGame engine.\n
@@ -91,6 +93,10 @@ class Stuff2d():
 
 
 
+
+
+
+
 ##
 # The object to consolidate background functionality in a single place for working with PyGame 2d game engine.\n
 class Background2d(Stuff2d):
@@ -121,24 +127,92 @@ class Background2d(Stuff2d):
 
 
 
+
+
+
+##
+# A class to consolidate all of the player control features for a 2d game.\n
+# @param left The left control, default is 'a' key
+# @param down The down control, default is 's' key
+# @param right The right control, default is 'd' key
+# @param up The up control, default is 'w' key
+class Control2D():
+    def __init__(self, left=pygame.K_a, down=pygame.K_s, right=pygame.K_d, up=pygame.K_w):
+        self.__left = left
+        self.__down = down
+        self.__right = right
+        self.__up = up
+
+    def getLeft(self):
+        return self.__left
+
+    def getDown(self):
+        return self.__down
+
+    def getRight(self):
+        return self.__right
+
+    def getUp(self):
+        return self.__up
+
+    def setLeft(self, left):
+        self.__left = left
+
+    def setDown(self, down):
+        self.__down = down
+
+    def setRight(self, right):
+        self.__right = right
+
+    def setUp(self, up):
+        self.__up = up
+    
+        
+    ##
+    # Mehtod to dertimine what keys are currently being pressed.\n
+    # @param watcher A base.mouseWatcherNode from a Panda3D game which cannot be passed in until runtime
+    # @return <b>{bool}</b> A dictionary of boolean values describing the state of each key
+    def checkKey(self, event):
+        controls = {"left":False, "down":False, "right":False, "up":False}
+        if event.key == self.getLeft():
+            controls["left"] = True
+        if event.key == self.getDown():
+            controls["down"] = True
+        if event.key == self.getRight():
+            controls["right"] = True
+        if event.key == self.getUp():
+            controls["up"] = True
+        return controls
+    
+ 
+    
+ 
+    
+ 
+
+
 ##
 # The class for characters in 2d games created with the PyGame engine.\n
-class Character2d(Stuff2d):
+class Player2d(Stuff2d):
 
     ##
     # The constructor for Characters2D objects
     # @param speed The number of pixels the character will cover during each tick of the clock when moving
     # @param isMoving The boolean to control which animation is playing with regards to walk/run or idle
-    def __init__(self, x=0, y=0, sprite=["images\\empty.svg"], speed=0, isMoving=False):
+    def __init__(self, x=0, y=0, sprite=["images\\empty.svg"], control=Control2D(), speed=0, isMoving=False):
         super().__init__(x, y, sprite)
         self.__speed = speed
         self.__isMoving = isMoving
+        self.__control = control
 
     def getSpeed(self):
         return self.__speed
 
     def getIsMoving(self):
         return self.__isMoving
+    
+    def getControl(self):
+        return self.__control
 
     def setSpeed(self, speed):
         self.__speed = speed
@@ -146,30 +220,40 @@ class Character2d(Stuff2d):
     def setIsMoving(self, isMoving):
         self.__isMoving = isMoving
         
+    def setControl(self, control):
+        self.__control = control
+        
         
     ##
     # The method to move the character.\n
     # Currently only handles player movement based off of the WASD keys, but plans will be to add another parameter and a selection structure to handle movement of NPC as well.
     # @param event The key press indicating which direction the player is to move.
-    def move(self, event):
-        if event.key == pygame.K_a:
+    def moveCardinal(self, event):
+        direction = self.getControl().checkKey(event)
+        if direction["left"]:
             self.setIsMoving(True)
             self.setX(self.getX() - self.getSpeed())
-        if event.key == pygame.K_s:
+        if direction["down"]:
             self.setIsMoving(True)
             self.setY(self.getY() + self.getSpeed())
-        if event.key == pygame.K_d:
+        if direction["right"]:
             self.setIsMoving(True)
             self.setX(self.getX() + self.getSpeed())
-        if event.key == pygame.K_w:
+        if direction["up"]:
             self.setIsMoving(True)
             self.setY(self.getY() - self.getSpeed())
 
 
 
 
+
+
+
+
+
+
 ##
-# A class to consolidate all of the player control features for a game.\n
+# A class to consolidate all of the player control features for a 3d game.\n
 # @param left The left control, default is 'a' key
 # @param down The down control, default is 's' key
 # @param right The right control, default is 'd' key
@@ -223,3 +307,97 @@ class Control3D():
             controls["up"] = True
         return controls
         
+
+
+##
+# The default non-vehicle player object for third-person 3d games to handle character animations and control.
+# @param watcher
+# @param actor
+# @param control
+# @param isMoving
+# @param linearSpeed
+# @param angularSpeed
+class Player3d():
+	def __init__(self, watcher, actor, control=Control3D(), isMoving=False, linearSpeed=0.05, angularSpeed=3):
+		self.__watcher = watcher
+		self.__actor = actor
+		self.__control = control
+		self.__isMoving = isMoving
+		self.__linearSpeed = linearSpeed
+		self.__angularSpeed = angularSpeed
+
+	def getWatcher(self):
+		return self.__watcher
+
+	def getActor(self):
+		return self.__actor
+
+	def getControl(self):
+		return self.__control
+
+	def getIsMoving(self):
+		return self.__isMoving
+
+	def getLinearSpeed(self):
+		return self.__linearSpeed
+
+	def getAngularSpeed(self):
+		return self.__angularSpeed
+
+	def setWatcher(self, watcher):
+		self.__watcher = watcher
+
+	def setActor(self, actor):
+		self.__actor = actor
+
+	def setControl(self, control):
+		self.__control = control
+
+	def setIsMoving(self, isMoving):
+		self.__isMoving = isMoving
+
+	def setLinearSpeed(self, linearSpeed):
+		self.__linearSpeed = linearSpeed
+
+	def setAngularSpeed(self, angularSpeed):
+		self.__angularSpeed = angularSpeed
+		
+	def moveAngle(self, task):
+		turn = 0
+		step = 0
+		
+		#control
+		direction = self.getControl().checkKey(self.getWatcher())
+		if direction["left"]:
+			turn = self.getAngularSpeed()
+		if direction["down"]:
+			step = self.getLinearSpeed()
+		if direction["right"]:
+			turn = -self.getAngularSpeed()
+		if direction["up"]:
+			step = -self.getLinearSpeed()
+			
+		#animate
+		if step != 0 and not self.getIsMoving():
+			self.setIsMoving(True)
+		if step == 0 and self.getIsMoving():
+			self.setIsMoving(False)
+			
+		#move
+		newH = self.getActor().getH() + turn
+		self.getActor().setHpr(newH, 0, 0)
+		targetAngle = self.getActor().getH() * math.pi/180
+		targetX = math.cos(targetAngle + math.pi/4) - math.sin(targetAngle + math.pi/4)
+		targetY = math.sin(targetAngle + math.pi/4) + math.cos(targetAngle + math.pi/4)
+		newX = self.getActor().getX() + step * targetX
+		newY = self.getActor().getY() + step * targetY
+		self.getActor().setFluidPos(newX, newY, 0)
+		return task.cont
+	
+	def chooseAnimation(self, task):
+		if not self.getIsMoving() and not self.getActor().getAnimControl("Idle").isPlaying():
+			self.getActor().loop("Idle")
+		elif self.getIsMoving() and not self.getActor().getAnimControl("Walk").isPlaying():
+			self.getActor().loop("Walk")
+		
+		return task.cont

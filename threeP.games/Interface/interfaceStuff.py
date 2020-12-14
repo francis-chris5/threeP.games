@@ -14,6 +14,8 @@ import xml.etree.ElementTree as ET
 from gltf.converter import convert
 
 from GameWriter import GameWriter2d, GameWriter3d
+#from GameObjects import Background2d, Player2d, Player3d, Stuff2d
+from GameTools import startClass
 
 ## Name for the current working project
 projectName = ""
@@ -47,14 +49,16 @@ def newProj(name, mode, direct):
     location = join(direct, projectName)
     makedirs(join(location, "Scenes"))
     with open(join(location, "Scenes\\scenes.txt"), "w") as toFile:
-        toFile.write("The scenes folder is intended to be used to hold the scripts which\ndefine the various cut-scenes and/or levels of a game.\n\n\nThis file is included here for to-do lists and notes about the Scenes resources\nsince only new python scripts can be created from within the project.")
+        toFile.write("The scenes folder is intended to be used to hold the scripts which\ndefine the various cut-scenes and/or levels of a game.\nThis is where the objects to be used as backgrounds, characters, and props in the game will go (things for the scene was my initial thought for this organization scheme).\n\n\nThis file is included here for to-do lists and notes about the Scenes resources\nsince only new python scripts can be created from within the project.")
     makedirs(join(location, "Assets"))
     with open(join(location, "Assets\\assets.txt"), "w") as toFile:
-        toFile.write("The assets folder is intended to serve as the master location to\norganize the multitude of resources needed for a game, such as: images,\nmodels, sound files, etc.\n\n\nThis file is included here for to-do lists and notes about the Assets resources\nsince only new python scripts can be created from within the project.")
+        toFile.write("The assets folder is intended to serve as the master location to\norganize the multitude of resources needed for a game, such as: images,\nmodels, sound files, etc.\nThe raw data goes here, use the scene folder for creating the objects to be used in the game, and the scripts folder for additional controls on those objects.\n\n\nThis file is included here for to-do lists and notes about the Assets resources\nsince only new python scripts can be created from within the project.")
     makedirs(join(location, "Scripts"))
     with open(join(location, "Scripts\\scripts.txt"), "w") as toFile:
         toFile.write("The scripts folder is intended to serve as the master location to\norganize the vast quantity of custom scripts that will be needed to\nassemble a game.\n\n\nThis file is included here for to-do lists and notes about the Scripts resources\nsince only new python scripts can be created from within the project.")
-    copytree("images\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
+    copytree("Project Imports\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
+    copytree("Project Imports\\GameScripts", location + "\\Scripts\\GameScripts")
+    copytree("Project Imports\\DefaultImages", location + "\\Assets\\DefaultImages")
     updateManifest()
 
 
@@ -79,6 +83,7 @@ def getDirectoryList(pathList, path):
 def updateManifest():
     xmlString = directoryToXML(location)
     printXML(join(location, projectName + "_manifest.xml"), xmlString)
+    writeTodoList()
 
 
 
@@ -140,6 +145,9 @@ def xmlParseManifest(path):
             gameMode = int(child.text)
         elif child.tag == "location":
             location = child.text
+  
+
+    
             
 
 
@@ -185,6 +193,47 @@ def dependencyToXML(path):
             xml += "\t</dependencies>\n"
     return xml
 
+
+
+##
+# Check a single file for todo annotations ('@todo') in comments.\n
+# return <b>str</b> A string listing the filename and all todo annotations
+def checkTodo(filepath):
+    stuff = "\n\n" + filepath + "\n"
+    with open(filepath, "r") as checkfile:
+        number = 0
+        for line in checkfile:
+            if "@todo" in line:
+                stuff += "\t" + str(number) + "\t|\t" + line[line.find("@todo") + 6:]
+            number += 1
+    return stuff
+
+
+##
+# Checks all files in the project for any todo annotations ('@todo') in comments
+# return <b>str</b> String to be written to a file indicating which tasks are listed in which files
+def todoList(path):
+    tasks = ""
+    if isdir(path):
+        for item in listdir(path):
+            if isfile(path + "\\" + item):
+                if item[-3:] == ".py":
+                    tasks += checkTodo(path + "\\" + item)
+            else:
+                todoList(path + "\\" + item)
+    return tasks
+
+
+##
+# Checks the python scripts for todo annotations ('@todo') in comments and writes it in a textfile to help keep track of all the upcoming tasks.
+def writeTodoList():
+    tasks = todoList(location)
+    if len(tasks) == 0:
+        tasks = "\n\nNothing on the todo list\n\nUse @todo annotation in comments to add tasks to this list"
+    with open(location + "\\" + "TO-DO.txt", "w") as toFile:        
+        toFile.write(tasks)
+        
+        
 
 ##
 # A method to import a folder of .png 2d-sprite-sheet images \n
@@ -248,6 +297,79 @@ def grabGraphicsSource(path):
             return True
     else:
         return False
+    
+    
+
+##
+# A method to add a new game object to the scene folder.
+# @param name The name for the new object
+# @param obj The type of object, either a player or background so far.
+# @return <b>bool</b> indicating the success or failure of the task
+def newSceneObject(name, obj):
+    rewrite = ["import sys\n", "sys.path.insert(1, \"" + location + "\")\n"]
+    if gameMode == 2 and obj == "Player":
+        startClass(module=name, name=name, parent="Player2d", attributes=[], directory=location + "\\Scenes")
+        rewrite.append("from Scripts.GameScripts.GameObjects import Player2d\n")
+        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
+            for line in fromFile:
+                if "def" in line:
+                    line = line[0:-3] + ", *args, **kwargs):\n"
+                elif "super" in line:
+                    line = line[0:-2] + "*args, **kwargs)\n"
+                rewrite.append(line)
+        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
+        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
+            for line in rewrite:
+                toFile.write(line)
+        return True
+    elif gameMode == 3 and obj == "Player":
+        startClass(module=name, name=name, parent="Player3d", attributes=[], directory=location + "\\Scenes")
+        rewrite.append("from Scripts.GameScripts.GameObjects import Player3d\n")
+        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
+            for line in fromFile:
+                if "def" in line:
+                    line = line[0:-3] + ", *args, **kwargs):\n"
+                elif "super" in line:
+                    line = line[0:-2] + "*args, **kwargs)\n"
+                rewrite.append(line)
+        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
+        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
+            for line in rewrite:
+                toFile.write(line)
+        return True
+    elif gameMode == 2 and obj == "Background":
+        startClass(module=name, name=name, parent="Background2d", attributes=[], directory=location + "\\Scenes")
+        rewrite.append("from Scripts.GameScripts.GameObjects import Background2d\n")
+        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
+            for line in fromFile:
+                if "def" in line:
+                    line = line[0:-3] + ", *args, **kwargs):\n"
+                elif "super" in line:
+                    line = line[0:-2] + "*args, **kwargs)\n"
+                rewrite.append(line)
+        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
+        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
+            for line in rewrite:
+                toFile.write(line)
+        return True
+    elif gameMode == 2 and obj == "Prop":
+        startClass(module=name, name=name, parent="Stuff2d", attributes=[], directory=location + "\\Scenes")
+        rewrite.append("from Scripts.GameScripts.GameObjects import Stuff2d\n")
+        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
+            for line in fromFile:
+                if "def" in line:
+                    line = line[0:-3] + ", *args, **kwargs):\n"
+                elif "super" in line:
+                    line = line[0:-2] + "*args, **kwargs)\n"
+                rewrite.append(line)
+        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
+        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
+            for line in rewrite:
+                toFile.write(line)
+        return True
+    else:
+        return False
+
 
 
 ##
@@ -306,10 +428,12 @@ def writeGame():
         print(projectName, location)
         gw2 = GameWriter2d(projectName, location)
         gw2.directory = location
+        gw2.localDirectory(location)
         gw2.writeGame()
     elif gameMode == 3:
         gw3 = GameWriter3d(projectName, location)
         gw3.directory = location
+        gw3.localDirectory(location)
         gw3.writeGame()
 
 
