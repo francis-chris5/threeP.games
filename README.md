@@ -63,7 +63,9 @@ Loadng the source graphics file rather than exports requires a default 2d graphi
 
 To set a default external editor select "External" in the main menu and then choose the appropriate option for 2d or 3d. The dialog box pictured below will appear, fill in the form for a name to refer to it by in buttons on this GUI, the primary type of file you wish to open with this editor, a .ico or .png file for the icon associated with this editor (do not leave this blank, choose any image if you don't have the actual icon), and select the location for the actual .exe application.
 
- 
+![threep_screenshot_editor1](https://user-images.githubusercontent.com/50467171/102166349-e2063080-3e59-11eb-94aa-4711d50d53d6.jpg)
+
+![threep_screenshot_editor](https://user-images.githubusercontent.com/50467171/102163179-a28b1480-3e58-11eb-88ec-31396fbeeb3c.jpg)
 
 <h4>Scene Objcets</h4>
 
