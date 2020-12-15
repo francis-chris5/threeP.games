@@ -17,6 +17,21 @@ from GameWriter import GameWriter2d, GameWriter3d
 #from GameObjects import Background2d, Player2d, Player3d, Stuff2d
 from GameTools import startClass
 
+
+##
+# registers saved default values for the MainWindow.py with interface stuff
+# @returns <b>void</b>
+def loadConfig():
+    with open("threeP.config", "r") as fromConfig:
+        for line in fromConfig:
+            if "editor2d" in line:
+                editor = line[line.find("&@")+2:-1].split(",")
+                external[2] = tuple(editor)
+            if "editor3d" in line:
+                editor = line[line.find("&@")+2:-1].split(",")
+                external[3] = tuple(editor)
+                
+
 ## Name for the current working project
 projectName = ""
 
@@ -28,8 +43,12 @@ location = ""
 
 
 ## List of tubles describing the external applications to be used:  [(currently unused -filled with nonsense), (currently unused -filled with nonsense), (2d-editor, file-extension, icon, path), (3d-modeling, file-extension, icon, path)]
-external = [("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("Inkscape", ".svg", "inkscape_logo.png", "\"C:\\Inkscape\\bin\\Inkscape.exe\""), ("Blender", ".blend", "blender_logo.png", "\"C:\\Program Files\\Blender Foundation\\Blender 2.82\Blender.exe\"")]
+external = [("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("nonsense", ".nonsense", "nonsense.png", "C:\\nonsense"), ("nonsense", ".nonsense", "file_icon.png", "C:\nonsense"), ("nonsense", ".nonsense", "file_icon.png", "C:\nonsense")]
+#("Inkscape", ".svg", "inkscape_logo.png", "\"C:\\Inkscape\\bin\\Inkscape.exe\""), ("Blender", ".blend", "blender_logo.png", "\"C:\\Program Files\\Blender Foundation\\Blender 2.82\Blender.exe\"")
 
+
+# load the default 2d and 3d editor
+loadConfig()
 
 
 #**************  FILE STUFF
