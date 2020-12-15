@@ -20,6 +20,7 @@ from Dialogs.NewProjectDialog import NewProjectDialog
 from Dialogs.NewScriptDialog import NewScriptDialog
 from Dialogs.NewSceneDialog import NewSceneDialog
 from Dialogs.StdOutDialog import StdOutDialog
+from Dialogs.SetEditorDialog import SetEditorDialog
 
 
 class MainWindow(wx.Frame):
@@ -115,12 +116,19 @@ class MainWindow(wx.Frame):
         
             # construct external menu
         self.__mnExternal = wx.Menu()
-        self.__graphics2d = self.__mnExternal.Append(wx.Window.NewControlId(), "Open " + interfaceStuff.external[2][0], helpString="Opens the selected 2d graphics editing software...")
-        self.__graphics3d = self.__mnExternal.Append(wx.Window.NewControlId(), "Open " + interfaceStuff.external[3][0], helpString="Opens the selected 3d graphics editing software...")
-        
+        self.__mnGraphics2d = self.__mnExternal.Append(wx.Window.NewControlId(), "Open {2d editor not set}", helpString="Opens the selected 2d graphics editing software...")
+        self.__mnGraphics3d = self.__mnExternal.Append(wx.Window.NewControlId(), "Open {3d editor not set}" + interfaceStuff.external[3][0], helpString="Opens the selected 3d graphics editing software...")
+        if  interfaceStuff.external[2][0] != "nonsense":
+            self.__mnGraphics2d.SetItemLabel("Open " + interfaceStuff.external[2][0])
+        if  interfaceStuff.external[3][0] != "nonsense":
+            self.__mnGraphics3d.SetItemLabel("Open " + interfaceStuff.external[3][0])
             # external menu events
-        self.Bind(wx.EVT_MENU, self.open2dEditor, self.__graphics2d)
-        self.Bind(wx.EVT_MENU, self.open3dEditor, self.__graphics3d)
+        self.__mnSetEditor2d = self.__mnExternal.Append(wx.Window.NewControlId(), "Set 2d Graphics Editing Software", helpString="Sets a 2d graphics editing software to work with")
+        self.__mnSetEditor3d = self.__mnExternal.Append(wx.Window.NewControlId(), "Set 3d Modeling Software", helpString="Sets a 3d graphics editing software to work with")
+        self.Bind(wx.EVT_MENU, self.open2dEditor, self.__mnGraphics2d)
+        self.Bind(wx.EVT_MENU, self.open3dEditor, self.__mnGraphics3d)
+        self.Bind(wx.EVT_MENU, self.setEditor2d, self.__mnSetEditor2d)
+        self.Bind(wx.EVT_MENU, self.setEditor3d, self.__mnSetEditor3d)
         
             # construct help menu
         self.__mnHelp = wx.Menu()
@@ -360,6 +368,24 @@ class MainWindow(wx.Frame):
                     wx.MessageDialog(self, "The selected file could not be imported, please check the following issues and try again:\nThere is a project open...").ShowModal()
                     
     
+    def setEditor2d(self, event):
+        sed = SetEditorDialog(self)
+        if sed.ShowModal() == wx.ID_OK:
+            config = []
+            editor = sed.getName() + "," + sed.getFiletype() + "," + sed.getIcon() + ",\"" + sed.getLocation() + "\"\n"
+            with open("threeP.config", "r") as fromConfig:
+                for line in fromConfig:
+                    config.append(line)
+                for c in config:
+                    if "editor2d" in c:
+                        config.remove(c)
+                config.append("editor2d &@" + editor)
+            with open("threeP.config", "w") as toConfig:
+                for line in config:
+                    toConfig.write(line)
+            wx.MessageDialog(self, "Please restart threeP.games for these changes to take effect.").ShowModal()
+    
+    
     def open2dEditor(self, event):
         echo = interfaceStuff.editor2d()
         sod = StdOutDialog(self, echo)
@@ -368,6 +394,25 @@ class MainWindow(wx.Frame):
             interfaceStuff.updateManifest()
             self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
             
+            
+    def setEditor3d(self, event):
+        sed = SetEditorDialog(self)
+        if sed.ShowModal() == wx.ID_OK:
+            config = []
+            editor = sed.getName() + "," + sed.getFiletype() + "," + sed.getIcon() + ",\"" + sed.getLocation() + "\"\n"
+            with open("threeP.config", "r") as fromConfig:
+                for line in fromConfig:
+                    config.append(line)
+                for c in config:
+                    if "editor3d" in c:
+                        config.remove(c)
+                config.append("editor3d &@" + editor)
+            with open("threeP.config", "w") as toConfig:
+                for line in config:
+                    toConfig.write(line)
+            wx.MessageDialog(self, "Please restart threeP.games for these changes to take effect.").ShowModal()
+    
+    
     
     def open3dEditor(self, event):
         echo = interfaceStuff.editor3d()
