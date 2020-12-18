@@ -4,7 +4,7 @@
 # @package interfaceStuff
 # The methods to interface with the selected game engines, 2d and 3d edting software, and a text editor for scripting to ease the task of constructing a game with PyGame and Panda3D.\n
 
-
+import sys
 from os import makedirs, listdir, system
 from os.path import isdir, isfile, join, basename
 from shutil import copytree, copy
@@ -16,6 +16,7 @@ from gltf.converter import convert
 from GameWriter import GameWriter2d, GameWriter3d
 #from GameObjects import Background2d, Player2d, Player3d, Stuff2d
 from GameTools import startClass
+#import imp
 
 
 ##
@@ -78,6 +79,12 @@ def newProj(name, mode, direct):
     copytree("Project Imports\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
     copytree("Project Imports\\GameScripts", location + "\\Scripts\\GameScripts")
     copytree("Project Imports\\DefaultImages", location + "\\Assets\\DefaultImages")
+    filepath = location + "\\Scenes\\GameInstance.py"
+    if not isfile(filepath):
+        with open(filepath, "w") as newFile:
+            newFile.write("imports = []\n")
+            newFile.write("inits = []\n")
+            newFile.write("mains = []\n")
     updateManifest()
 
 
@@ -260,7 +267,7 @@ def writeTodoList():
         toFile.write(tasks)
         
         
-
+"""
 ##
 # A method to import a folder of .png 2d-sprite-sheet images \n
 # The folder must be named appropriately in advance and contain only .png files as it will simply copy the entire thing directly over to the Assets folder of the current project.
@@ -278,9 +285,31 @@ def grabSpriteSheet(path):
         return True
     else:
         return False
+"""
+    
+##
+# A method to import a folder of image assets.\n
+# @param path The directory where the assets were originally stored at
+# @ returns <b>bool</b> Representing success or failure of the task
+def grabAssets(path):
+    destination = location + "\\Assets\\" + basename(path)
+    if not isdir(destination):
+        copytree(path, destination)
+        converts = makeBam(destination)
+        updateManifest()
+        return True
+    elif isdir(destination):
+        for item in listdir(path):
+            copy(path + "\\" + item, destination)
+        converts = makeBam(destination)
+        updateManifest()
+        return True
+    else:
+        return False
+    
  
 
-
+"""
 ##
 # A method to import a folder of gltf format (.glb) animated 3d models \n
 # The folder must be named appropriately in advance and contain only .glb files which will be copied to an identically named subdirectory of the Assets folder in the current project and generate identically named .bam files to use in Panda3D.\n
@@ -304,6 +333,28 @@ def grabModel(path):
         return True
     else:
         return False
+"""
+    
+
+##
+# A method to convert files for animated 3d models in gltf format (.glb)  into .bam files for use in Panda3d\n
+# @param path The directory where the gltf (.glb) files were originally located.
+# @ returns <b>int</b> Representing number of file conversions
+def makeBam(source, destination=""):
+    if destination == "":
+        destination = source
+    counter = 0
+    for infile in listdir(source):
+        try:
+            if infile[-4:] == ".glb":
+                outfile = infile[0:-4] + ".bam"
+                convert(join(source, infile), join(destination, outfile))
+                counter += 1
+        except:
+            pass
+    updateManifest()
+    return counter
+
     
  
     
@@ -331,71 +382,83 @@ def grabGraphicsSource(path):
 # @param name The name for the new object
 # @param obj The type of object, either a player or background so far.
 # @returns <b>bool</b> indicating the success or failure of the task
-def newSceneObject(name, obj):
-    rewrite = ["import sys\n", "sys.path.insert(1, \"" + location + "\")\n"]
-    if gameMode == 2 and obj == "Player":
-        startClass(module=name, name=name, parent="Player2d", attributes=[], directory=location + "\\Scenes")
-        rewrite.append("from Scripts.GameScripts.GameObjects import Player2d\n")
-        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
-            for line in fromFile:
-                if "def" in line:
-                    line = line[0:-3] + ", *args, **kwargs):\n"
-                elif "super" in line:
-                    line = line[0:-2] + "*args, **kwargs)\n"
-                rewrite.append(line)
-        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
-        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
-            for line in rewrite:
-                toFile.write(line)
-        return True
-    elif gameMode == 3 and obj == "Player":
-        startClass(module=name, name=name, parent="Player3d", attributes=[], directory=location + "\\Scenes")
-        rewrite.append("from Scripts.GameScripts.GameObjects import Player3d\n")
-        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
-            for line in fromFile:
-                if "def" in line:
-                    line = line[0:-3] + ", *args, **kwargs):\n"
-                elif "super" in line:
-                    line = line[0:-2] + "*args, **kwargs)\n"
-                rewrite.append(line)
-        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
-        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
-            for line in rewrite:
-                toFile.write(line)
-        return True
-    elif gameMode == 2 and obj == "Background":
-        startClass(module=name, name=name, parent="Background2d", attributes=[], directory=location + "\\Scenes")
-        rewrite.append("from Scripts.GameScripts.GameObjects import Background2d\n")
-        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
-            for line in fromFile:
-                if "def" in line:
-                    line = line[0:-3] + ", *args, **kwargs):\n"
-                elif "super" in line:
-                    line = line[0:-2] + "*args, **kwargs)\n"
-                rewrite.append(line)
-        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
-        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
-            for line in rewrite:
-                toFile.write(line)
-        return True
-    elif gameMode == 2 and obj == "Prop":
-        startClass(module=name, name=name, parent="Stuff2d", attributes=[], directory=location + "\\Scenes")
-        rewrite.append("from Scripts.GameScripts.GameObjects import Stuff2d\n")
-        with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
-            for line in fromFile:
-                if "def" in line:
-                    line = line[0:-3] + ", *args, **kwargs):\n"
-                elif "super" in line:
-                    line = line[0:-2] + "*args, **kwargs)\n"
-                rewrite.append(line)
-        rewrite.append("\n        # @todo finish out the class, remember to put any new attributes before args and kwargs in the constructor\n\n")
-        with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
-            for line in rewrite:
-                toFile.write(line)
-        return True
-    else:
-        return False
+def newSceneObject(name, obj, asset):
+    rewrite = ["import sys\n", "sys.path.insert(1, \"" + location.replace("\\", "\\\\") + "\")\n"]
+    parent = obj + str(gameMode) + "d"
+        # creates the game object class
+        # rewrites the file with current project as a module source
+        # assigns an asset folder to the object
+        # adds in args and kwargs for the parent class
+    startClass(module=name, name=name, parent=parent, attributes=["Asset"], directory=location + "\\Scenes")
+    rewrite.append("from Scripts.GameScripts.GameObjects import " + parent + "\n")
+    with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
+        for line in fromFile:
+            if "def __init__" in line:
+                line = line.replace("Asset", "Asset=\"" + asset.replace("\\", "\\\\") + "\"")
+                line = line[0:-3] + ", *args, **kwargs):\n"
+                line += "        super().__init__(*args, **kwargs)\n\n"
+                line += "        #--> This Area for interface usage, best to leave it alone there are already getters and seters for these things\n"
+                line += "        #? inspector read start\n"
+                line += "        self.__x=0\n        self.__y=0\n        self.__z=0\n"
+                line += "        self.__h=0\n        self.__p=0\n        self.__r=0\n"
+                line += "        #? inspector read end\n"
+            rewrite.append(line)
+    rewrite.append("\n\n        # @todo finish out the class by completeing the start and update methods below, remember to put any new attributes before args and kwargs in the constructor\n\n")
+    rewrite.append("\n\n    def start(self):\n        pass")
+    rewrite.append("\n\n    def update(self):\n        pass")
+    rewrite.append("\n\n\n    # @todo Create and import custom scripts to enhance functionality of this game object")
+    with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
+        for line in rewrite:
+            toFile.write(line)
+    return addSceneObject(name)
 
+
+##
+# When a new object is created this adds it to a module containing the strings that will actually be used to manipulate transform data in the interface and written to the game file.
+# @param name The name of the game object to add to the list, must be in a .py file with the same name as the game object, i.e. one class per file and names match
+# @returns <b>bool</b> Indicating success or failure of the task
+def addSceneObject(name):
+    imports = []
+    inits = []
+    mains = []
+    filepath = location + "\\Scenes\\GameInstance.py"
+    if not isfile(filepath):
+        with open(filepath, "w") as newFile:
+            newFile.write("imports = []\n")
+            newFile.write("inits = []\n")
+            newFile.write("mains = []\n")
+    sys.path.insert(0, location)
+    import Scenes.GameInstance
+    imports = Scenes.GameInstance.imports
+    inits = Scenes.GameInstance.inits
+    mains = Scenes.GameInstance.mains
+    imports.append("from Scenes." + name + " import " + name)
+    if gameMode == 2:
+        inits.append("m_" + name + " = " +  name + "()")
+        inits.append("m_" + name + ".start()")
+        mains.append("m_" + name + ".update()")
+    elif gameMode == 3:
+        inits.append("self.m_" + name + " = " +  name + "()")
+        inits.append("self.m_" + name + ".start(base.mouseWatcherNode)")
+        inits.append("self.m_" + name + ".reparentTo(self.render)\n")
+        mains.append("self.taskMgr.add(self.m_" + name + ".update, \"m_" + name + "_Update\")")
+    with open(filepath, "w") as toFile:
+        toFile.write("imports = ")
+        toFile.write(str(imports))
+        toFile.write("\n")
+        toFile.write("inits = ")
+        toFile.write(str(inits))
+        toFile.write("\n")
+        toFile.write("mains = ")
+        toFile.write(str(mains))
+        toFile.write("\n")
+    sys.modules.pop("Scenes.GameInstance")
+    sys.path.pop(0)
+    return True
+
+
+
+    
 
 
 ##
@@ -451,17 +514,32 @@ def editor3d():
 # A call to the appropriate function of the GameWriter object for the mode set with the project
 # @returns <b>void</b>
 def writeGame():
+    sys.path.insert(0, location)
+    import Scenes.GameInstance
+    imports = Scenes.GameInstance.imports
+    inits = Scenes.GameInstance.inits
+    mains = Scenes.GameInstance.mains
     if gameMode == 2:
-        print(projectName, location)
         gw2 = GameWriter2d(projectName, location)
         gw2.directory = location
         gw2.localDirectory(location)
+        gw2.importsSection(imports)
+        gw2.initializeSection(inits)
+        gw2.mainSceneSection(mains)
         gw2.writeGame()
     elif gameMode == 3:
         gw3 = GameWriter3d(projectName, location)
         gw3.directory = location
         gw3.localDirectory(location)
+        gw3.importsSection(imports)
+        gw3.initializeSection(inits)
+        gw3.mainSceneSection(mains)
         gw3.writeGame()
+    sys.modules.pop("Scenes.GameInstance")
+    sys.path.pop(0)
+
+
+
 
 
 
