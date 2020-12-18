@@ -14,6 +14,8 @@ wxPython was selected for putting together the Graphical User Interface due to t
 
 ![threep_screenshot_main](https://user-images.githubusercontent.com/50467171/102130540-fa0c8e80-3e1e-11eb-9f7a-861b46b2b963.jpg)
 
+As I began development of the inspector tab it quickly became apparent that my orignal plan, to use GLtf format with PyOpenGL, was going to require some complex code and a little trickery. Falling back to a simpler plan B uses wavefront (.obj and .mtl) format for the object previews, which also happens to be the standard format for 3d games in PyGame, so a future version (once the original is completed and working) may switch to include a choice of engines rather than simply PyGame for 2d and Panda3d for 3d (2d in panda is easy -just ignore the z-axis except for front/back issues).
+
 <h2>Instructions</h2>
 
 <h4>Create Project</h4>
@@ -55,7 +57,14 @@ The autocomplete functionality, while still very crude, will at least show the k
 
 <h4>Import Assets</h4>
 
-When it came time to set up the import graphics features for 3d models and 2d sprite-sheets careful consideration led to the decision to only allow gltf (.glb) and .png formats, the two leading format standards for each. Direct integration, at least from blender which contains its own python API can be a bit problematic if the blender python version does not exactly match the native python environment, so there are export scripts included (hopefully more coming for other major 3d modeling softwares: MEL and Zscript for example), load them into the animated model in blender, then just hit run to get the folder to import into the threeP.games project (non-animated models can already be exported with a single click to either format, just make sure it is placed in an appropriately named folder that contains only that file-type: all .png files or all .glb files). The blender2gltf.py script exports one 3d model for each animation named model_{action}.glb which will be converted to a .bam copy when imported into the threeP.games project, and the blender2png.py script exports a .png file for every keyframe of the animation from the viewpoint of the active camera in the scene named model_{action}####.png (so it will work whether it is a 2d or 3d animated model). Both export scripts give the folder the same name as the blender file the model is saved in and place it in the same directory as the blender file. Selecting a gltf(.glb) or .png graphics file from the directory tree will open it in the system default for viewing such a file.
+There are two ways to import assets into the project, by folder and by source. To import a folder simply click the import assets button (see picture below) and navigate to and select the folder to import. To import by source (the preferred and intended method), see paragraphs below the pictures.
+
+![threep_screenshot_importSource](https://user-images.githubusercontent.com/50467171/102575046-462a2e00-40c0-11eb-9649-0db829305a9d.jpg)
+![threep_screenshot_importAssets](https://user-images.githubusercontent.com/50467171/102575047-46c2c480-40c0-11eb-9418-8e9473f6c208.jpg)
+
+Direct integration, at least from blender which contains its own python API can be a bit problematic if the blender python version does not exactly match the native python environment, so there are export scripts included (hopefully more coming for other major 3d modeling softwares: MEL and Zscript for example), load them into the animated model in blender, then just hit run to get the folder to import into the threeP.games project. 
+
+The blender2gltf.py script exports one 3d model for each animation named model_{action}.glb which will need to be converted to a .bam copy when imported into the threeP.games project (at this time there is an option in the "External" menu to do this, automation should be coming soon), and the blender2png.py script exports a .png file for every keyframe of the animation from the viewpoint of the active camera in the scene named model_{action}####.png (so it will work whether it is a 2d or 3d animated model). Both export scripts give the folder the same name as the blender file the model is saved in and place it in the same directory as the blender file. Selecting a gltf(.glb) or .png graphics file from the directory tree will open it in the system default for viewing such a file.
 
 <h4>External Editors</h4>
 
