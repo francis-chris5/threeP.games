@@ -6,9 +6,6 @@ Created on Sat Dec  5 17:12:04 2020
 """
 
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 from os.path import dirname
 import xml.etree.ElementTree as ET

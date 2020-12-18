@@ -7,8 +7,6 @@ Created on Mon Dec 14 09:19:41 2020
 
 
 import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 import interfaceStuff
 from datetime import datetime
@@ -19,7 +17,7 @@ class StdOutDialog(wx.Dialog):
         super().__init__(parent)
         self.SetTitle("sys.stdout")
         self.SetSize((600, 320))
-        self.__icon = wx.Icon("images\\threep_logo.png")
+        self.__icon = wx.Icon("GUI\\images\\threep_logo.png")
         self.SetIcon(self.__icon)
         
         self.__result = list(result)

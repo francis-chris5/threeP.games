@@ -5,9 +5,6 @@ Created on Fri Dec 11 06:09:57 2020
 @author: Christopher S. Francis
 """
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx.stc
 from Editors.TextEditor import TextEditor
 import Editors.myWords as myWords

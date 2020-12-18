@@ -26,28 +26,52 @@ def blender2gltf():
     selection = bpy.context.selected_objects
     bpy.ops.object.select_all(action='DESELECT')
     
-        #loop through every animated action for every object in scene
-    for act in bpy.data.actions:
-        for obj in selection:
+    if len(bpy.data.actions) > 0:
+            #loop through every animated action for every object in scene
+        for act in bpy.data.actions:
+            for obj in selection:
+                    
+                    #select the object and toggle through which animation is active
+                obj.select_set(True)
+                obj.parent.animation_data.action = act
+                view_layer.objects.active = obj
                 
-                #select the object and toggle through which animation is active
-            obj.select_set(True)
-            obj.parent.animation_data.action = act
-            view_layer.objects.active = obj
-            
-            
-                # names for directories and files
-            name = bpy.path.clean_name(obj.name)
-            gltfFolder = join(basedir, name)
-            if not isdir(gltfFolder):
-                makedirs(gltfFolder)
-            filepath = join(gltfFolder, name + "_" + act.name)
+                
+                    # names for directories and files
+                name = bpy.path.clean_name(obj.name)
+                gltfFolder = join(basedir, name)
+                if not isdir(gltfFolder):
+                    makedirs(gltfFolder)
+                filepath = join(gltfFolder, name + "_" + act.name)
 
-            
-                #export the gltf and maybe keep a list of animations (uncomment that part)
-            bpy.ops.export_scene.gltf(filepath=filepath + ".glb")
-            
-            obj.select_set(False)
+                
+                    #export the gltf and maybe keep a list of animations (uncomment that part)
+                bpy.ops.export_scene.gltf(filepath=filepath + ".glb")
+                bpy.ops.export_scene.obj(filepath=filepath + ".obj", use_triangles=True)
+                
+                obj.select_set(False)
+                
+    else:
+        for obj in selection:
+                    
+                    #select the object and toggle through which animation is active
+                obj.select_set(True)
+                view_layer.objects.active = obj
+                
+                
+                    # names for directories and files
+                name = bpy.path.clean_name(obj.name)
+                gltfFolder = join(basedir, name)
+                if not isdir(gltfFolder):
+                    makedirs(gltfFolder)
+                filepath = join(gltfFolder, name)
+
+                
+                    #export the gltf and maybe keep a list of animations (uncomment that part)
+                bpy.ops.export_scene.gltf(filepath=filepath + ".glb")
+                bpy.ops.export_scene.obj(filepath=filepath + ".obj", use_triangles=True)
+                
+                obj.select_set(False)
 
 
     #run program

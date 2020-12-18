@@ -6,9 +6,6 @@ Created on Fri Dec 11 06:46:30 2020
 """
 
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 import wx.py.shell
 import Editors.myWords as myWords
@@ -25,7 +22,7 @@ class PyConsole(wx.Panel):
         
             # console shell
         self.__shell = wx.py.shell.Shell(self)
-        self.__clearIcon = wx.Bitmap("images\\clear_icon.png")
+        self.__clearIcon = wx.Bitmap("GUI\\images\\clear_icon.png")
         self.__clear = wx.BitmapButton(self, bitmap=self.__clearIcon)
         
 
