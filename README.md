@@ -78,9 +78,13 @@ To set a default external editor select "External" in the main menu and then cho
 
 <h4>Scene Objcets</h4>
 
-The "Scenes" folder is for the objects that will actually be placed into the game. Selecting the "New Scene Object" tool or menu option will bring up a dialog to choose from the short list of objects that are ready so far: 2d backgrounds, 2d props, 2d player, 3d player. More options will be coming soon.
+The "Scenes" folder is for the objects that will actually be placed into the game. Selecting the "New Scene Object" tool or menu option will bring up a dialog to choose from the short list of objects that are ready so far: 2d backgrounds, 2d props, 2d player, 3d player. More options will be coming soon. Along with the type of game object to insert, give it a name and chooose the folder containing the image assets: all sprite-sheet files for 2d and all bam files for 3d in a single folder, do not organize into subfolders, a dictionary to refer to the various animations will be generated from the given files.
 
 ![threep_screenshot_newScene](https://user-images.githubusercontent.com/50467171/102130534-f8db6180-3e1e-11eb-84c4-e0b1a5800270.jpg)
+
+A file will be generated for the scene object which will need customization to the start() and update() methods. The start() method will be called one time when the object is initialized, and the update() method will be called at every frame of the game. It is highly recommended to put all customizations here, as other locations may be overwritten as files are (re)generated.
+
+There is also a file named GameInstance which contains the strings that will actually be written to the final game script. It is HIGHLY recommended not to mess with this file, as the entire project depends upon the order this file is generated, and errors here may result in the entire project needing redone.
 
 <h4>TODO List</h4>
 
