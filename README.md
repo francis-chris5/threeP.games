@@ -84,7 +84,7 @@ The "Scenes" folder is for the objects that will actually be placed into the gam
 
 A file will be generated for the scene object which will need customization to the start() and update() methods. The start() method will be called one time when the object is initialized, and the update() method will be called at every frame of the game. It is highly recommended to put all customizations here, as other locations may be overwritten as files are (re)generated.
 
-There is also a file named GameInstance which contains the strings that will actually be written to the final game script. It is HIGHLY recommended not to mess with this file, as the entire project depends upon the order this file is generated, and errors here may result in the entire project needing redone.
+There is also a file named GameInstance which contains the strings that will actually be written to the final game script. It is HIGHLY recommended not to mess with this file, as the entire project depends upon the order this file is generated, and alterations here may result in the entire project needing redone.
 
 <h4>TODO List</h4>
 
