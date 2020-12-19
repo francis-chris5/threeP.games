@@ -108,18 +108,7 @@ So at this point, basically just the directory structure set up...
 
 Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
 
-I forgot to list all the dependencies as I was making this at first, the full list will be coming, but I know that in addition to the core Python API I at least used:
-
-<blockquote>
-      
-      https://www.pygame.org/wiki/GettingStarted (engine used for 2d games)
-      https://www.panda3d.org/ (engine used for 3d games)
-      https://docs.panda3d.org/1.10/python/tools/model-export/converting-from-blender (I chose second link: https://github.com/Moguri/panda3d-gltf)
-      https://www.wxpython.org/pages/downloads/ (graphical user interface package used)
-      https://inkscape.org/ (interface has method to open this)
-      https://www.blender.org/ (interface has method to open this)
-      
-   </blockquote>
+In the folder kernal there is a text-document listing the version of python used when creating this (as of now there should not be anythin specific to that version, though it does use subprocess.run(...) which I think was introduced in 2.7 so probably need at least python 3.x) along with the libraries that will need installed in order for the game files it generates to run.
   
   
   Very excited about this project so updates will be coming along very shortly...
