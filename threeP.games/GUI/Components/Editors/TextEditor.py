@@ -103,13 +103,13 @@ class TextEditor(wx.Panel):
         file = self.getPath()[self.getPath().rindex("\\")+1:]
         path = self.getPath()[:self.getPath().rindex("\\")]
         if isdir(path):
-            if file != interfaceStuff.projectName + "_manifest.xml":
+            if file != interfaceStuff.projectName + "_manifest.xml" and file != "GameInstance.py":
                 with open(path + "\\" + file, "w", newline="") as toFile:
                     for line in range(self.getEditor().GetLineCount()):
                         toFile.write(self.getEditor().GetLine(line))
                         self.__btnSave.SetBitmap(self.__picSave)
             else:
-                wx.MessageDialog(self, "The manifest is an automtically generated critical file, altering it could destroy the project so it cannot be saved here.").ShowModal()
+                wx.MessageDialog(self, "The file \"" + file + "\" is an automtically generated critical file, altering it could destroy the project so it cannot be saved here.").ShowModal()
             return True
         else:
             return False
