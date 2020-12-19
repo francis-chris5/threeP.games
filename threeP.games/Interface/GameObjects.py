@@ -107,22 +107,29 @@ class Stuff2d():
                 i += 1
             self.setSprite(animations)
             
-        
-    ##
-    # The method to render an object on the scene using the PyGame blit (block transfer) method, to be called every pass of the main loop in the game.\n
-    # @param game The pygame display surface in the rendering window -object created by line "pygame.display.set_mode((x,y))"
-    # @param x The x coordinate of where to render the object at
-    # @param y The y coordinate of where to render the object at
-    # @param frame The frame of the sprite animation to render, design intentions are for this parameter to be filled with a ternary operator checking a global counter, example: for idle/walk animations with 20 frames each (counter%20, counter%20+20)[character.getIsMoving()]
-    def render(self, game, frame=0):
-        if len(self.__sprite) == 1:
-            game.blit(self.__sprite[0], (self.getX(), self.getY()))
-        else: 
-            game.blit(self.__sprite[frame], (self.getX(), self.getY()))
-        
+    
     def bounds(self):
         # @todo adjust this for rotation
         return (self.getX(), self.getY(), self.getX() + self.getWidth(), self.getY() + self.getHeight())
+    
+    ##
+    # The calll to render the sprite image in the game, this must be overridden in subclasses, i.e. the actual objects to be used in a game.\n
+    # @param game The pygame display surface in the rendering window -object created by line "pygame.display.set_mode((x,y))"
+    def render(self, game):
+        pass
+    
+    ##
+    # The initialization method for a game object, this must be overridden in subclasses, i.e. the actual objects to be used in a game.\n
+    # @returns void
+    def start(self):
+        pass
+    
+    ##
+    # The actions to be carried out by a game object, this will be called at every frame of the game, this must be overridden in subclasses, i.e. the actual objects to be used in a game.\n
+    # @returns void
+    def update(self):
+        pass
+        
         
 
 
@@ -388,13 +395,22 @@ class Stuff3d():
             self.setActor(Actor(asset + "\\" + a[0], animations))
     
     ##
-    # The animation call sent to the panda3d task manager.\n
-    # This must be overridden in all subclasses that will be used in the game
-    # @param task Requirement for Panda3d Task Manager
-    # @return <b>task.cont</b> Requirement for Panda3d Task Manager
+    # The calll to render the sprite image in the game, this must be overridden in subclasses, i.e. the actual objects to be used in a game.\n
+    # @param game The pygame display surface in the rendering window -object created by line "pygame.display.set_mode((x,y))"
     def render(self, task):
-        #choose animation for the actor
-        return task.cont
+        pass
+    
+    ##
+    # The initialization method for a game object, this must be overridden in subclasses, i.e. the actual objects to be used in a game.\n
+    # @returns void
+    def start(self):
+        pass
+    
+    ##
+    # The actions to be carried out by a game object, this will be called at every frame of the game, this must be overridden in subclasses, i.e. the actual objects to be used in a game.\n
+    # @returns void
+    def update(self, task):
+        pass
 
 
 
