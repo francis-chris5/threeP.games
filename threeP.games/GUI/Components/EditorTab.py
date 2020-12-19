@@ -66,7 +66,7 @@ class EditorTab(wx.Panel):
             file = src.split("\\")[-1]
             self.__book.AddPage(editor, file, select=True)
             return "Done"
-        elif src[-4:] == ".txt":
+        elif src[-4:] == ".txt" or src[-4:] == ".mtl" or src[-4:] == ".obj":
             editor = TextEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
