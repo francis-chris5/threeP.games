@@ -1,3 +1,0 @@
-adding in all dependencies that are not
-part of the core python-37 library will
-be placed here very soon (maybe put a copy of python too)
