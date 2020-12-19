@@ -18,7 +18,7 @@ from os.path import isdir, basename
 
 
 ##
-#The parent class for all of the custom objects to be used when developing a a 2d game with the PyGame engine.\n
+#The parent class for all of the visible/tangible objects to be used when developing a a 2d game with the PyGame engine.\n
 class Stuff2d():
 
     ##
@@ -70,7 +70,7 @@ class Stuff2d():
 
     ##
     # Replaces the list of sprites for the object.\n
-    # @param sprite Must be a list of filenames as strings, if only a single image, pass it in as a single element list.
+    # @param sprite Must be a dictionar of filepaths as strings, if only a single image, pass it in as a single key value pair in a dictionary.
     def setSprite(self, sprite):
         self.__sprite = sprite
 
@@ -168,11 +168,15 @@ class Background2d(Stuff2d):
 
 ##
 # A class to consolidate all of the player control features for a 2d game.\n
-# @param left The left control, default is 'a' key
-# @param down The down control, default is 's' key
-# @param right The right control, default is 'd' key
-# @param up The up control, default is 'w' key
 class Control2D():
+    
+    ##
+    # The constructor for 2d control object
+    # @param left The left control, default is 'a' key
+    # @param down The down control, default is 's' key
+    # @param right The right control, default is 'd' key
+    # @param up The up control, default is 'w' key
+
     def __init__(self, left=pygame.K_a, down=pygame.K_s, right=pygame.K_d, up=pygame.K_w):
         self.__left = left
         self.__down = down
@@ -286,14 +290,17 @@ class Player2d(Stuff2d):
 
 
 ##
-# The parent class for all objects used in 3d games, essentially an expansion of actor, though not a child class, a container with an actor, positions and rotations can go straight in, other stuff probably needs {instance}.getActor() called first.\n
-# @param x X-Coordinate
-# @param y Y-Coordinate
-# @param z Z-Coordinate
-# @param h Yaw angle
-# @param p Pitch angle
-# @param r Roll angle
+# The parent class for all visible/tangible objects used in 3d games, essentially an expansion of actor, though not a child class, a container with an actor, positions and rotations can go straight in, other stuff probably needs {instance}.getActor() called first.\n
 class Stuff3d():
+    
+    ##
+    # The constructor for the 3d game object parent class
+    # @param x X-Coordinate
+    # @param y Y-Coordinate
+    # @param z Z-Coordinate
+    # @param h Yaw angle
+    # @param p Pitch angle
+    # @param r Roll angle
     def __init__(self, x=0, y=0, z=0, h=0, p=0, r=0):
         
         self.__actor = Actor()
@@ -359,6 +366,8 @@ class Stuff3d():
     ##
     # All subclasses that will be used need to call this method and pass up a directory of assets, must contain .bam files, if not named as per instructions this method will need overridden with something that passes a dictionary of animated bam files into the setActor() method 
     # NOTE: this must be a relative filepath (for some reason, no absolutes)
+    # @param asset The relative filepath to the folder where the .bam files for this object are located at
+    # @returns <b>void</b>
     def loadActor(self, asset):
         # convert gltf to bam file here???
         countBams = 0
@@ -378,6 +387,11 @@ class Stuff3d():
                     animations[item[startAnim:item.rindex(".")]] = asset + "\\" + item
             self.setActor(Actor(asset + "\\" + a[0], animations))
     
+    ##
+    # The animation call sent to the panda3d task manager.\n
+    # This must be overridden in all subclasses that will be used in the game
+    # @param task Requirement for Panda3d Task Manager
+    # @return <b>task.cont</b> Requirement for Panda3d Task Manager
     def render(self, task):
         #choose animation for the actor
         return task.cont
