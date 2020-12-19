@@ -8,8 +8,6 @@ Created on Fri Dec  4 03:21:17 2020
 import sys
 from os import remove, rmdir, execl, listdir
 from os.path import join, isfile, isdir, basename, dirname, abspath
-#sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-#sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 sys.path.insert(1, dirname(abspath(__file__)) + "\\Interface")
 sys.path.insert(2, dirname(abspath(__file__)) + "\\GUI\\Components")
 import wx
@@ -272,7 +270,7 @@ class MainWindow(wx.Frame):
             start = filepath.index(">") + 1
             filepath = filepath[start:]
             name, extension = interfaceStuff.getFileStuff(filepath)
-            if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
+            if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != ".ico" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
                 result = self.__tbEditor.newEditor(filepath)
                 if result == "Scene":
                     self.__tbInspector.openObject(filepath)
@@ -286,6 +284,8 @@ class MainWindow(wx.Frame):
             
             elif extension == ".bam":
                 wx.MessageDialog(self, "No preview of a Binary-Compressed Sequence Alignment/Map available, see https://samtools.github.io/hts-specs/SAMv1.pdf for details.\nThis file is here because the Panda3D engine uses it, select the associated gltf(.glb) file for a preview of the animated model.").ShowModal()
+            elif extension == ".ico":
+                wx.MessageDialog(self, "Unable to open .ico file with default system settings, try opening it manually from inside graphics editing software.").ShowModal()
         except ValueError:
             branch = self.__trDirectory.getTree().GetSelection()
             if self.__trDirectory.getTree().IsExpanded(branch):
