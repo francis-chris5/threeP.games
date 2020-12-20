@@ -76,9 +76,9 @@ def newProj(name, mode, direct):
     makedirs(join(location, "Scripts"))
     with open(join(location, "Scripts\\scripts.txt"), "w") as toFile:
         toFile.write("The scripts folder is intended to serve as the master location to\norganize the vast quantity of custom scripts that will be needed to\nassemble a game.\n\n\nThis file is included here for to-do lists and notes about the Scripts resources\nsince only new python scripts can be created from within the project.")
-    copytree("Project Imports\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
-    copytree("Project Imports\\GameScripts", location + "\\Scripts\\GameScripts")
-    copytree("Project Imports\\DefaultImages", location + "\\Assets\\DefaultImages")
+    copytree("GUI\\Project Imports\\ModelBatchExports", location + "\\Scripts\\ModelBatchExports")
+    copytree("GUI\\Project Imports\\GameScripts", location + "\\Scripts\\GameScripts")
+    copytree("GUI\\Project Imports\\DefaultImages", location + "\\Assets\\DefaultImages")
     filepath = location + "\\Scenes\\GameInstance.py"
     if not isfile(filepath):
         with open(filepath, "w") as newFile:
@@ -394,14 +394,20 @@ def newSceneObject(name, obj, asset):
     with open(location + "\\Scenes\\" + name + ".py", "r") as fromFile:
         for line in fromFile:
             if "def __init__" in line:
-                line = line.replace("Asset", "Asset=\"" + asset[asset.find("Assets"):].replace("\\", "\\\\") + "\"")
+                line = line.replace("Asset", "Asset=\"" + asset.replace("\\", "\\\\") + "\"")
                 line = line[0:-3] + ", *args, **kwargs):\n"
-                line += "        super().__init__(*args, **kwargs)\n\n"
+                line += "        super().__init__(*args, **kwargs)\n"
                 line += "        #--> This Area for interface usage, best to leave it alone there are already getters and seters for these things\n"
                 line += "        #? inspector read start\n"
                 line += "        self.__x=0\n        self.__y=0\n        self.__z=0\n"
                 line += "        self.__h=0\n        self.__p=0\n        self.__r=0\n"
                 line += "        #? inspector read end\n"
+                if gameMode == 2:
+                    line += "        self.loadSprite(Asset)\n"
+                    line += "        print(\"Animations: \" + str(self.getSprite().keys()))\n"
+                if gameMode == 3:
+                    line += "        self.loadActor(Asset)\n"
+                    line += "        print(\"Animations: \" + str(self.getActor()))\n"
             rewrite.append(line)
     rewrite.append("\n\n        # @todo finish out the class by completeing the start, update, and render methods below, remember to put any new attributes before args and kwargs in the constructor\n\n")
     rewrite.append("\n\n        # @todo If you did not use the Blender export scripts, or store spritesheet/model in the same manner you will need to override (2d) .loadSprite(asset) or (3d) .loadActor(asset) methods as well\n\n")
@@ -410,8 +416,8 @@ def newSceneObject(name, obj, asset):
         rewrite.append("\n\n    def update(self):\n        # @todo define actions to be called every frame of the game\n        pass")
         rewrite.append("\n\n    def render(self, game):\n        # @todo define how this object is to be rendered\n        pass")
     elif gameMode == 3:
-        rewrite.append("\n\n    def update(self,task):\n        # @todo define actions to be called every frame of the game\n        retrun task.cont")
-        rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered\n        retrun task.cont")
+        rewrite.append("\n\n    def update(self,task):\n        # @todo define actions to be called every frame of the game\n        return task.cont")
+        rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered\n        return task.cont")
     rewrite.append("\n\n\n    # @todo Create and import custom scripts to enhance functionality of this game object")
     with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
         for line in rewrite:
@@ -445,9 +451,9 @@ def addSceneObject(name):
         mains.append("m_" + name + ".update()")
         mains.append("m_" + name + ".render(scene)")
     elif gameMode == 3:
-        inits.append("self.m_" + name + " = " +  name + "()")
-        inits.append("self.m_" + name + ".start(base.mouseWatcherNode)")
-        inits.append("self.m_" + name + ".reparentTo(self.render)\n")
+        inits.append("self.m_" + name + " = " +  name + "(watcher=base.mouseWatcherNode)")
+        inits.append("self.m_" + name + ".start()")
+        inits.append("self.m_" + name + ".getActor().reparentTo(self.render)\n")
         mains.append("self.taskMgr.add(self.m_" + name + ".update, \"m_" + name + "_Update\")")
         mains.append("self.taskMgr.add(self.m_" + name + ".render, \"m_" + name + "_Render\")")
     with open(filepath, "w") as toFile:
