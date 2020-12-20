@@ -36,7 +36,7 @@ class GameWriter2d:
     def localDirectory(self, path):
         self.imports.insert(0, "import sys")
         self.imports.insert(1, "sys.path.insert(1, \"" + path.replace("\\", "\\\\") + "\")")
-        self.imports.append("\n# @todo import required modules here, --The game will check project resources so 'import Scripts.MyModule' for example\n\n")
+        
     
     
     def importsSection(self, items=[]):
@@ -49,7 +49,6 @@ class GameWriter2d:
     def initializeSection(self, items=[]):
         self.initialize.append("scene = pygame.display.set_mode((" + str(self.sceneWidth) + ", " + str(self.sceneHeight) + "))")
         self.initialize.append("pygame.display.set_caption(\"" + self.title + "\")\n\n")
-        self.initialize.append("\n\n# @todo initialize custom game objects here\n\n")
         for item in items:
             self.initialize.insert(-1, item)
         
@@ -57,7 +56,6 @@ class GameWriter2d:
     # Method to fill up the writable list with lines related to the main loop section of a 2d game
     # @return <b>void</b>
     def mainSceneSection(self, items=[]):
-        self.mainScene.insert(len(self.mainScene), "\n    # @todo manipulate the game objects here\n")
         self.mainScene.insert(len(self.mainScene), "    pygame.display.flip()")
         self.mainScene.insert(len(self.mainScene), "    clock.tick(" + str(self.framesPerSecond) + ")")
         for item in items:
@@ -115,7 +113,6 @@ class GameWriter3d:
     def localDirectory(self, path):
         self.imports.insert(0, "import sys")
         self.imports.insert(1, "sys.path.insert(1, \"" + path.replace("\\", "\\\\") + "\")")
-        self.imports.append("\n# @todo import required modules here, --The game will check project resources so 'import Scripts.MyModule' for example\n\n")
      
         
     def importsSection(self, items=[]):
@@ -131,7 +128,6 @@ class GameWriter3d:
         self.initialize.append("        self.light.setColor( (0.8, 0.8, 0.8, 1) )")
         self.initialize.append("        attachLight = self.render.attachNewNode(self.light)")
         self.initialize.append("        self.render.setLight(attachLight)\n\n")
-        self.initialize.append("\n\n        #@todo Insert custom models and actors for the scene here\n")
         for item in items:
             self.initialize.insert(-1, "        " + item)
             
