@@ -99,7 +99,7 @@ class Stuff2d():
             for item in listdir(asset):
                 for i in range(len(anim)):
                     if item[startAnim:item.rindex(".")-4] == anim[i]:
-                        frames[i].append(asset + "\\" + item)
+                        frames[i].append(pygame.image.load(asset + "\\" + item))
             animations = {}
             i = 0
             for key in anim:
