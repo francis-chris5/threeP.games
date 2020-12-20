@@ -8,8 +8,9 @@ Created on Fri Dec  4 03:21:17 2020
 import sys
 from os import remove, rmdir, execl, listdir
 from os.path import join, isfile, isdir, basename, dirname, abspath
-sys.path.insert(1, dirname(abspath(__file__)) + "\\Interface")
-sys.path.insert(2, dirname(abspath(__file__)) + "\\GUI\\Components")
+sys.path.insert(0, dirname(abspath(__file__)) + "\\Interface")
+sys.path.insert(1, dirname(abspath(__file__)) + "\\GUI\\Components")
+sys.path.insert(2, dirname(abspath(__file__)) + "\\kernal")
 import wx
 import webbrowser
 import interfaceStuff
