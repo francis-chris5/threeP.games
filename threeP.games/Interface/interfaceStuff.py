@@ -405,6 +405,7 @@ def newSceneObject(name, obj, asset):
                 if gameMode == 2:
                     line += "        self.loadSprite(Asset)\n"
                     line += "        print(\"Animations: \" + str(self.getSprite().keys()))\n"
+                    #line += "        print(\"Animations: \" + str(self.getSprite()))\n"
                 if gameMode == 3:
                     line += "        self.loadActor(Asset)\n"
                     line += "        print(\"Animations: \" + str(self.getActor()))\n"
