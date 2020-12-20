@@ -28,7 +28,7 @@ class NewSceneDialog(wx.Dialog):
             # Object Type
         objectLabel = wx.StaticText(self, -1, label="Game Object Type", pos=(20, 80))
         if interfaceStuff.gameMode == 2:
-            objectList = ["Prop", "Background", "Player"]
+            objectList = ["Player"] # "Prop", "Background", 
         elif interfaceStuff.gameMode == 3:
             objectList = ["Player"]
         self.__object = wx.RadioBox(self, -1, pos=(10, 100), choices=objectList)
