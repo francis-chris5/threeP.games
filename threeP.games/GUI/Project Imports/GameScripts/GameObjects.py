@@ -527,26 +527,25 @@ class Control3D():
 ##
 # The default non-vehicle player object for third-person 3d games to handle character animations and control.
 class Player3d(Character3d):
-    
     ##
     # Constructor for Player3d
     # @param watcher The panda 3d base.mouseWatcherNode for keyboard and mouse events
     # @param control The 3d controller object
-	def __init__(self, watcher, control=Control3D(), *args, **kwargs):
-		self.__watcher = watcher
-		self.__control = control
-
-	def getWatcher(self):
-		return self.__watcher
-
-	def getControl(self):
-		return self.__control
-
-	def setWatcher(self, watcher):
-		self.__watcher = watcher
-
-	def setControl(self, control):
-		self.__control = control
+    def __init__(self, watcher, control=Control3D(), *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__watcher = watcher
+        self.__control = control
+        
+    def getWatcher(self):
+        return self.__watcher
+    
+    def getControl(self):
+        return self.__control
+    def setWatcher(self, watcher):
+        self.__watcher = watcher
+        
+    def setControl(self, control):
+        self.__control = control
 
 
 
