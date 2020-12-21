@@ -399,8 +399,11 @@ def newSceneObject(name, obj, asset):
                 line += "        super().__init__(*args, **kwargs)\n"
                 line += "        #--> This Area for interface usage, best to leave it alone there are already getters and seters for these things\n"
                 line += "        #? inspector read start\n"
-                line += "        self.__x=0\n        self.__y=0\n        self.__z=0\n"
-                line += "        self.__h=0\n        self.__p=0\n        self.__r=0\n"
+                line += "        self.setX(0)\n        self.setY(0)\n        self.setZ(0)\n"
+                if gameMode == 2:
+                    line += "        self.setH(0)\n"
+                elif gameMode == 3:
+                    line += "        self.setH(0)\n        self.setP(0)\n        self.setR(0)\n"
                 line += "        #? inspector read end\n"
                 if gameMode == 2:
                     line += "        self.loadSprite(Asset)\n"
@@ -423,7 +426,7 @@ def newSceneObject(name, obj, asset):
     with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
         for line in rewrite:
             toFile.write(line)
-    return addSceneObject(name)
+    return addSceneObject(name, obj)
 
 
 ##
