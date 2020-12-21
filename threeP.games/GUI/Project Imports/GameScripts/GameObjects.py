@@ -68,9 +68,6 @@ class Stuff2d():
     def setH(self, h):
         self.__h = h
 
-    ##
-    # Replaces the list of sprites for the object.\n
-    # @param sprite Must be a dictionar of filepaths as strings, if only a single image, pass it in as a single key value pair in a dictionary.
     def setSprite(self, sprite):
         self.__sprite = sprite
 
@@ -83,7 +80,9 @@ class Stuff2d():
     def loadSprite(self, asset):
         if len(listdir(asset)) == 1:
             a = listdir(asset)
-            return {"still": asset + "\\" + a[0]}
+            self.setSprite({"still": [pygame.image.load(asset + "\\" + a[0])]})
+            self.setWidth(self.getSprite()[list(self.getSprite().keys())[0]][0].get_width())
+            self.setHeight(self.getSprite()[list(self.getSprite().keys())[0]][0].get_height())
         else:
             anim = []
             startAnim = len(basename(asset)) + 1
@@ -106,7 +105,9 @@ class Stuff2d():
                 animations[key] = frames[i]
                 i += 1
             self.setSprite(animations)
-            
+            self.setWidth(self.getSprite()[list(self.getSprite().keys())[0]][0].get_width())
+            self.setHeight(self.getSprite()[list(self.getSprite().keys())[0]][0].get_height())
+
     
     def bounds(self):
         # @todo adjust this for rotation
@@ -166,11 +167,12 @@ class Background2d(Stuff2d):
     ##
     # Method to actually display the background, even if using something other than bgMode = "Tile"\n
     # @param game the pygame display surface in the rendering window -object created by line "pygame.display.set_mode((x,y))"
-    def layTiles(self, game):
+    def layTiles(self, game, x=0, y=0, frame=0, anim="still"):
         if self.__bgMode == "Tile":
-            for i in range(0, game.get_width(), self.getWidth()):
-                for j in range(0, game.get_height(), self.getHeight()):
-                    self.render(game, i, j)
+            for i in range(x, x + game.get_width(), self.getWidth()):
+                for j in range(y, y + game.get_height(), self.getHeight()):
+                    #self.render(game, i, j)
+                    game.blit(self.getSprite()[anim][frame], (i, j))
 
 
 ##
@@ -287,24 +289,7 @@ class Player2d(Character2d):
         self.__control = control
         
         
-    ##
-    # The method to move the character.\n
-    # Currently only handles player movement based off of the WASD keys, but plans will be to add another parameter and a selection structure to handle movement of NPC as well.
-    # @param event The key press indicating which direction the player is to move.
-    def moveCardinal(self, event):
-        direction = self.getControl().checkKey(event)
-        if direction["left"]:
-            self.setIsMoving(True)
-            self.setX(self.getX() - self.getSpeed())
-        if direction["down"]:
-            self.setIsMoving(True)
-            self.setY(self.getY() + self.getSpeed())
-        if direction["right"]:
-            self.setIsMoving(True)
-            self.setX(self.getX() + self.getSpeed())
-        if direction["up"]:
-            self.setIsMoving(True)
-            self.setY(self.getY() - self.getSpeed())
+    
 
 
 
@@ -401,7 +386,7 @@ class Stuff3d():
                 countBams += 1
                 a.append(item)
         if countBams == 1:            
-            self.setActor(asset[asset.find("Assets"):].replace("\\", "\\\\") + "\\" + a[0])
+            self.setActor(Actor(asset[asset.find("Assets"):] + "\\" + a[0] , {"Still": asset[asset.find("Assets"):] + "\\" + a[0]}))
         else:
             animations = {}
             startAnim = len(basename(asset)) + 1
@@ -547,10 +532,9 @@ class Player3d(Character3d):
     # Constructor for Player3d
     # @param watcher The panda 3d base.mouseWatcherNode for keyboard and mouse events
     # @param control The 3d controller object
-	def __init__(self, watcher, control=Control3D(), isMoving=False, linearSpeed=0.05, angularSpeed=3):
+	def __init__(self, watcher, control=Control3D(), *args, **kwargs):
 		self.__watcher = watcher
 		self.__control = control
-		self.__isMoving = isMoving
 
 	def getWatcher(self):
 		return self.__watcher
@@ -574,11 +558,30 @@ class Player3d(Character3d):
 # Here are a couple methods from earlier testing that may be useful for copy and paste stuff to get started
 
 
+#### 2d character and rendering ######
+    
+    ##
+    # The method to move the character.\n
+    # Currently only handles player movement based off of the WASD keys, but plans will be to add another parameter and a selection structure to handle movement of NPC as well.
+    # @param event The key press indicating which direction the player is to move.
+    def moveCardinal(self, event):
+        direction = self.getControl().checkKey(event)
+        if direction["left"]:
+            self.setIsMoving(True)
+            self.setX(self.getX() - self.getSpeed())
+        if direction["down"]:
+            self.setIsMoving(True)
+            self.setY(self.getY() + self.getSpeed())
+        if direction["right"]:
+            self.setIsMoving(True)
+            self.setX(self.getX() + self.getSpeed())
+        if direction["up"]:
+            self.setIsMoving(True)
+            self.setY(self.getY() - self.getSpeed())
 
 
 
-
-    # 3d Player movement and rendering
+###### 3d Player movement and rendering ######
 		
 	def moveAngle(self, task):
 		turn = 0
