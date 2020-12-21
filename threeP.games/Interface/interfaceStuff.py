@@ -5,7 +5,7 @@
 # The methods to interface with the selected game engines, 2d and 3d edting software, and a text editor for scripting to ease the task of constructing a game with PyGame and Panda3D.\n
 
 import sys
-from os import makedirs, listdir, system
+from os import makedirs, listdir, system, remove
 from os.path import isdir, isfile, join, basename
 from shutil import copytree, copy
 import subprocess
@@ -418,10 +418,10 @@ def newSceneObject(name, obj, asset):
     rewrite.append("\n\n    def start(self):\n        # @todo define any necessary initialization actions for this object\n        pass")
     if gameMode == 2:
         rewrite.append("\n\n    def update(self):\n        # @todo define actions to be called every frame of the game, remember to call move here\n        pass")
-        rewrite.append("\n\n    def render(self, game):\n        # @todo define how this object is to be rendered\n        pass")
+        rewrite.append("\n\n    def render(self, game):\n        # @todo define how this object is to be rendered\n        pass\n")
     elif gameMode == 3:
         rewrite.append("\n\n    def update(self,task):\n        # @todo define actions to be called every frame of the game, remember to call move here\n        return task.cont")
-        rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered\n        return task.cont")
+        rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered\n        return task.cont\n")
     rewrite.append("\n\n\n    # @todo Create and import custom scripts to enhance functionality of this game object")
     with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
         for line in rewrite:
@@ -535,6 +535,15 @@ def editor3d():
 # A call to the appropriate function of the GameWriter object for the mode set with the project
 # @returns <b>void</b>
 def writeGame():
+    remove(location + "\\Scenes\\GameInstance.py")
+    for item in listdir(location + "\\Scenes"):
+        if item[-3:] == ".py" and item != "GameInstance.py":
+            with open(location + "\\Scenes\\" + item, "r") as checkScript:
+                for line in checkScript:
+                    if line[:5] == "class":
+                        name = line[6: line.index("(")]
+                        obj = line[line.index("(")+1:-5]
+                        addSceneObject(name, obj)
     sys.path.insert(0, location)
     import Scenes.GameInstance
     imports = Scenes.GameInstance.imports
