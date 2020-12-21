@@ -404,20 +404,20 @@ def newSceneObject(name, obj, asset):
                 line += "        #? inspector read end\n"
                 if gameMode == 2:
                     line += "        self.loadSprite(Asset)\n"
-                    line += "        print(\"Animations: \" + str(self.getSprite().keys()))\n"
+                    line += "        #print(\"Animations: \" + str(self.getSprite().keys()))\n"
                     #line += "        print(\"Animations: \" + str(self.getSprite()))\n"
                 if gameMode == 3:
                     line += "        self.loadActor(Asset)\n"
-                    line += "        print(\"Animations: \" + str(self.getActor()))\n"
+                    line += "        #print(\"Animations: \" + str(self.getActor()))\n"
             rewrite.append(line)
     rewrite.append("\n\n        # @todo finish out the class by completeing the start, update, and render methods below, remember to put any new attributes before args and kwargs in the constructor\n\n")
     rewrite.append("\n\n        # @todo If you did not use the Blender export scripts, or store spritesheet/model in the same manner you will need to override (2d) .loadSprite(asset) or (3d) .loadActor(asset) methods as well\n\n")
     rewrite.append("\n\n    def start(self):\n        # @todo define any necessary initialization actions for this object\n        pass")
     if gameMode == 2:
-        rewrite.append("\n\n    def update(self):\n        # @todo define actions to be called every frame of the game\n        pass")
+        rewrite.append("\n\n    def update(self):\n        # @todo define actions to be called every frame of the game, remember to call move here\n        pass")
         rewrite.append("\n\n    def render(self, game):\n        # @todo define how this object is to be rendered\n        pass")
     elif gameMode == 3:
-        rewrite.append("\n\n    def update(self,task):\n        # @todo define actions to be called every frame of the game\n        return task.cont")
+        rewrite.append("\n\n    def update(self,task):\n        # @todo define actions to be called every frame of the game, remember to call move here\n        return task.cont")
         rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered\n        return task.cont")
     rewrite.append("\n\n\n    # @todo Create and import custom scripts to enhance functionality of this game object")
     with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
@@ -430,7 +430,7 @@ def newSceneObject(name, obj, asset):
 # When a new object is created this adds it to a module containing the strings that will actually be used to manipulate transform data in the interface and written to the game file.
 # @param name The name of the game object to add to the list, must be in a .py file with the same name as the game object, i.e. one class per file and names match
 # @returns <b>bool</b> Indicating success or failure of the task
-def addSceneObject(name):
+def addSceneObject(name, obj=""):
     imports = []
     inits = []
     mains = []
@@ -452,7 +452,10 @@ def addSceneObject(name):
         mains.append("m_" + name + ".update()")
         mains.append("m_" + name + ".render(scene)")
     elif gameMode == 3:
-        inits.append("self.m_" + name + " = " +  name + "(watcher=base.mouseWatcherNode)")
+        if obj == "Player":
+            inits.append("self.m_" + name + " = " +  name + "(watcher=base.mouseWatcherNode)")
+        else:
+            inits.append("self.m_" + name + " = " +  name + "()")
         inits.append("self.m_" + name + ".start()")
         inits.append("self.m_" + name + ".getActor().reparentTo(self.render)\n")
         mains.append("self.taskMgr.add(self.m_" + name + ".update, \"m_" + name + "_Update\")")
