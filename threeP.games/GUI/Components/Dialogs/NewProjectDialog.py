@@ -6,8 +6,6 @@ Created on Sat Dec  5 17:12:04 2020
 """
 
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
 import interfaceStuff
 import wx
 
@@ -20,7 +18,7 @@ class NewProjectDialog(wx.Dialog):
         super().__init__(*args, **kwargs)
         self.SetTitle("New Project")
         self.SetSize((400, 320))
-        self.__icon = wx.Icon("images\\threeP_logo.png")
+        self.__icon = wx.Icon("GUI\\images\\threeP_logo.png")
         self.SetIcon(self.__icon)
         
             # Name Input

@@ -6,12 +6,13 @@ Created on Fri Dec  4 03:21:17 2020
 """
 
 import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
+from os import remove, rmdir, execl, listdir
+from os.path import join, isfile, isdir, basename, dirname, abspath
+sys.path.insert(0, dirname(abspath(__file__)) + "\\Interface")
+sys.path.insert(1, dirname(abspath(__file__)) + "\\GUI\\Components")
+sys.path.insert(2, dirname(abspath(__file__)) + "\\kernal")
 import wx
 import webbrowser
-from os import remove, rmdir
-from os.path import join, isfile, isdir
 import interfaceStuff
 from EditorTab import EditorTab
 from InspectorTab import InspectorTab
@@ -21,6 +22,7 @@ from Dialogs.NewScriptDialog import NewScriptDialog
 from Dialogs.NewSceneDialog import NewSceneDialog
 from Dialogs.StdOutDialog import StdOutDialog
 from Dialogs.SetEditorDialog import SetEditorDialog
+
 
 
 class MainWindow(wx.Frame):
@@ -33,7 +35,7 @@ class MainWindow(wx.Frame):
         self.__location = "C:\\Users\\Chris\\Documents\\delete"
         
             # window settings
-        self.__icon = wx.Icon("images\\threeP_logo.ico")
+        self.__icon = wx.Icon("GUI\\images\\threeP_logo.ico")
         self.SetIcon(self.__icon)
         self.SetSize((1100, 600))
         
@@ -125,10 +127,12 @@ class MainWindow(wx.Frame):
             # external menu events
         self.__mnSetEditor2d = self.__mnExternal.Append(wx.Window.NewControlId(), "Set 2d Graphics Editing Software", helpString="Sets a 2d graphics editing software to work with")
         self.__mnSetEditor3d = self.__mnExternal.Append(wx.Window.NewControlId(), "Set 3d Modeling Software", helpString="Sets a 3d graphics editing software to work with")
+        self.__mnMakeBam = self.__mnExternal.Append(wx.Window.NewControlId(), "Convert Exported Folder to Bam", helpString="Convert Exported Folder to Bam (hopefully this will be automatic soon)")
         self.Bind(wx.EVT_MENU, self.open2dEditor, self.__mnGraphics2d)
         self.Bind(wx.EVT_MENU, self.open3dEditor, self.__mnGraphics3d)
         self.Bind(wx.EVT_MENU, self.setEditor2d, self.__mnSetEditor2d)
         self.Bind(wx.EVT_MENU, self.setEditor3d, self.__mnSetEditor3d)
+        self.Bind(wx.EVT_MENU, self.gltf2bam, self.__mnMakeBam)
         
             # construct help menu
         self.__mnHelp = wx.Menu()
@@ -155,18 +159,18 @@ class MainWindow(wx.Frame):
         self.__tlMain = self.CreateToolBar()
         
             # tools
-        self.__tlNewProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Project", wx.Bitmap("images\\new_project.png"), shortHelp="Create a New Project")
-        self.__tlOpenProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Open Project", wx.Bitmap("images\\folder_icon.png"), shortHelp="Open an Existing Project")
-        self.__tlCloseProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Close Project", wx.Bitmap("images\\close_project.png"), shortHelp="Close the Current Project")
+        self.__tlNewProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Project", wx.Bitmap("GUI\\images\\new_project.png"), shortHelp="Create a New Project")
+        self.__tlOpenProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Open Project", wx.Bitmap("GUI\\images\\folder_icon.png"), shortHelp="Open an Existing Project")
+        self.__tlCloseProject = self.__tlMain.AddTool(wx.Window.NewControlId(), "Close Project", wx.Bitmap("GUI\\images\\close_project.png"), shortHelp="Close the Current Project")
         self.__tlMain.AddSeparator()
-        self.__tlNewScript = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Script", wx.Bitmap("images\\file_icon.png"), shortHelp="Create a New Python Script")
-        self.__tlNewScene = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Scene Object", wx.Bitmap("images\\new_scene.png"), shortHelp="Create a New Scene Object")
-        self.__tlImportGraphics = self.__tlMain.AddTool(wx.Window.NewControlId(), "Import Graphics Folder", wx.Bitmap("images\\graphics_icon.png"), shortHelp="Import an Asset Folder")
-        self.__tlImportSource = self.__tlMain.AddTool(wx.Window.NewControlId(), "Imort Graphics/Model Editor Source", wx.Bitmap("images\\edit_source.png"), shortHelp="Import a Graphics Source File")
+        self.__tlNewScript = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Script", wx.Bitmap("GUI\\images\\file_icon.png"), shortHelp="Create a New Python Script")
+        self.__tlNewScene = self.__tlMain.AddTool(wx.Window.NewControlId(), "New Scene Object", wx.Bitmap("GUI\\images\\new_scene.png"), shortHelp="Create a New Scene Object")
+        self.__tlImportGraphics = self.__tlMain.AddTool(wx.Window.NewControlId(), "Import Graphics Folder", wx.Bitmap("GUI\\images\\graphics_icon.png"), shortHelp="Import an Asset Folder")
+        self.__tlImportSource = self.__tlMain.AddTool(wx.Window.NewControlId(), "Imort Graphics/Model Editor Source", wx.Bitmap("GUI\\images\\edit_source.png"), shortHelp="Import a Graphics Source File")
         self.__tlMain.AddSeparator()
-        self.__tlRunGame = self.__tlMain.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("images\\run_button.png"), shortHelp="Run Game in a System Console")
+        self.__tlRunGame = self.__tlMain.AddTool(wx.Window.NewControlId(), "Run", wx.Bitmap("GUI\\images\\run_button.png"), shortHelp="Run Game in a System Console")
         self.__tlMain.AddSeparator()
-        self.__tlHelp = self.__tlMain.AddTool(wx.Window.NewControlId(), "Help", wx.Bitmap("images\\help_icon.png"), shortHelp="Quick Access to Python, PyGame, and Panda3d API's")
+        self.__tlHelp = self.__tlMain.AddTool(wx.Window.NewControlId(), "Help", wx.Bitmap("GUI\\images\\help_icon.png"), shortHelp="Quick Access to Python, PyGame, and Panda3d API's")
         
             # tool bar events (that don't have to wait on other components)
         self.Bind(wx.EVT_TOOL, self.CloseCurrentProject, self.__tlCloseProject)
@@ -191,9 +195,9 @@ class MainWindow(wx.Frame):
         self.__nbMainContent.AddPage(self.__tbInspector, "Inspector")
         
             # directory tree
-        self.__trImages = [wx.Icon("images\\python_logo.png"), wx.Icon("images\\file_icon.png"), wx.Icon("images\\folder_icon.png"), wx.Icon("images\\manifest_icon.png"), wx.Icon("images\\threeP_logo.ico"), wx.Icon("images\\graphics_icon.png")]
-        self.__trImages.append(wx.Icon("images\\" + interfaceStuff.external[3][2])) #3d editor will be index 6
-        self.__trImages.append(wx.Icon("images\\" + interfaceStuff.external[2][2])) #2d editor will be index 7
+        self.__trImages = [wx.Icon("GUI\\images\\python_logo.png"), wx.Icon("GUI\\images\\file_icon.png"), wx.Icon("GUI\\images\\folder_icon.png"), wx.Icon("GUI\\images\\manifest_icon.png"), wx.Icon("GUI\\images\\threeP_logo.ico"), wx.Icon("GUI\\images\\graphics_icon.png")]
+        self.__trImages.append(wx.Icon("GUI\\images\\" + interfaceStuff.external[3][2])) #3d editor will be index 6
+        self.__trImages.append(wx.Icon("GUI\\images\\" + interfaceStuff.external[2][2])) #2d editor will be index 7
         self.__trDirectory = ProjectTree(self, self.__trImages)
         
             # main content events
@@ -232,7 +236,8 @@ class MainWindow(wx.Frame):
                 interfaceStuff.xmlParseManifest(manifest)
                 self.__trDirectory.loadProject(manifest)
                 self.SetTitle("threeP.games:        " + interfaceStuff.location)
-         
+                
+                
                 
     def CloseCurrentProject(self, event):
         interfaceStuff.updateManifest()
@@ -248,8 +253,8 @@ class MainWindow(wx.Frame):
 
     
     def runGame(self, event):
-        if not isfile(interfaceStuff.location + "\\" + interfaceStuff.projectName + ".py"):
-            interfaceStuff.writeGame()
+        # if not isfile(interfaceStuff.location + "\\" + interfaceStuff.projectName + ".py"):
+        interfaceStuff.writeGame()
         interfaceStuff.updateManifest()
         self.__trDirectory.loadProject(join(interfaceStuff.location, interfaceStuff.projectName + "_manifest.xml"))
         echo = interfaceStuff.runSystem()
@@ -266,8 +271,10 @@ class MainWindow(wx.Frame):
             start = filepath.index(">") + 1
             filepath = filepath[start:]
             name, extension = interfaceStuff.getFileStuff(filepath)
-            if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
-                self.__tbEditor.newEditor(filepath)
+            if not isdir(filepath) and extension != ".png" and extension != ".glb" and extension != ".bam" and extension != ".ico" and extension != interfaceStuff.external[2][1] and extension != interfaceStuff.external[3][1]:
+                result = self.__tbEditor.newEditor(filepath)
+                if result == "Scene":
+                    self.__tbInspector.openObject(filepath)
             elif extension == ".png" or extension == ".glb" or extension == interfaceStuff.external[2][1] or extension == interfaceStuff.external[3][1]:
                 echo = interfaceStuff.systemPreview(filepath)
                 sod = StdOutDialog(self, echo)
@@ -278,6 +285,8 @@ class MainWindow(wx.Frame):
             
             elif extension == ".bam":
                 wx.MessageDialog(self, "No preview of a Binary-Compressed Sequence Alignment/Map available, see https://samtools.github.io/hts-specs/SAMv1.pdf for details.\nThis file is here because the Panda3D engine uses it, select the associated gltf(.glb) file for a preview of the animated model.").ShowModal()
+            elif extension == ".ico":
+                wx.MessageDialog(self, "Unable to open .ico file with default system settings, try opening it manually from inside graphics editing software.").ShowModal()
         except ValueError:
             branch = self.__trDirectory.getTree().GetSelection()
             if self.__trDirectory.getTree().IsExpanded(branch):
@@ -324,17 +333,15 @@ class MainWindow(wx.Frame):
             with directories as dlg:
                 isCopied = False
                 if dlg.ShowModal() == wx.ID_OK:
-                    if interfaceStuff.gameMode == 2:
-                        isCopied = interfaceStuff.grabSpriteSheet(dlg.GetPath())
-                    elif interfaceStuff.gameMode == 3:
-                        isCopied = interfaceStuff.grabModel(dlg.GetPath())
+                    if interfaceStuff.gameMode == 2 or interfaceStuff.gameMode == 3:
+                        isCopied = interfaceStuff.grabAssets(dlg.GetPath())
                     else:
                         isCopied = False
                 if isCopied:
                     interfaceStuff.updateManifest()
                     self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
                 else:
-                    wx.MessageDialog(self, "The selected folder could not be imported, please check the following issues and try again:\nThere is a project open\nThe folder contians only the apporpriate image type for this project (2d:.png, 3d: .glb)\nIf the folder was exported from a source file refresh the directory tree (close and reopen project)").ShowModal()
+                    wx.MessageDialog(self, "The selected folder could not be imported, please check the following issues and try again:\nThere is a project open").ShowModal()
     
     
     def importSource(self, event):
@@ -351,7 +358,23 @@ class MainWindow(wx.Frame):
                     self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
                 else:
                     wx.MessageDialog(self, "The selected file could not be imported, please check the following issues and try again:\nThere is a project open...").ShowModal()
-                
+                    
+    
+    def gltf2bam(self, event):
+        if interfaceStuff.projectName == "":
+            wx.MessageDialog(self, "Assets cannot be converted without a project open, this option is for existing assets only.\nPlease open or create a project and try again.").ShowModal()
+        else:
+            directories = wx.DirDialog(None, "Select the folder containing the gltf(.glb) files to convert")
+            with directories as dlg:
+                if dlg.ShowModal() == wx.ID_OK:
+                    if interfaceStuff.gameMode == 2 or interfaceStuff.gameMode == 3:
+                        converts = interfaceStuff.makeBam(dlg.GetPath())
+                if converts > 0:
+                    interfaceStuff.updateManifest()
+                    self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")
+                else:
+                    wx.MessageDialog(self, "None of the files in selected folder could not be converted, please check the following issues and try again:\nThere is a project open\nThere are gltf(.glb) files present in the selected folder").ShowModal()
+    
                 
     def newScene(self, event):
         if interfaceStuff.projectName == "":
@@ -360,7 +383,7 @@ class MainWindow(wx.Frame):
             scn = NewSceneDialog(self)
             isCopied = False
             if scn.ShowModal() == wx.ID_OK:
-                isCopied = interfaceStuff.newSceneObject(scn.getName(), scn.getObject())
+                isCopied = interfaceStuff.newSceneObject(scn.getName(), scn.getObject(), scn.getAsset())
                 if isCopied:
                     interfaceStuff.updateManifest()
                     self.__trDirectory.loadProject(interfaceStuff.location + "\\" + interfaceStuff.projectName + "_manifest.xml")

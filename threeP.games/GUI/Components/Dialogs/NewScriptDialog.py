@@ -6,8 +6,6 @@ Created on Fri Dec 11 22:20:57 2020
 """
 
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
 import interfaceStuff
 import wx
 
@@ -19,7 +17,7 @@ class NewScriptDialog(wx.Dialog):
         super().__init__(*args, **kwargs)
         self.SetTitle("New Python Script")
         self.SetSize((600, 320))
-        self.__icon = wx.Icon("images\\python_logo.png")
+        self.__icon = wx.Icon("GUI\\images\\python_logo.png")
         self.SetIcon(self.__icon)
         
         self.__value = ()

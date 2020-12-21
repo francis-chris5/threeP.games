@@ -14,6 +14,8 @@ wxPython was selected for putting together the Graphical User Interface due to t
 
 ![threep_screenshot_main](https://user-images.githubusercontent.com/50467171/102130540-fa0c8e80-3e1e-11eb-9f7a-861b46b2b963.jpg)
 
+As I began development of the inspector tab it quickly became apparent that my orignal plan, to use GLtf format with PyOpenGL, was going to require some complex code and a little trickery. Falling back to a simpler plan B uses wavefront (.obj and .mtl) format for the object previews, which also happens to be the standard format for 3d games in PyGame, so a future version (once the original is completed and working) may switch to include a choice of engines rather than simply PyGame for 2d and Panda3d for 3d (2d in panda is easy -just ignore the z-axis except for front/back issues).
+
 <h2>Instructions</h2>
 
 <h4>Create Project</h4>
@@ -55,7 +57,16 @@ The autocomplete functionality, while still very crude, will at least show the k
 
 <h4>Import Assets</h4>
 
-When it came time to set up the import graphics features for 3d models and 2d sprite-sheets careful consideration led to the decision to only allow gltf (.glb) and .png formats, the two leading format standards for each. Direct integration, at least from blender which contains its own python API can be a bit problematic if the blender python version does not exactly match the native python environment, so there are export scripts included (hopefully more coming for other major 3d modeling softwares: MEL and Zscript for example), load them into the animated model in blender, then just hit run to get the folder to import into the threeP.games project (non-animated models can already be exported with a single click to either format, just make sure it is placed in an appropriately named folder that contains only that file-type: all .png files or all .glb files). The blender2gltf.py script exports one 3d model for each animation named model_{action}.glb which will be converted to a .bam copy when imported into the threeP.games project, and the blender2png.py script exports a .png file for every keyframe of the animation from the viewpoint of the active camera in the scene named model_{action}####.png (so it will work whether it is a 2d or 3d animated model). Both export scripts give the folder the same name as the blender file the model is saved in and place it in the same directory as the blender file. Selecting a gltf(.glb) or .png graphics file from the directory tree will open it in the system default for viewing such a file.
+There are two ways to import assets into the project, by folder and by source. To import a folder simply click the import assets button (see picture below) and navigate to and select the folder to import. To import by source (the preferred and intended method), see paragraphs below the pictures.
+
+![threep_screenshot_importSource](https://user-images.githubusercontent.com/50467171/102575046-462a2e00-40c0-11eb-9649-0db829305a9d.jpg)
+![threep_screenshot_importAssets](https://user-images.githubusercontent.com/50467171/102575047-46c2c480-40c0-11eb-9418-8e9473f6c208.jpg)
+
+Direct integration, at least from blender which contains its own python API can be a bit problematic if the blender python version does not exactly match the native python environment, so there are export scripts included (hopefully more coming for other major 3d modeling softwares: MEL and Zscript for example), load them into the animated model in blender, then just hit run to get the folder to import into the threeP.games project. 
+
+The blender2gltf.py script exports one 3d model for each animation named model_{action}.glb which will need to be converted to a .bam copy when imported into the threeP.games project (at this time there is an option in the "External" menu to do this, automation should be coming soon), and the blender2png.py script exports a .png file for every keyframe of the animation from the viewpoint of the active camera in the scene named model_{action}####.png (so it will work whether it is a 2d or 3d animated model). Both export scripts give the folder the same name as the blender file the model is saved in and place it in the same directory as the blender file. Selecting a gltf(.glb) or .png graphics file from the directory tree will open it in the system default for viewing such a file.
+
+The automatic file generation is set up to work with these export scripts: all filenames match the folder name with an underscore then animation-name, and a four digit frame number on 2d spritesheets. If you choose to set up your assets directory differently you will need to override the {Stuff2d}.loadSprite(asset) or {Stuff3d}.loadActor(asset) methods to match your directory structure, and remember that Panda3d requires relative addressing to the __name__ == "__main__" file for models, i.e. the game script in this case.
 
 <h4>External Editors</h4>
 
@@ -69,9 +80,13 @@ To set a default external editor select "External" in the main menu and then cho
 
 <h4>Scene Objcets</h4>
 
-The "Scenes" folder is for the objects that will actually be placed into the game. Selecting the "New Scene Object" tool or menu option will bring up a dialog to choose from the short list of objects that are ready so far: 2d backgrounds, 2d props, 2d player, 3d player. More options will be coming soon.
+The "Scenes" folder is for the objects that will actually be placed into the game. Selecting the "New Scene Object" tool or menu option will bring up a dialog to choose from the short list of objects that are ready so far: 2d backgrounds, 2d props, 2d player, 3d player. More options will be coming soon. Along with the type of game object to insert, give it a name and chooose the folder containing the image assets: all sprite-sheet files for 2d and all bam files for 3d in a single folder, do not organize into subfolders, a dictionary to refer to the various animations will be generated from the given files.
 
 ![threep_screenshot_newScene](https://user-images.githubusercontent.com/50467171/102130534-f8db6180-3e1e-11eb-84c4-e0b1a5800270.jpg)
+
+A file will be generated for the scene object which will need customization to the start(), update(), and render methods. The start() method will be called one time when the object is initialized, the update() method will be called at every frame of the game, and the render method is where to define how the animations in the sprite sheet are to be rendered, by default both 2d and 3d objects will print a list of thier dictionary keys showing what animations are available. It is highly recommended to put all customizations here, as other locations may be overwritten as files are (re)generated.
+
+There is also a file named GameInstance which contains the strings that will actually be written to the final game script. It is HIGHLY recommended not to mess with this file, as the entire project depends upon the order this file is generated, and alterations here may result in the entire project needing redone.
 
 <h4>TODO List</h4>
 
@@ -93,18 +108,7 @@ So at this point, basically just the directory structure set up...
 
 Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
 
-I forgot to list all the dependencies as I was making this at first, the full list will be coming, but I know that in addition to the core Python API I at least used:
-
-<blockquote>
-      
-      https://www.pygame.org/wiki/GettingStarted (engine used for 2d games)
-      https://www.panda3d.org/ (engine used for 3d games)
-      https://docs.panda3d.org/1.10/python/tools/model-export/converting-from-blender (I chose second link: https://github.com/Moguri/panda3d-gltf)
-      https://www.wxpython.org/pages/downloads/ (graphical user interface package used)
-      https://inkscape.org/ (interface has method to open this)
-      https://www.blender.org/ (interface has method to open this)
-      
-   </blockquote>
+In the folder kernal there is a text-document listing the version of python used when creating this (as of now there should not be anythin specific to that version, though it does use subprocess.run(...) which I think was introduced in 2.7 so probably need at least python 3.x) along with the libraries that will need installed in order for the game files it generates to run.
   
   
   Very excited about this project so updates will be coming along very shortly...

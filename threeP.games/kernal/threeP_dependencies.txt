@@ -1,0 +1,9 @@
+
+
+created using Python37-32
+
+Also Uses:
+	pip install pygame
+	pip install panda3d==1.10.7
+	pip install panda3d-gltf
+	pip install -U wxPython

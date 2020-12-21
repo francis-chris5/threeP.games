@@ -6,9 +6,6 @@ Created on Fri Dec 11 05:02:00 2020
 """
 
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 import wx.stc
 from os.path import isdir
@@ -28,8 +25,8 @@ class TextEditor(wx.Panel):
         self.__stcEditor = wx.stc.StyledTextCtrl(self, -1)
         
             # save button
-        self.__picSave = wx.Bitmap("images\\save_script.png")
-        self.__picNeedSave = wx.Bitmap("images\\need_save_script.png")
+        self.__picSave = wx.Bitmap("GUI\\images\\save_script.png")
+        self.__picNeedSave = wx.Bitmap("GUI\\images\\need_save_script.png")
         self.__btnSave = wx.BitmapButton(self, bitmap=self.__picSave)
         
             # color the keywords/symbols
@@ -106,13 +103,13 @@ class TextEditor(wx.Panel):
         file = self.getPath()[self.getPath().rindex("\\")+1:]
         path = self.getPath()[:self.getPath().rindex("\\")]
         if isdir(path):
-            if file != interfaceStuff.projectName + "_manifest.xml":
+            if file != interfaceStuff.projectName + "_manifest.xml" and file != "GameInstance.py":
                 with open(path + "\\" + file, "w", newline="") as toFile:
                     for line in range(self.getEditor().GetLineCount()):
                         toFile.write(self.getEditor().GetLine(line))
                         self.__btnSave.SetBitmap(self.__picSave)
             else:
-                wx.MessageDialog(self, "The manifest is an automtically generated critical file, altering it could destroy the project so it cannot be saved here.").ShowModal()
+                wx.MessageDialog(self, "The file \"" + file + "\" is an automtically generated critical file, altering it could destroy the project so it cannot be saved here.").ShowModal()
             return True
         else:
             return False

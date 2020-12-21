@@ -6,9 +6,6 @@ Created on Sat Dec  5 16:13:54 2020
 """
 
 
-import sys
-sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
-sys.path.insert(2, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\GUI\\Components")
 import wx
 import wx.stc
 import wx.py.shell
@@ -61,16 +58,20 @@ class EditorTab(wx.Panel):
             editor.loadFile(src)
             file = src.split("\\")[-1]
             self.__book.AddPage(editor, file, select=True)
+            if "Scenes" in src:
+                return "Scene"
         elif src[-4:] == ".xml":
             editor = XMLEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
             self.__book.AddPage(editor, file, select=True)
-        elif src[-4:] == ".txt":
+            return "Done"
+        elif src[-4:] == ".txt" or src[-4:] == ".mtl" or src[-4:] == ".obj":
             editor = TextEditor(self.__book, src)
             editor.loadFile(src)
             file = src.split("\\")[-1]
             self.__book.AddPage(editor, file, select=True)
+            return "Done"
         
         
     def newScript(self, event):
