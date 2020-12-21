@@ -104,8 +104,6 @@ To remove a file from the project, right-click on it in the directory tree and c
 
 <h2>In Conclusion...</h2>
 
-So at this point, basically just the directory structure set up...
-
 Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html
 
 In the folder kernal there is a text-document listing the version of python used when creating this (as of now there should not be anythin specific to that version, though it does use subprocess.run(...) which I think was introduced in 2.7 so probably need at least python 3.x) along with the libraries that will need installed in order for the game files it generates to run.
