@@ -17,9 +17,15 @@ class NewSceneDialog(wx.Dialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.SetTitle("New Scene Object")
-        self.SetSize((600, 320))
+        self.SetSize((700, 350))
         self.__icon = wx.Icon("GUI\\images\\new_scene.png")
         self.SetIcon(self.__icon)
+        
+        
+        if interfaceStuff.gameMode == 2:
+            self.__heirarchy = wx.StaticBitmap(self, -1, wx.Bitmap("GUI\\images\\class_hierarchy_2.png"), pos=(300, 20))
+        elif interfaceStuff.gameMode == 3:
+            self.__heirarchy = wx.StaticBitmap(self, -1, wx.Bitmap("GUI\\images\\class_hierarchy_3.png"), pos=(300, 20))
         
             # Name Input
         nameLabel = wx.StaticText(self, -1, label="Name for the New Project", pos=(20, 20))
@@ -28,9 +34,9 @@ class NewSceneDialog(wx.Dialog):
             # Object Type
         objectLabel = wx.StaticText(self, -1, label="Game Object Type", pos=(20, 80))
         if interfaceStuff.gameMode == 2:
-            objectList = ["Player"] # "Prop", "Background", 
+            objectList = ["Background", "Prop", "Character", "Player"] # "Prop", "Background", 
         elif interfaceStuff.gameMode == 3:
-            objectList = ["Player"]
+            objectList = ["Background", "Prop", "Character", "Player"]
         self.__object = wx.RadioBox(self, -1, pos=(10, 100), choices=objectList)
         
         
@@ -41,8 +47,8 @@ class NewSceneDialog(wx.Dialog):
         
         
             # clickers
-        self.__create = wx.Button(self, wx.ID_OK, label="Add Object", pos=(170, 235))
-        self.__cancel = wx.Button(self, wx.ID_CANCEL, label="Cancel", pos=(280, 235))
+        self.__create = wx.Button(self, wx.ID_OK, label="Add Object", pos=(70, 235))
+        self.__cancel = wx.Button(self, wx.ID_CANCEL, label="Cancel", pos=(180, 235))
         
             # events
         self.Bind(wx.EVT_DIRPICKER_CHANGED, self.showLocation, self.__asset)
