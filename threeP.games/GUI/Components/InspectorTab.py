@@ -9,14 +9,17 @@ Created on Sat Dec  5 16:34:00 2020
 import wx
 from Graphics.GLPanel import GLModel
 import interfaceStuff
+from os import listdir
 
 class InspectorTab(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
+        self.__reading = False
         
             # identification
         nameLabel = wx.StaticText(self, -1, "Name: ", pos=(10, 10))
         self.__name = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(10, 30), choices=["test values", "load a class", "to see instances used"])
+        
         
             # transform
         positionLabel = wx.StaticText(self, -1, "Position", pos=(10, 60))
@@ -29,20 +32,25 @@ class InspectorTab(wx.Panel):
         self.__r = wx.TextCtrl(self, -1, size=(30, 20), pos=(90, 130))
         
         
+        
+        
         # collisionArea = wx.StaticText(self, -1, "This Area is for collision stuff, My idea is have object images/animations/bounds preview here and drag out from image and get two comboboxes popup to choose collision and function--any thoughts/suggestions on this", pos=(400, 30), size=(200, 150))
         # scriptingArea = wx.StaticText(self, -1, "This Area is for managing scripts attached to this game object, probably simple combobox selection to start with at least", pos=(400, 220), size=(200, 150))
         # otherArea = wx.StaticText(self, -1, "Obviously this project is a long way from completion enough to even give it a version 1.x, these controls are coming, but for now it all has to be done in the scripting tab", pos=(20, 300), size=(200, 100))
         
-        self.__preview = wx.Panel(self, -1, size=(300, 300), pos=(400, 30))
-        self.setPreview("GUI\\images\\cube.obj", "GUI\\images\\cube.mtl")
-        
+        self.__previewOptions = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(400, 30), choices=["test values", "load a class", "to see instances used"])
+        self.__preview = wx.Panel(self, -1, size=(300, 300), pos=(400, 50))
+            
     
     
 # =============================================================================
 #     Getters and Setters
 # =============================================================================
-    def setPreview(self, obj, mtl):
-        self.__model = GLModel(self.__preview, obj, mtl)
+    def setPreview(self, obj="", mtl=""):
+        if interfaceStuff.gameMode == 2:
+            self.__image = wx.StaticBitmap(self.__preview, -1, wx.Bitmap(obj), size=(64, 64), pos=(20, 20))
+        elif interfaceStuff.gameMode == 3:
+            self.__model = GLModel(self.__preview, obj, mtl)
         
     def getX(self):
         return self.__x.GetValue()
@@ -85,6 +93,26 @@ class InspectorTab(wx.Panel):
 # =============================================================================
 #     Methods for Inspector Tab
 # =============================================================================
+    
+    def clearPreview(self):
+        self.__preview.DestroyChildren()
+        
+    def loadProject(self):
+        objects = []
+        for item in listdir(interfaceStuff.location + "\\Scenes"):
+            if item[-3:] == ".py" and item != "GameInstance.py":
+                objects.append(item)
+        self.__name.Set(objects)
+        if interfaceStuff.gameMode == 2:
+            self.__p.SetEditable(False)
+            self.__r.SetEditable(False)
+            self.setPreview(interfaceStuff.location + "\\Assets\\DefaultImages\\square.png")
+        elif interfaceStuff.gameMode == 3:
+            self.__p.SetEditable(True)
+            self.__r.SetEditable(True)
+            self.setPreview("GUI\\images\\cube.obj", "GUI\\images\\cube.mtl")
+        
+    
     def openObject(self, filepath):
         pass
         # get the type of thing when a module in Scenes is opened
