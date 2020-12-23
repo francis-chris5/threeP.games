@@ -7,6 +7,7 @@ Created on Sat Dec  5 16:34:00 2020
 
 
 import wx
+import wx.lib.masked.numctrl
 from Graphics.GLPanel import GLModel
 import interfaceStuff
 from os import listdir
@@ -17,6 +18,7 @@ class InspectorTab(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
         self.__reading = False
+        self.__transform = {"x": 0, "y": 0, "z": 0, "h": 0, "p": 0, "r": 0}
         
             # identification
         nameLabel = wx.StaticText(self, -1, "Name: ", pos=(10, 10))
@@ -25,13 +27,19 @@ class InspectorTab(wx.Panel):
         
             # transform
         positionLabel = wx.StaticText(self, -1, "Position", pos=(10, 60))
-        self.__x = wx.TextCtrl(self, -1, size=(30, 20), pos=(10, 80))
-        self.__y = wx.TextCtrl(self, -1, size=(30, 20), pos=(50, 80))
-        self.__y = wx.TextCtrl(self, -1, size=(30, 20), pos=(90, 80))
+        xLabel = wx.StaticText(self, -1, "x", pos=(10, 80))
+        self.__x = wx.TextCtrl(self, -1, size=(30, 20), pos=(20, 80))
+        yLabel = wx.StaticText(self, -1, "y", pos=(60, 80))
+        self.__y = wx.TextCtrl(self, -1, size=(30, 20), pos=(70, 80))
+        zLabel = wx.StaticText(self, -1, "z", pos=(110, 80))
+        self.__z = wx.TextCtrl(self, -1, size=(30, 20), pos=(120, 80))
         rotationLabel = wx.StaticText(self, -1, "Rotation", pos=(10, 110))
-        self.__h = wx.TextCtrl(self, -1, size=(30, 20), pos=(10, 130))
-        self.__p = wx.TextCtrl(self, -1, size=(30, 20), pos=(50, 130))
-        self.__r = wx.TextCtrl(self, -1, size=(30, 20), pos=(90, 130))
+        hLabel = wx.StaticText(self, -1, "h", pos=(10, 130))
+        self.__h = wx.TextCtrl(self, -1, size=(30, 20), pos=(20, 130))
+        pLabel = wx.StaticText(self, -1, "p", pos=(60, 130))
+        self.__p = wx.TextCtrl(self, -1, size=(30, 20), pos=(70, 130))
+        rLabel = wx.StaticText(self, -1, "r", pos=(110, 130))
+        self.__r = wx.TextCtrl(self, -1, size=(30, 20), pos=(120, 130))
         
         
         
@@ -45,7 +53,13 @@ class InspectorTab(wx.Panel):
         
         self.Bind(wx.EVT_COMBOBOX, self.changeImage, self.__previewOptions)
         self.Bind(wx.EVT_COMBOBOX, self.changeSource, self.__name)
-            
+        self.Bind(wx.EVT_TEXT, self.changeCoords, self.__x)
+        self.Bind(wx.EVT_TEXT, self.changeCoords, self.__y)
+        self.Bind(wx.EVT_TEXT, self.changeCoords, self.__z)
+        self.Bind(wx.EVT_TEXT, self.changeCoords, self.__h)
+        self.Bind(wx.EVT_TEXT, self.changeCoords, self.__p)
+        self.Bind(wx.EVT_TEXT, self.changeCoords, self.__r)
+        
     
     
 # =============================================================================
@@ -98,6 +112,15 @@ class InspectorTab(wx.Panel):
     def setR(self, r):
         self.__r.SetValue(r)
         
+    def setTransform(self):
+        self.setX(self.__transform["x"])
+        self.setY(self.__transform["y"])
+        self.setZ(self.__transform["z"])
+        self.setH(self.__transform["h"])
+        if interfaceStuff.gameMode == 3:
+            self.setP(self.__transform["p"])
+            self.setR(self.__transform["r"])
+        
     
     
 # =============================================================================
@@ -108,6 +131,15 @@ class InspectorTab(wx.Panel):
         self.__preview.DestroyChildren()
         self.__previewOptions.Set(["no object loaded"])
         self.__name.Set(["no object loaded"])
+        
+    def clearCoords(self):
+        self.setX("")
+        self.setY("")
+        self.setZ("")
+        self.setH("")
+        self.setP("")
+        self.setR("")
+        
         
     def loadProject(self):
         objects = []
@@ -136,10 +168,29 @@ class InspectorTab(wx.Panel):
         
     def changeSource(self, event):
         file = self.__name.GetValue()
-        with open(interfaceStuff.location + "\\Scenes\\" + file) as fromFile:
+        reading = False
+        with open(interfaceStuff.location + "\\Scenes\\" + file, "r") as fromFile:
             for line in fromFile:
                 if "def __init__" in line:
                     source = line[line.find("Asset=") + 7: line.find(", *args")-1].replace("\\\\", "\\")
+                if "#? start" in line:
+                    reading = True
+                if "#? end" in line:
+                    reading = False
+                if reading:
+                    if "setX" in line:
+                        self.__transform["x"] = line[line.index("(")+1:line.rindex(")")]
+                    elif "setY" in line:
+                        self.__transform["y"] = line[line.index("(")+1:line.rindex(")")]
+                    elif "setZ" in line:
+                        self.__transform["z"] = line[line.index("(")+1:line.rindex(")")]
+                    elif "setH" in line:
+                        self.__transform["h"] = line[line.index("(")+1:line.rindex(")")]
+                    elif "setP" in line:
+                        self.__transform["p"] = line[line.index("(")+1:line.rindex(")")]
+                    elif "setR" in line:
+                        self.__transform["r"] = line[line.index("(")+1:line.rindex(")")]
+            self.setTransform()
         if interfaceStuff.gameMode == 2:
             images = []
             for item in listdir(source):
@@ -153,6 +204,51 @@ class InspectorTab(wx.Panel):
                     obj.append(basename(source) + "\\" + item)
             self.__previewOptions.Set(obj)
             
+            
+    def changeCoords(self, event):
+        try:
+            number = float(event.GetString())
+            if event.GetId() == self.__x.GetId():
+                self.__transform["x"] = number
+            elif event.GetId() == self.__y.GetId():
+                self.__transform["y"] = number
+            elif event.GetId() == self.__z.GetId():
+                self.__transform["z"] = number
+            elif event.GetId() == self.__h.GetId():
+                self.__transform["h"] = number
+            elif event.GetId() == self.__p.GetId():
+                self.__transform["p"] = number
+            elif event.GetId() == self.__r.GetId():
+                self.__transform["r"] = number
+            # @todo figure out a better time to rewrite file
+            self.updateTransform()
+        except:
+            pass
+            
+        
+    def updateTransform(self):
+        lines = []
+        file = self.__name.GetValue()
+        reading = False
+        with open(interfaceStuff.location + "\\Scenes\\" + file, "r") as fromFile:
+            for line in fromFile:
+                if "setX" in line:
+                    lines.append("        self.setX(" + str(self.__transform["x"]) + ")\n")
+                elif "setY" in line:
+                    lines.append("        self.setY(" + str(self.__transform["y"]) + ")\n")
+                elif "setZ" in line:
+                    lines.append("        self.setZ(" + str(self.__transform["z"]) + ")\n")
+                elif "setH" in line:
+                    lines.append("        self.setH(" + str(self.__transform["h"]) + ")\n")
+                elif "setP" in line:
+                    lines.append("        self.setP(" + str(self.__transform["p"]) + ")\n")
+                elif "setR" in line:
+                    lines.append("        self.setR(" + str(self.__transform["r"]) + ")\n")
+                else:
+                    lines.append(line)
+        with open(interfaceStuff.location + "\\Scenes\\" + file, "w") as toFile:
+            for line in lines:
+                toFile.write(line)
         
     def openObject(self, filepath):
         pass
