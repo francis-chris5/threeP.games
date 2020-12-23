@@ -398,13 +398,13 @@ def newSceneObject(name, obj, asset):
                 line = line[0:-3] + ", *args, **kwargs):\n"
                 line += "        super().__init__(*args, **kwargs)\n"
                 line += "        #--> This Area for interface usage, best to leave it alone there are already getters and seters for these things\n"
-                line += "        #? inspector read start\n"
+                line += "        #? start inspector read\n"
                 line += "        self.setX(0)\n        self.setY(0)\n        self.setZ(0)\n"
                 if gameMode == 2:
                     line += "        self.setH(0)\n"
                 elif gameMode == 3:
                     line += "        self.setH(0)\n        self.setP(0)\n        self.setR(0)\n"
-                line += "        #? inspector read end\n"
+                line += "        #? end inspector read\n"
                 if gameMode == 2:
                     line += "        self.loadSprite(Asset)\n"
                     line += "        #print(\"Animations: \" + str(self.getSprite().keys()))\n"
