@@ -10,6 +10,8 @@ import wx
 from Graphics.GLPanel import GLModel
 import interfaceStuff
 from os import listdir
+from os.path import isdir, basename
+
 
 class InspectorTab(wx.Panel):
     def __init__(self, parent):
@@ -18,7 +20,7 @@ class InspectorTab(wx.Panel):
         
             # identification
         nameLabel = wx.StaticText(self, -1, "Name: ", pos=(10, 10))
-        self.__name = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(10, 30), choices=["test values", "load a class", "to see instances used"])
+        self.__name = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(10, 30), choices=["no object loaded"])
         
         
             # transform
@@ -38,8 +40,11 @@ class InspectorTab(wx.Panel):
         # scriptingArea = wx.StaticText(self, -1, "This Area is for managing scripts attached to this game object, probably simple combobox selection to start with at least", pos=(400, 220), size=(200, 150))
         # otherArea = wx.StaticText(self, -1, "Obviously this project is a long way from completion enough to even give it a version 1.x, these controls are coming, but for now it all has to be done in the scripting tab", pos=(20, 300), size=(200, 100))
         
-        self.__previewOptions = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(400, 30), choices=["test values", "load a class", "to see instances used"])
+        self.__previewOptions = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(400, 30), choices=["no object loaded"])
         self.__preview = wx.Panel(self, -1, size=(300, 300), pos=(400, 50))
+        
+        self.Bind(wx.EVT_COMBOBOX, self.changeImage, self.__previewOptions)
+        self.Bind(wx.EVT_COMBOBOX, self.changeSource, self.__name)
             
     
     
@@ -48,8 +53,13 @@ class InspectorTab(wx.Panel):
 # =============================================================================
     def setPreview(self, obj="", mtl=""):
         if interfaceStuff.gameMode == 2:
-            self.__image = wx.StaticBitmap(self.__preview, -1, wx.Bitmap(obj), size=(64, 64), pos=(20, 20))
+            png = []
+            for item in listdir(obj):
+                if item[-4:] == ".png":
+                    png.append(item)
+            self.__image = wx.StaticBitmap(self.__preview, -1, wx.Bitmap(obj + "\\" + png[0]), pos=(20, 20))
         elif interfaceStuff.gameMode == 3:
+            self.__preview.DestroyChildren()
             self.__model = GLModel(self.__preview, obj, mtl)
         
     def getX(self):
@@ -96,6 +106,8 @@ class InspectorTab(wx.Panel):
     
     def clearPreview(self):
         self.__preview.DestroyChildren()
+        self.__previewOptions.Set(["no object loaded"])
+        self.__name.Set(["no object loaded"])
         
     def loadProject(self):
         objects = []
@@ -106,13 +118,42 @@ class InspectorTab(wx.Panel):
         if interfaceStuff.gameMode == 2:
             self.__p.SetEditable(False)
             self.__r.SetEditable(False)
-            self.setPreview(interfaceStuff.location + "\\Assets\\DefaultImages\\square.png")
+            self.setPreview(interfaceStuff.location + "\\Assets\\DefaultImages")
         elif interfaceStuff.gameMode == 3:
             self.__p.SetEditable(True)
             self.__r.SetEditable(True)
             self.setPreview("GUI\\images\\cube.obj", "GUI\\images\\cube.mtl")
         
     
+    def changeImage(self, event):
+        if interfaceStuff.gameMode == 2:
+            filepath = interfaceStuff.location + "\\Assets\\" + self.__previewOptions.GetValue()
+            self.__image.SetBitmap(wx.Bitmap(filepath))
+        elif interfaceStuff.gameMode == 3:
+            obj = interfaceStuff.location + "\\Assets\\" + self.__previewOptions.GetValue()
+            mtl = obj[:-4] + ".mtl"
+            self.setPreview(obj, mtl)
+        
+    def changeSource(self, event):
+        file = self.__name.GetValue()
+        with open(interfaceStuff.location + "\\Scenes\\" + file) as fromFile:
+            for line in fromFile:
+                if "def __init__" in line:
+                    source = line[line.find("Asset=") + 7: line.find(", *args")-1].replace("\\\\", "\\")
+        if interfaceStuff.gameMode == 2:
+            images = []
+            for item in listdir(source):
+                if item[-4:] == ".png":
+                    images.append(basename(source) + "\\" + item)
+            self.__previewOptions.Set(images)
+        elif interfaceStuff.gameMode == 3:
+            obj = []
+            for item in listdir(source):
+                if item[-4:] == ".obj":
+                    obj.append(basename(source) + "\\" + item)
+            self.__previewOptions.Set(obj)
+            
+        
     def openObject(self, filepath):
         pass
         # get the type of thing when a module in Scenes is opened
