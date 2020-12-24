@@ -227,6 +227,8 @@ class MainWindow(wx.Frame):
     
     
     def OpenExistingProject(self, event):
+        if interfaceStuff.location != "":
+            self.CloseCurrentProject(event)
         fileDialog = wx.FileDialog(None, "Select the Manifest for Project", wildcard="XML Project Manifest (*.xml)|*.xml")
         with fileDialog as dlg:
             if dlg.ShowModal() == wx.ID_OK:
@@ -247,6 +249,7 @@ class MainWindow(wx.Frame):
         interfaceStuff.location = ""
         self.__trDirectory.clearTree()
         self.__tbInspector.clearPreview()
+        self.__tbInspector.clearCoords()
         self.SetTitle("threeP.games")
         
         
