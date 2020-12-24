@@ -18,7 +18,7 @@ class InspectorTab(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent)
         self.__reading = False
-        self.__transform = {"x": 0, "y": 0, "z": 0, "h": 0, "p": 0, "r": 0}
+        self.__transform = {"x": "", "y": "", "z": "", "h": "", "p": "", "r": ""}
         
             # identification
         nameLabel = wx.StaticText(self, -1, "Name: ", pos=(10, 10))
@@ -209,21 +209,22 @@ class InspectorTab(wx.Panel):
         try:
             number = float(event.GetString())
             if event.GetId() == self.__x.GetId():
-                self.__transform["x"] = number
+                self.__transform["x"] = str(number)
             elif event.GetId() == self.__y.GetId():
-                self.__transform["y"] = number
+                self.__transform["y"] = str(number)
             elif event.GetId() == self.__z.GetId():
-                self.__transform["z"] = number
+                self.__transform["z"] = str(number)
             elif event.GetId() == self.__h.GetId():
-                self.__transform["h"] = number
+                self.__transform["h"] = str(number)
             elif event.GetId() == self.__p.GetId():
-                self.__transform["p"] = number
+                self.__transform["p"] = str(number)
             elif event.GetId() == self.__r.GetId():
-                self.__transform["r"] = number
+                self.__transform["r"] = str(number)
             # @todo figure out a better time to rewrite file
             self.updateTransform()
         except:
             pass
+
             
         
     def updateTransform(self):
@@ -232,18 +233,24 @@ class InspectorTab(wx.Panel):
         reading = False
         with open(interfaceStuff.location + "\\Scenes\\" + file, "r") as fromFile:
             for line in fromFile:
-                if "setX" in line:
-                    lines.append("        self.setX(" + str(self.__transform["x"]) + ")\n")
-                elif "setY" in line:
-                    lines.append("        self.setY(" + str(self.__transform["y"]) + ")\n")
-                elif "setZ" in line:
-                    lines.append("        self.setZ(" + str(self.__transform["z"]) + ")\n")
-                elif "setH" in line:
-                    lines.append("        self.setH(" + str(self.__transform["h"]) + ")\n")
-                elif "setP" in line:
-                    lines.append("        self.setP(" + str(self.__transform["p"]) + ")\n")
-                elif "setR" in line:
-                    lines.append("        self.setR(" + str(self.__transform["r"]) + ")\n")
+                if "#? start" in line:
+                    reading = True
+                    lines.append(line)
+                if "#? end" in line:
+                    reading = False
+                if reading:
+                    if "setX" in line:
+                        lines.append("        self.setX(" + str(self.__transform["x"]) + ")\n")
+                    elif "setY" in line:
+                        lines.append("        self.setY(" + str(self.__transform["y"]) + ")\n")
+                    elif "setZ" in line:
+                        lines.append("        self.setZ(" + str(self.__transform["z"]) + ")\n")
+                    elif "setH" in line:
+                        lines.append("        self.setH(" + str(self.__transform["h"]) + ")\n")
+                    elif "setP" in line:
+                        lines.append("        self.setP(" + str(self.__transform["p"]) + ")\n")
+                    elif "setR" in line:
+                        lines.append("        self.setR(" + str(self.__transform["r"]) + ")\n")
                 else:
                     lines.append(line)
         with open(interfaceStuff.location + "\\Scenes\\" + file, "w") as toFile:
