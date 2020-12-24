@@ -19,6 +19,8 @@ class InspectorTab(wx.Panel):
         super().__init__(parent)
         self.__reading = False
         self.__transform = {"x": "", "y": "", "z": "", "h": "", "p": "", "r": ""}
+        self.__animations = {}
+        self.__frame = 0
         
             # identification
         nameLabel = wx.StaticText(self, -1, "Name: ", pos=(10, 10))
@@ -51,8 +53,15 @@ class InspectorTab(wx.Panel):
         self.__previewOptions = wx.ComboBox(self, -1, value="", size=(200, 20), pos=(400, 30), choices=["no object loaded"])
         self.__preview = wx.Panel(self, -1, size=(300, 300), pos=(400, 50))
         
+        self.__next = wx.Button(self, -1, label="Next", pos=(500, 370), size=(80, 20))
+        self.__next.Show(False)
+        self.__previous = wx.Button(self, -1, label="Previous", pos=(400, 370), size=(80, 20))
+        self.__previous.Show(False)
+        
         self.Bind(wx.EVT_COMBOBOX, self.changeImage, self.__previewOptions)
         self.Bind(wx.EVT_COMBOBOX, self.changeSource, self.__name)
+        self.Bind(wx.EVT_BUTTON, self.changeImage, self.__next)
+        self.Bind(wx.EVT_BUTTON, self.changeImage, self.__previous)
         self.Bind(wx.EVT_TEXT, self.changeCoords, self.__x)
         self.Bind(wx.EVT_TEXT, self.changeCoords, self.__y)
         self.Bind(wx.EVT_TEXT, self.changeCoords, self.__z)
@@ -131,6 +140,8 @@ class InspectorTab(wx.Panel):
         self.__preview.DestroyChildren()
         self.__previewOptions.Set(["no object loaded"])
         self.__name.Set(["no object loaded"])
+        self.__next.Show(False)
+        self.__previous.Show(False)
         
     def clearCoords(self):
         self.setX("")
@@ -158,10 +169,27 @@ class InspectorTab(wx.Panel):
         
     
     def changeImage(self, event):
+        # @todo export and organize model animation data in .obj files so working with previews kind of matches
         if interfaceStuff.gameMode == 2:
-            filepath = interfaceStuff.location + "\\Assets\\" + self.__previewOptions.GetValue()
+            frames = len(self.__animations[self.__previewOptions.GetValue()])
+            if event.GetId() == self.__previewOptions.GetId():
+                self.__frame = 0
+                if frames > 1:
+                    self.__next.Show(True)
+                    self.__previous.Show(True)
+                else:
+                    self.__next.Show(False)
+                    self.__previous.Show(False)
+            elif event.GetId() == self.__next.GetId():
+                self.__frame += 1
+            elif event.GetId() == self.__previous.GetId():
+                self.__frame -= 1
+        if interfaceStuff.gameMode == 2:
+            filepath = self.__animations[self.__previewOptions.GetValue()][self.__frame % frames]
             self.__image.SetBitmap(wx.Bitmap(filepath))
         elif interfaceStuff.gameMode == 3:
+            self.__next.Show(False)
+            self.__previous.Show(False)
             obj = interfaceStuff.location + "\\Assets\\" + self.__previewOptions.GetValue()
             mtl = obj[:-4] + ".mtl"
             self.setPreview(obj, mtl)
@@ -192,11 +220,15 @@ class InspectorTab(wx.Panel):
                         self.__transform["r"] = line[line.index("(")+1:line.rindex(")")]
             self.setTransform()
         if interfaceStuff.gameMode == 2:
+            """
             images = []
             for item in listdir(source):
                 if item[-4:] == ".png":
                     images.append(basename(source) + "\\" + item)
             self.__previewOptions.Set(images)
+            """
+            self.__animations = self.loadSprite(source)
+            self.__previewOptions.Set(list(self.__animations.keys()))
         elif interfaceStuff.gameMode == 3:
             obj = []
             for item in listdir(source):
@@ -256,6 +288,40 @@ class InspectorTab(wx.Panel):
         with open(interfaceStuff.location + "\\Scenes\\" + file, "w") as toFile:
             for line in lines:
                 toFile.write(line)
+                
+                
+    def loadSprite(self, asset):
+        countPng = 0
+        a = []
+        for item in listdir(asset):
+            if item[-4:] == ".png":
+                countPng += 1
+                a.append(item)
+        if countPng == 1:
+            return {"still": [asset + "\\" + a[0]]}
+        else:
+            anim = []
+            startAnim = len(basename(asset)) + 1
+            animName = ""
+            for item in a:
+                if item[startAnim:item.rindex(".")-4] != animName:
+                    anim.append(item[startAnim:item.rindex(".")-4])
+                    animName = item[startAnim:item.rindex(".")-4]
+            frames = []
+            for name in anim:
+                frames.append([])
+                
+            for item in a:
+                for i in range(len(anim)):
+                    if item[startAnim:item.rindex(".")-4] == anim[i]:
+                        frames[i].append(asset + "\\" + item)
+            animations = {}
+            i = 0
+            for key in anim:
+                animations[key] = frames[i]
+                i += 1
+            return animations
+            
         
     def openObject(self, filepath):
         pass
