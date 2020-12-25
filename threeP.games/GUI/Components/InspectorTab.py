@@ -82,7 +82,6 @@ class InspectorTab(wx.Panel):
                     png.append(item)
             self.__image = wx.StaticBitmap(self.__preview, -1, wx.Bitmap(obj + "\\" + png[0]), pos=(20, 20))
         elif interfaceStuff.gameMode == 3:
-            self.__preview.DestroyChildren()
             self.__model = GLModel(self.__preview, obj, mtl)
         
     def getX(self):
@@ -169,30 +168,31 @@ class InspectorTab(wx.Panel):
         
     
     def changeImage(self, event):
-        # @todo export and organize model animation data in .obj files so working with previews kind of matches
-        if interfaceStuff.gameMode == 2:
-            frames = len(self.__animations[self.__previewOptions.GetValue()])
-            if event.GetId() == self.__previewOptions.GetId():
-                self.__frame = 0
-                if frames > 1:
-                    self.__next.Show(True)
-                    self.__previous.Show(True)
-                else:
-                    self.__next.Show(False)
-                    self.__previous.Show(False)
-            elif event.GetId() == self.__next.GetId():
-                self.__frame += 1
-            elif event.GetId() == self.__previous.GetId():
-                self.__frame -= 1
+        frames = len(self.__animations[self.__previewOptions.GetValue()])
+        if event.GetId() == self.__previewOptions.GetId():
+            self.__frame = 0
+            if frames > 1:
+                self.__next.Show(True)
+                self.__previous.Show(True)
+            else:
+                self.__next.Show(False)
+                self.__previous.Show(False)
+        elif event.GetId() == self.__next.GetId():
+            self.__frame += 1
+        elif event.GetId() == self.__previous.GetId():
+            self.__frame -= 1
         if interfaceStuff.gameMode == 2:
             filepath = self.__animations[self.__previewOptions.GetValue()][self.__frame % frames]
             self.__image.SetBitmap(wx.Bitmap(filepath))
         elif interfaceStuff.gameMode == 3:
-            self.__next.Show(False)
-            self.__previous.Show(False)
-            obj = interfaceStuff.location + "\\Assets\\" + self.__previewOptions.GetValue()
+            obj = self.__animations[self.__previewOptions.GetValue()][self.__frame % frames]
             mtl = obj[:-4] + ".mtl"
-            self.setPreview(obj, mtl)
+            if event.GetId() == self.__previewOptions.GetId():
+                self.__preview.DestroyChildren()
+                self.__model = GLModel(self.__preview, obj, mtl)
+            else:
+                self.__model.onDraw(obj, mtl)
+            
         
     def changeSource(self, event):
         file = self.__name.GetValue()
@@ -220,21 +220,11 @@ class InspectorTab(wx.Panel):
                         self.__transform["r"] = line[line.index("(")+1:line.rindex(")")]
             self.setTransform()
         if interfaceStuff.gameMode == 2:
-            """
-            images = []
-            for item in listdir(source):
-                if item[-4:] == ".png":
-                    images.append(basename(source) + "\\" + item)
-            self.__previewOptions.Set(images)
-            """
             self.__animations = self.loadSprite(source)
             self.__previewOptions.Set(list(self.__animations.keys()))
         elif interfaceStuff.gameMode == 3:
-            obj = []
-            for item in listdir(source):
-                if item[-4:] == ".obj":
-                    obj.append(basename(source) + "\\" + item)
-            self.__previewOptions.Set(obj)
+            self.__animations = self.loadModel(source)
+            self.__previewOptions.Set(list(self.__animations.keys()))
             
             
     def changeCoords(self, event):
@@ -315,6 +305,40 @@ class InspectorTab(wx.Panel):
                 for i in range(len(anim)):
                     if item[startAnim:item.rindex(".")-4] == anim[i]:
                         frames[i].append(asset + "\\" + item)
+            animations = {}
+            i = 0
+            for key in anim:
+                animations[key] = frames[i]
+                i += 1
+            return animations
+        
+        
+    def loadModel(self, asset):
+        countObj = 0
+        a = []
+        for item in listdir(asset):
+            if item[-4:] == ".obj":
+                countObj += 1
+                a.append(item)
+        if countObj == 1:
+            return {"still": [asset + "\\" + a[0]]}
+        else:
+            anim = []
+            startAnim = len(basename(asset)) + 1
+            animName = ""
+            for item in a:
+                if item[startAnim:item.rindex(".")-7] != animName:
+                    anim.append(item[startAnim:item.rindex(".")-7])
+                    animName = item[startAnim:item.rindex(".")-7]
+            frames = []
+            for name in anim:
+                frames.append([])
+                
+            for item in a:
+                for i in range(len(anim)):
+                    if item[startAnim:item.rindex(".")-7] == anim[i]:
+                        frames[i].append(asset + "\\" + item)
+                        
             animations = {}
             i = 0
             for key in anim:
