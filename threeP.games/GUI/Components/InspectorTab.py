@@ -273,6 +273,14 @@ class InspectorTab(wx.Panel):
                         lines.append("        self.setP(" + str(self.__transform["p"]) + ")\n")
                     elif "setR" in line:
                         lines.append("        self.setR(" + str(self.__transform["r"]) + ")\n")
+                    elif "key =" in line:
+                        lines.append(line)
+                    elif "frames =" in line:
+                        lines.append(line)
+                    elif "getActor" in line:
+                        lines.append(line)
+                    elif "game.blit" in line:
+                        lines.append(line)
                 else:
                     lines.append(line)
         with open(interfaceStuff.location + "\\Scenes\\" + file, "w") as toFile:
