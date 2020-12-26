@@ -415,13 +415,14 @@ def newSceneObject(name, obj, asset):
             rewrite.append(line)
     rewrite.append("\n\n        # @todo finish out the class by completeing the start, update, and render methods below, remember to put any new attributes before args and kwargs in the constructor\n\n")
     rewrite.append("\n\n        # @todo If you did not use the Blender export scripts, or store spritesheet/model in the same manner you will need to override (2d) .loadSprite(asset) or (3d) .loadActor(asset) methods as well\n\n")
-    rewrite.append("\n\n    def start(self):\n        # @todo define any necessary initialization actions for this object\n        pass")
     if gameMode == 2:
+        rewrite.append("\n\n    def start(self):\n        # @todo define any necessary initialization actions for this object\n        pass")
         rewrite.append("\n\n    def update(self):\n        # @todo define actions to be called every frame of the game, remember to call move here\n        pass")
-        rewrite.append("\n\n    def render(self, game):\n        # @todo define how this object is to be rendered\n        pass\n")
+        rewrite.append("\n\n    def render(self, game):\n        self.setCounter(self.getCounter() + 1)\n        #? start inspector read\n        key =list(self.getSprite().keys())[0]\n        frames = len(self.getSprite()[key])\n        game.blit(self.getSprite()[key][self.getCounter()%frames], (self.getX(), self.getY()))\n        #? end inspector read\n        # @todo define how this object is to be rendered under various conditions\n\n        pass\n")
     elif gameMode == 3:
+        rewrite.append("\n\n    def start(self):\n        #? start inspector read\n        key = self.getActor().getAnimNames()[0]\n        self.getActor().loop(key)\n        #? end inspector read\n        # @todo define any necessary initialization actions for this object\n        pass")
         rewrite.append("\n\n    def update(self,task):\n        # @todo define actions to be called every frame of the game, remember to call move here\n        return task.cont")
-        rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered\n        return task.cont\n")
+        rewrite.append("\n\n    def render(self, task):\n        # @todo define how this object is to be rendered under various conditions\n\n        return task.cont\n")
     rewrite.append("\n\n\n    # @todo Create and import custom scripts to enhance functionality of this game object")
     with open(location + "\\Scenes\\" + name + ".py", "w") as toFile:
         for line in rewrite:
