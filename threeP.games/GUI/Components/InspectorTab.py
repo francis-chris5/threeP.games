@@ -58,10 +58,14 @@ class InspectorTab(wx.Panel):
         self.__previous = wx.Button(self, -1, label="Previous", pos=(400, 370), size=(80, 20))
         self.__previous.Show(False)
         
+        self.__defaultAnimation = wx.Button(self, -1, label="Set Default", pos=(450, 400), size=(80, 20))
+        self.__defaultAnimation.Show(False)
+        
         self.Bind(wx.EVT_COMBOBOX, self.changeImage, self.__previewOptions)
         self.Bind(wx.EVT_COMBOBOX, self.changeSource, self.__name)
         self.Bind(wx.EVT_BUTTON, self.changeImage, self.__next)
         self.Bind(wx.EVT_BUTTON, self.changeImage, self.__previous)
+        self.Bind(wx.EVT_BUTTON, self.setDefaultAnimation, self.__defaultAnimation)
         self.Bind(wx.EVT_TEXT, self.changeCoords, self.__x)
         self.Bind(wx.EVT_TEXT, self.changeCoords, self.__y)
         self.Bind(wx.EVT_TEXT, self.changeCoords, self.__z)
@@ -141,6 +145,7 @@ class InspectorTab(wx.Panel):
         self.__name.Set(["no object loaded"])
         self.__next.Show(False)
         self.__previous.Show(False)
+        self.__defaultAnimation.Show(False)
         
     def clearCoords(self):
         self.setX("")
@@ -171,6 +176,7 @@ class InspectorTab(wx.Panel):
         frames = len(self.__animations[self.__previewOptions.GetValue()])
         if event.GetId() == self.__previewOptions.GetId():
             self.__frame = 0
+            self.__defaultAnimation.Show(True)
             if frames > 1:
                 self.__next.Show(True)
                 self.__previous.Show(True)
@@ -281,6 +287,49 @@ class InspectorTab(wx.Panel):
                         lines.append(line)
                     elif "game.blit" in line:
                         lines.append(line)
+                else:
+                    lines.append(line)
+        with open(interfaceStuff.location + "\\Scenes\\" + file, "w") as toFile:
+            for line in lines:
+                toFile.write(line)
+                
+    def setDefaultAnimation(self, event):
+        animation = self.__previewOptions.GetValue()
+        frame = str(self.__frame)
+        lines = []
+        file = self.__name.GetValue()
+        reading = False
+        with open(interfaceStuff.location + "\\Scenes\\" + file, "r") as fromFile:
+            for line in fromFile:
+                if "#? start" in line:
+                    reading = True
+                    lines.append(line)
+                if "#? end" in line:
+                    reading = False
+                if reading:
+                    if "setX" in line:
+                        lines.append(line)
+                    elif "setY" in line:
+                        lines.append(line)
+                    elif "setZ" in line:
+                        lines.append(line)
+                    elif "setH" in line:
+                        lines.append(line)
+                    elif "setP" in line:
+                        lines.append(line)
+                    elif "setR" in line:
+                        lines.append(line)
+                    elif "key =" in line:
+                        if interfaceStuff.gameMode == 2:
+                            lines.append("        key =\"" + animation + "\"\n")
+                        elif interfaceStuff.gameMode == 3:
+                            lines.append("        key = \"" + animation + "\"\n")
+                    elif "frames =" in line:
+                        lines.append("        frames = len(self.getSprite()[\"" + animation + "\"])\n")
+                    elif "getActor" in line:
+                        lines.append("        self.getActor().loop(\"" + animation + "\")\n")
+                    elif "game.blit" in line:
+                        lines.append("        game.blit(self.getSprite()[\"" + animation + "\"][(self.getCounter()+" + frame + ")%frames], (self.getX(), self.getY()))\n")
                 else:
                     lines.append(line)
         with open(interfaceStuff.location + "\\Scenes\\" + file, "w") as toFile:
