@@ -28,12 +28,13 @@ class Stuff2d():
     # @param z a value for closer/farther from viewer layering
     # @param h Yaw, rotation around the z axis
     # @param sprite the list of image files as strings to be used for the sprite animations, if only one single image it still must be passed in as a single element list. The design intention when creating this was that all sprite images are placed into a single directory and then retrieved with a list comprehension passed into the constructor. example: sprite=[("images\\sprite\\" + file) for file in listdir("images\\sprite") if isfile(join("images\\sprite", file))].
-    def __init__(self, x=0, y=0, z=0, h=0, sprite=["images\\empty.svg"]):
+    def __init__(self, x=0, y=0, z=0, h=0, sprite=[""]):
         self.__x = x
         self.__y = y
         self.__sprite = None
         self.__width = 0
         self.__height = 0
+        self.__counter = 0
         
     def getX(self):
         return self.__x
@@ -55,6 +56,9 @@ class Stuff2d():
 
     def getHeight(self):
         return self.__height
+    
+    def getCounter(self):
+        return self.__counter
 
     def setX(self, x):
         self.__x = x
@@ -76,18 +80,24 @@ class Stuff2d():
 
     def setHeight(self, height):
         self.__height = height
+        
+    def setCounter(self, counter):
+        self.__counter = counter
     
     def loadSprite(self, asset):
-        if len(listdir(asset)) == 1:
-            a = listdir(asset)
-            self.setSprite({"still": [pygame.image.load(asset + "\\" + a[0])]})
-            self.setWidth(self.getSprite()[list(self.getSprite().keys())[0]][0].get_width())
-            self.setHeight(self.getSprite()[list(self.getSprite().keys())[0]][0].get_height())
+        countPng = 0
+        a = []
+        for item in listdir(asset):
+            if item[-4:] == ".png":
+                countPng += 1
+                a.append(item)
+        if countPng == 1:
+            return {"still": [asset + "\\" + a[0]]}
         else:
             anim = []
             startAnim = len(basename(asset)) + 1
             animName = ""
-            for item in listdir(asset):
+            for item in a:
                 if item[startAnim:item.rindex(".")-4] != animName:
                     anim.append(item[startAnim:item.rindex(".")-4])
                     animName = item[startAnim:item.rindex(".")-4]
@@ -95,7 +105,7 @@ class Stuff2d():
             for name in anim:
                 frames.append([])
                 
-            for item in listdir(asset):
+            for item in a:
                 for i in range(len(anim)):
                     if item[startAnim:item.rindex(".")-4] == anim[i]:
                         frames[i].append(pygame.image.load(asset + "\\" + item))
@@ -380,7 +390,6 @@ class Stuff3d():
         # convert gltf to bam file here???
         countBams = 0
         a = []
-        # @todo: get full path to asset in 399 and 408 without passing it in
         for item in listdir(asset):
             if item[-4:] == ".bam":
                 countBams += 1
@@ -390,9 +399,8 @@ class Stuff3d():
         else:
             animations = {}
             startAnim = len(basename(asset)) + 1
-            for item in listdir(asset):
+            for item in a:
                 if item[-4:] == ".bam":
-                    print(item)
                     animations[item[startAnim:item.rindex(".")]] = asset[asset.find("Assets"):].replace("\\", "\\\\") + "\\" + item
             self.setActor(Actor(asset[asset.find("Assets"):].replace("\\", "\\\\") + "\\" + a[0], animations))
     

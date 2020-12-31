@@ -10,7 +10,7 @@ from os import remove, rmdir, execl, listdir
 from os.path import join, isfile, isdir, basename, dirname, abspath
 sys.path.insert(0, dirname(abspath(__file__)) + "\\Interface")
 sys.path.insert(1, dirname(abspath(__file__)) + "\\GUI\\Components")
-sys.path.insert(2, dirname(abspath(__file__)) + "\\kernal")
+#sys.path.insert(2, dirname(abspath(__file__)) + "\\kernal")
 import wx
 import webbrowser
 import interfaceStuff
@@ -227,6 +227,8 @@ class MainWindow(wx.Frame):
     
     
     def OpenExistingProject(self, event):
+        if interfaceStuff.location != "":
+            self.CloseCurrentProject(event)
         fileDialog = wx.FileDialog(None, "Select the Manifest for Project", wildcard="XML Project Manifest (*.xml)|*.xml")
         with fileDialog as dlg:
             if dlg.ShowModal() == wx.ID_OK:
@@ -235,6 +237,7 @@ class MainWindow(wx.Frame):
                 interfaceStuff.updateManifest()
                 interfaceStuff.xmlParseManifest(manifest)
                 self.__trDirectory.loadProject(manifest)
+                self.__tbInspector.loadProject()
                 self.SetTitle("threeP.games:        " + interfaceStuff.location)
                 
                 
@@ -245,6 +248,8 @@ class MainWindow(wx.Frame):
         interfaceStuff.gameMode = ""
         interfaceStuff.location = ""
         self.__trDirectory.clearTree()
+        self.__tbInspector.clearPreview()
+        self.__tbInspector.clearCoords()
         self.SetTitle("threeP.games")
         
         

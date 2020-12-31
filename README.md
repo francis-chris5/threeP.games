@@ -102,6 +102,16 @@ The help features link directly to the official API documentation pages for Pyth
 
 To remove a file from the project, right-click on it in the directory tree and confirm the choice.
 
+<h4>Inspector Tab</h4>
+
+With a project open, the "Name" combo box on the inspector tab allows the choice of any scene objects added to the project. With an existing scene object selected (the project may need reloaded to see any scene objects added since opening) the input fields at left allow for adjustments to be made to transform data: x, y, and z positioning or yaw, pitch, and roll rotations --pitch and roll only available in a 3d project.
+
+With a scene object selected the combobox at right will bring up a preview of the available model(s)/sprite(s), next/previous buttons will appear if there is an animation available in the assets folder linked to the selected scene object.
+
+![threep_screenshot_inspector1](https://user-images.githubusercontent.com/50467171/103112413-4a57cd80-4623-11eb-9acc-a959fa243f8b.jpg)
+
+![threep_screenshot_inspector2](https://user-images.githubusercontent.com/50467171/103112415-4cba2780-4623-11eb-9c85-a4c241abf7e6.jpg)
+
 <h2>In Conclusion...</h2>
 
 Script documentation generated with doxygen available at: https://francis-chris5.github.io/threeP.games/html/index.html

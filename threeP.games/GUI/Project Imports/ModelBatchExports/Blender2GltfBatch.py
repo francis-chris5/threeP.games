@@ -47,7 +47,7 @@ def blender2gltf():
                 
                     #export the gltf and maybe keep a list of animations (uncomment that part)
                 bpy.ops.export_scene.gltf(filepath=filepath + ".glb")
-                bpy.ops.export_scene.obj(filepath=filepath + ".obj", use_triangles=True)
+                bpy.ops.export_scene.obj(filepath=filepath + ".obj", use_triangles=True, use_animation=True)
                 
                 obj.select_set(False)
                 

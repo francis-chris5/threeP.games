@@ -5,7 +5,8 @@ Created on Tue Dec 15 20:46:52 2020
 @author: Christopher S. Francis
 """
 
-
+import sys
+sys.path.insert(1, "C:\\Users\\Chris\\Documents\\game dev in python\\threeP.games\\Interface")
 import wx
 import wx.glcanvas
 from OpenGL.GL import *
@@ -24,6 +25,10 @@ class GLBase(wx.glcanvas.GLCanvas):
         self.__previousX = 30
         self.__previousY = 30
         
+        self.__left = -0.3
+        self.__top = 0.5
+        self.__spread = 0.6
+        
         #self.SetBackgroundStyle(wx.BG_STYLE_PAINT)
         #self.SetTransparent(True)
         
@@ -31,7 +36,9 @@ class GLBase(wx.glcanvas.GLCanvas):
         self.Bind(wx.EVT_PAINT, self.onPaint)
         self.Bind(wx.EVT_MIDDLE_DOWN, self.onGrab)
         self.Bind(wx.EVT_MIDDLE_UP, self.onRelease)
+        self.Bind(wx.EVT_MOUSEWHEEL, self.onZoom)
         self.Bind(wx.EVT_MOTION, self.onRotate)
+        
         
     
 # =============================================================================
@@ -52,6 +59,15 @@ class GLBase(wx.glcanvas.GLCanvas):
     def getSize(self):
         return self.__size
     
+    def getLeft(self):
+        return self.__left
+    
+    def getTop(self):
+        return self.__top
+    
+    def getSpread(self):
+        return self.__spread
+    
     def setX(self, x):
         self.__x = x
         
@@ -66,6 +82,15 @@ class GLBase(wx.glcanvas.GLCanvas):
         
     def setSize(self, size):
         self.__size = size
+        
+    def setLeft(self, left):
+        self.__left = left
+        
+    def setTop(self, top):
+        self.__top = top
+        
+    def setSpread(self, spread):
+        self.__spread = spread
         
     
     
@@ -108,6 +133,12 @@ class GLBase(wx.glcanvas.GLCanvas):
         
     def onRelease(self, event):
         self.ReleaseMouse()
+        
+    
+    def onZoom(self, event):
+        # @todo right numbers but my thought on where to put them was incorrect
+        delta = event.GetWheelRotation() / 1000
+        self.setSpread(self.getSpread() + delta)
     
     def onRotate(self, event):
         if event.Dragging() and event.MiddleIsDown():
@@ -117,6 +148,13 @@ class GLBase(wx.glcanvas.GLCanvas):
             self.setX(x)
             self.setY(y)
             self.Refresh(False)
+        elif event.Dragging() and event.RightIsDown():
+            # @todo right numbers but my thought on where to put them was incorrect
+            l, t = event.GetPosition()
+            l /= 1000
+            t /= 1000
+            self.setLeft(l - self.getLeft())
+            self.setTop(t - self.getTop())
     
     
 
@@ -135,7 +173,7 @@ class GLModel(GLBase):
     def initGL(self):
         
         glMatrixMode(GL_PROJECTION)
-        glFrustum(-.3, .3, -0.1, 0.5, 1.0, 8.0)
+        glFrustum(self.getLeft(), self.getLeft() + self.getSpread(), self.getTop() - self.getSpread(), self.getTop(), 1.0, 8.0)
         
         glMatrixMode(GL_MODELVIEW)
         glTranslatef(0, 0, -5)
@@ -148,7 +186,12 @@ class GLModel(GLBase):
         glEnable(GL_LIGHT0)
         glEnable(GL_COLOR_MATERIAL)
         
-    def onDraw(self):
+    def onDraw(self, obj="", mtl=""):
+        if obj != "" and mtl != "":
+            self.__obj = obj
+            self.__mtl = mtl
+            self.__model, self.__material = loadModel(self.__obj, self.__mtl)
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         
         glBegin(GL_TRIANGLES)
@@ -163,8 +206,10 @@ class GLModel(GLBase):
         width, height = self.GetSize()
         scaleX = 180.0 / width
         scaleY = 180.0 / height
+
         glRotatef( (self.getY() - self.getPreviousY()) * scaleY, 1, 0.0, 0.0)
         glRotatef( (self.getX() - self.getPreviousX()) * scaleX, 0.0, 1.0, 0.0)
+        
         
         self.SwapBuffers()
         
@@ -172,7 +217,7 @@ class GLModel(GLBase):
 if __name__ == "__main__":
     app = wx.App()
     frame = wx.Frame(None, -1, "GLPanel Test")
-    gl = GLModel(frame, "Human\\Human_walk.obj", "Human\\Human_walk.mtl")
+    gl = GLModel(frame, "C:\\Users\\Chris\\Documents\\delete\\testing\\Assets\\Human\\Human_walk.obj", "C:\\Users\\Chris\\Documents\\delete\\testing\\Assets\\Human\\Human_walk.mtl")
     frame.SetSize(gl.GetSize())
     frame.Show()
     app.MainLoop()
